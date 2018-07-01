@@ -1,0 +1,87 @@
+<ion-view view-title="Your Pairs" data-ui-sref-opts="{reload: true}">
+  <ion-nav-bar class="bar-balanced">
+  </ion-nav-bar>
+  <ion-nav-buttons side="right">
+  	 <button menu-toggle="right" class="button button-icon icon ion-navicon"></button>
+</ion-nav-buttons>
+
+  <ion-nav-buttons side="left">
+    <div class="chat-icon icon-left ion-chatbubbles"ng-click="openPairs()"></div>
+  </ion-nav-buttons>
+
+  <ion-floating-button click="createEvent()" has-footer="true" button-color="#FFFFFF" icon="ion-plus" icon-color="#33cd5f">
+  </ion-floating-button>
+  <ion-content>
+
+  
+    <div class="button-bar">
+      <a class="button tab-events" badge="2">Pending</a>
+      <a class="button tab-events" badge="2">Upcoming</a>
+    </div>
+    <div class="list card event-card">
+
+      <div class="item item-avatar">
+        <img ng-src="https://scontent.cdninstagram.com/t51.2885-19/s150x150/13712640_1760548557555252_393558530_a.jpg" >
+        Hannah has invited you to <br><i class="icon ion-android-walk activity"></i> <b>Afternoon Run</b>
+      </div>
+
+      <div class="item item-image">
+        <img src="http://edge.alluremedia.com.au/m/g/2015/10/shutterstock_112330748_1080.jpg">
+      </div>
+      <div class="date">
+        <div class="number">21</div>
+        <div class="month">July</div>
+      </div>
+      <div class="description">
+        <div class="time">10:30pm Wednesday</div>
+        <div class="location"> Lake Ginnenderra, Belconnen</div>
+      </div>
+      <div class="footer">
+        <button class="button decline">
+          Invite
+        </button>
+        <button class="button commit">
+          <i class="icon ion-android-star-outline"></i>
+          Commit
+        </button>
+        <button class="button invite">
+          Info
+        </button>
+      </div>
+    </div>
+    <div class="list card event-card">
+      <div class="item item-avatar">
+        <img ng-src="https://scontent.cdninstagram.com/t51.2885-19/s150x150/13712640_1760548557555252_393558530_a.jpg" >
+        Hannah has invited you to <br><i class="icon ion-android-walk activity"></i> <b>Afternoon Run</b>
+      </div>
+
+      <div class="item item-image">
+        <img src="http://edge.alluremedia.com.au/m/g/2015/10/shutterstock_112330748_1080.jpg">
+      </div>
+      <div class="date">
+        <div class="number">21</div>
+        <div class="month">July</div>
+      </div>
+      <div class="description">
+          <div class="time">10:30pm Wednesday</div>
+          <div class="location"> Lake Ginnenderra, Belconnen</div>
+      </div>
+      <div class="footer">
+          <button class="button decline">
+            <i class="icon ion-ios-plus"></i>
+            Invite
+          </button>
+          <button class="button commit">
+            <i class="icon ion-android-star-outline"></i>
+            Commit
+          </button>
+          <button class="button invite">
+            <i class="icon ion-information-circled"></i>
+            Info
+          </button>
+      </div>
+    </div>
+
+
+  </ion-content>
+</ion-view>

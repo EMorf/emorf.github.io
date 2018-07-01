@@ -1,0 +1,1058 @@
+
+
+
+
+<html>
+<head>
+    <title>Time Tracking Report</title>
+    <meta name="decorator" content="none" />
+    <meta http-equiv="Content-Type" Content="application/vnd.ms-excel; charset=UTF-8" />
+</head>
+<body>
+
+<table id="time_tracking_report_table" border="1">
+<tr>
+    <td bgcolor="#205081" colspan="15" height=30>
+        <img src="/images/icon-jira-logo.png" width="57" height="30" border="0" alt="JIRA">
+    </td>
+</tr>
+<tr>
+    <td bgcolor=#ffffff colspan="15">
+        <a href=""><span class="bluetext">JIRA</span></a>
+    </td>
+</tr>
+<tr>
+    <th bgcolor="#dddddd">Issue Type</th>
+    <th bgcolor="#dddddd"><b>Key</b></th>
+    <th bgcolor="#dddddd"><b>Status</b></th>
+    <th bgcolor="#dddddd"><b>Priority</b></th>
+    <th bgcolor="#dddddd"><b>Summary</b></th>
+    <th bgcolor="#dddddd"><b>Original Time Estimated (min)</b></th>
+            <th bgcolor="#dddddd">&Sigma;</th>
+        <th bgcolor="#dddddd"><b>Estimated Time Remaining (min)</b></th>
+            <th bgcolor="#dddddd">&Sigma;</th>
+        <th bgcolor="#dddddd"><b>Total Time Spent (min)</b></th>
+            <th bgcolor="#dddddd">&Sigma;</th>
+        <th bgcolor="#dddddd"><b>Accuracy</b></th>
+            <th bgcolor="#dddddd">&Sigma;</th>
+        <th bgcolor="#dddddd"><b>Accuracy (%)</b></th>
+            <th bgcolor="#dddddd">&Sigma;</th>
+    </tr>
+
+    <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-179">PAIR-179</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Pull picture from facebook
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>90</td>
+            <td>
+                            90
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-251">PAIR-251</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Event Creation GUI
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>600</td>
+            <td>
+                            600
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-252">PAIR-252</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Integrate back end for events (feed &amp; creation)
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>180</td>
+            <td>
+                            180
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Bug</td>
+    <td><a href="/browse/PAIR-255">PAIR-255</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Edit profile Design
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>300</td>
+            <td>
+                            300
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Bug</td>
+    <td><a href="/browse/PAIR-256">PAIR-256</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Search Filter bugs
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>90</td>
+            <td>
+                            90
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-257">PAIR-257</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Load All Data before views are visible
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>180</td>
+            <td>
+                            180
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-268">PAIR-268</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Open Day Demo Preperation
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>60</td>
+            <td>
+                            60
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-272">PAIR-272</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Missing JSDoc Descriptions
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>60</td>
+            <td>
+                            60
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-273">PAIR-273</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Fix Misleading JSDoc Description and Function names
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>30</td>
+            <td>
+                            30
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-275">PAIR-275</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Profile UI
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>303</td>
+            <td>
+                            303
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-281">PAIR-281</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Event invite functionality
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>120</td>
+            <td>
+                            120
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-284">PAIR-284</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Feedback Form
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>30</td>
+            <td>
+                            30
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Bug</td>
+    <td><a href="/browse/PAIR-285">PAIR-285</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Bigfixing in general
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>240</td>
+            <td>
+                            240
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Bug</td>
+    <td><a href="/browse/PAIR-289">PAIR-289</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Profile picture upload
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>20</td>
+            <td>
+                            20
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-293">PAIR-293</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Link profile GUI with pair search 
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>60</td>
+            <td>
+                            60
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-299">PAIR-299</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Pair Delete functionality
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>40</td>
+            <td>
+                            40
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-301">PAIR-301</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Separate pair requests from chat menu and put them in pairs menu
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>290</td>
+            <td>
+                            290
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-304">PAIR-304</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Event commit functionality
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>180</td>
+            <td>
+                            180
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-305">PAIR-305</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Invite friends to event functionality
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>120</td>
+            <td>
+                            120
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-306">PAIR-306</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Edit event functionality
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>600</td>
+            <td>
+                            600
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-307">PAIR-307</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Work through app as new user
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td>0</td>
+            <td>
+                            0
+                    </td>
+        <td>60</td>
+            <td>
+                            60
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                            
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-33">PAIR-33</a></td>
+    <td>Open</td>
+    <td>Medium</td>
+    <td>
+                Work out review functionality
+    </td>
+    <td>360</td>
+            <td>
+                            360
+                    </td>
+        <td>360</td>
+            <td>
+                            360
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td>
+                    
+            </td>
+            <td>
+                            
+                    </td>
+        <td>
+                    0
+            </td>
+            <td>
+                            0
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-37">PAIR-37</a></td>
+    <td>Open</td>
+    <td>Medium</td>
+    <td>
+                Display previous workouts
+    </td>
+    <td>420</td>
+            <td>
+                            420
+                    </td>
+        <td>360</td>
+            <td>
+                            360
+                    </td>
+        <td>60</td>
+            <td>
+                            60
+                    </td>
+        <td>
+                    0
+            </td>
+            <td>
+                            0
+                    </td>
+        <td>
+                    0
+            </td>
+            <td>
+                            0
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-250">PAIR-250</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Event Description Modal
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Bug</td>
+    <td><a href="/browse/PAIR-263">PAIR-263</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Back button on chat
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-270">PAIR-270</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Change Back button from saying back to an arrow in chat modal
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Bug</td>
+    <td><a href="/browse/PAIR-274">PAIR-274</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Adding an image while creating an account does not work
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Bug</td>
+    <td><a href="/browse/PAIR-278">PAIR-278</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Users profile picture does not appear in chat
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-279">PAIR-279</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Create event header bar should have &quot; &lt; &quot; icon on the left instead of the word &quot;back&quot; on the right
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Bug</td>
+    <td><a href="/browse/PAIR-286">PAIR-286</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Scrolling issue when keyboard is open on android
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Bug</td>
+    <td><a href="/browse/PAIR-292">PAIR-292</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                profile button bar
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-302">PAIR-302</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Link back end to show invited users in event description modal
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+    </tr>        <tr valign="top">
+    <td>
+                Task</td>
+    <td><a href="/browse/PAIR-308">PAIR-308</a></td>
+    <td>Done</td>
+    <td>Medium</td>
+    <td>
+                Work through app as new user
+    </td>
+    <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td></td>
+            <td>
+                            
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+        <td>
+            </td>
+            <td>
+                    </td>
+    </tr>    
+<tr>
+    <td colspan="4" align="right">
+        &nbsp;
+    </td>
+    <td><b>Total</b></td>
+    <td>780</td>
+            <td>780</td>
+        <td>720</td>
+            <td>720</td>
+        <td>3713</td>
+            <td>3713</td>
+        <td>-3653</td>
+            <td>-3653</td>
+        <td>-468</td>
+            <td>-468</td>
+    </tr>
+
+<tr>
+    <td bgcolor="#ffffff" colspan="15">&nbsp;</td>
+</tr>
+<tr>
+    <td bgcolor="#dddddd" colspan="15"><font size=1>
+                    Generated at 10/2/16 7:11 PM by Emmanuel using JIRA 1000.383.2#100014-sha1:783d42561fdcfe98ce52c7c3d24c33d56126c5a5.
+            </font></td>
+</tr>
+</table>
+
+
+</body>
+</html>
