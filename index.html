@@ -46,7 +46,7 @@
     <div id="lead">
         <div id="lead-content">
             <h1>Emmanuel Morfiadakis</h1>
-            <h2>Software Engineer</h2>
+            <h2>Senior Software Engineer</h2>
         </div>
         <!-- End #lead-content -->
 
@@ -95,7 +95,7 @@
         <div id="experience-timeline">
             <div data-date="February 2022 - Present">
                 <h3>DEWC Services</h3>
-                <h4>Software Engineer / Senior Software Engineer</h4>
+                <h4>Software Engineer ➡️ Senior Software Engineer</h4>
                 <p>
                     Use the form below to contact me for a copy of my CV, providing more detail.
                 </p>
@@ -142,6 +142,21 @@
         <h2 class="heading"> Select Projects</h2>
         <div class="container">
             <div class="row">
+                <div class="project shadow-large no-image">
+                    <!-- End .project-image -->
+                    <div class="project-info">
+                        <h3>LZ77 Decoding with GPU acceleration</h3>
+                        <p>
+                            This was the subject of my honours thesis back in uni. It involved using a Graphics
+                            Processing Unit (GPU) to speed up the process of decoding compressed data, and was my first
+                            research paper.
+                        </p>
+                        <a href="https://github.com/EMorf/COMP4560_Mirror">View Paper/Software</a>
+                    </div>
+                    <!-- End .project-info -->
+                </div>
+                <!-- End .project -->
+
                 <div class="project shadow-large">
                     <div class="project-image">
                         <img src="images/p_fit.jpg" />
@@ -180,20 +195,27 @@
                 </div>
                 <!-- End .project -->
 
-                <div class="project shadow-large no-image">
+                <div class="project shadow-large">
+                    <div class="project-image">
+                        <img src="https://github.com/EMorf/message_dog/blob/master/resources/logo.png?raw=true" />
+                    </div>
                     <!-- End .project-image -->
                     <div class="project-info">
-                        <h3>LZ77 Decoding with GPU acceleration</h3>
+                        <h3>Message Dog</h3>
                         <p>
-                            This was the subject of my honours thesis back in uni. It involved using a Graphics
-                            Processing Unit (GPU) to speed up the process of decoding compressed data, and was my first
-                            research paper.
+                            Python app I built from scratch, in order to automate participation in raffles ran by Twitch
+                            chatbots.
+                            <br> <br> In addition to the above, I extended the app by making it solve trivia questions
+                            as well, in a manner that allows
+                            it to absorb information that has not been seen before.
                         </p>
-                        <a href="https://github.com/EMorf/COMP4560_Mirror">View Paper/Software</a>
+                        <a href="https://github.com/EMorf/message_dog">View Project</a>
                     </div>
                     <!-- End .project-info -->
                 </div>
                 <!-- End .project -->
+
+
 
             </div>
         </div>
@@ -254,37 +276,37 @@
     <!-- Contact form -->
     <script src="https://formspree.io/js/formbutton-v1.min.js" defer></script>
     <script>
-      /* paste this line in verbatim */
-      window.formbutton=window.formbutton||function(){(formbutton.q=formbutton.q||[]).push(arguments)};
-      /* customize formbutton below*/     
-      formbutton("create", {
-        action: "https://formspree.io/f/mleqjvel",
-        title: "How can we help?",
-        fields: [
-          { 
-            type: "email", 
-            label: "Email:", 
-            name: "email",
-            required: true,
-            placeholder: "your@email.com"
-          },
-          {
-            type: "textarea",
-            label: "Message:",
-            name: "message",
-            placeholder: "What's on your mind?",
-          },
-          { type: "submit" }      
-        ],
-        styles: {
-          title: {
-            backgroundColor: "gray"
-          },
-          button: {
-            backgroundColor: "gray"
-          }
-        }
-      });
+        /* paste this line in verbatim */
+        window.formbutton = window.formbutton || function () { (formbutton.q = formbutton.q || []).push(arguments) };
+        /* customize formbutton below*/
+        formbutton("create", {
+            action: "https://formspree.io/f/mleqjvel",
+            title: "Flick me a message!",
+            fields: [
+                {
+                    type: "email",
+                    label: "Email:",
+                    name: "email",
+                    required: true,
+                    placeholder: "your@email.com"
+                },
+                {
+                    type: "textarea",
+                    label: "Message:",
+                    name: "message",
+                    placeholder: "What would you like to tell me?",
+                },
+                { type: "submit" }
+            ],
+            styles: {
+                title: {
+                    backgroundColor: "gray"
+                },
+                button: {
+                    backgroundColor: "gray"
+                }
+            }
+        });
     </script>
     <!-- End contact form -->
 
