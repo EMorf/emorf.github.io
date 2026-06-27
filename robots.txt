@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://emorf.github.io/sitemap.xml
+Sitemap: https://morfiadakis.au/sitemap.xml
