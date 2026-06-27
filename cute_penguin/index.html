@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cute Penguin Slideshow</title>
+  <meta name="description" content="Hidden penguin slideshow at morfiadakis.au/cute_penguin">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <link rel="canonical" href="https://morfiadakis.au/cute_penguin/">
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <style>
+    body { min-height:100vh; background:#020617; color:#f8fafc; display:flex; align-items:center; justify-content:center; margin:0; padding:1.5rem; font-family:system-ui, sans-serif; }
+    .slideshow { width:100%; max-width:980px; }
+    .slide-card { border:none; background:rgba(15,23,42,0.92); box-shadow:0 30px 80px rgba(8,18,50,.45); }
+    .slide-view { position:relative; overflow:hidden; border-radius:1rem; min-height:420px; background:#000; display:flex; align-items:center; justify-content:center; }
+    .slide-view img { width:100%; height:auto; max-height:calc(100vh - 260px); object-fit:contain; transition:opacity .45s ease; display:block; }
+    .nav-btn { position:absolute; top:50%; width:4rem; height:4rem; border-radius:50%; border:none; transform:translateY(-50%); background:rgba(15, 23, 42, .75); color:#fff; font-size:1.5rem; cursor:pointer; opacity:.85; transition:.2s; }
+    .nav-btn:hover { opacity:1; }
+    .nav-btn.prev { left:1rem; }
+    .nav-btn.next { right:1rem; }
+    .slide-meta { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .slide-meta small { color:#cbd5e1; }
+    .btn-group .btn { min-width:100px; }
+    .details { margin-top:1rem; border:1px solid rgba(148,163,184,.2); }
+    .details p { margin:0; }
+    @media (max-width: 640px) {
+      .nav-btn { width:3rem; height:3rem; font-size:1.15rem; }
+      .slide-meta { flex-direction:column; align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slideshow">
+    <div class="card slide-card">
+      <div class="slide-view">
+        <img id="slideImage" src="images/PXL_20250609_000925302.jpg" alt="Cute penguin slideshow image" loading="lazy">
+        <button id="prevBtn" class="nav-btn prev" aria-label="Previous slide">←</button>
+        <button id="nextBtn" class="nav-btn next" aria-label="Next slide">→</button>
+      </div>
+      <div class="card-body">
+        <div class="slide-meta">
+          <div>
+            <h2 class="h4 mb-1">Cute Penguin Collection</h2>
+            <small id="slideIndex">1 / 10</small>
+          </div>
+          <div class="btn-group" role="group" aria-label="Slideshow controls">
+            <button id="playPauseBtn" type="button" class="btn btn-sm btn-outline-light">Play</button>
+            <button id="toggleDetailsBtn" type="button" class="btn btn-sm btn-outline-light">Details</button>
+          </div>
+        </div>
+        <div id="detailsPanel" class="details p-3 bg-white text-dark rounded-3 d-none">
+          <p id="slideName"><strong>Filename:</strong> PXL_20250609_000925302.jpg</p>
+          <p class="mb-0"><strong>Description:</strong> Smooth hidden slideshow with autoplay and manual controls.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slides = [
+      'images/PXL_20250609_000925302.jpg',
+      'images/PXL_20250813_115834316.jpg',
+      'images/PXL_20250815_043254288.jpg',
+      'images/IMG_20240517_214222_054.jpg',
+      'images/PXL_20230106_093315319.jpg',
+      'images/PXL_20230117_222641776.jpg',
+      'images/PXL_20230831_115314741.jpg',
+      'images/PXL_20241213_112359676.BURST-01.COVER.jpg',
+      'images/PXL_20241231_093047041.jpg',
+      'images/PXL_20250609_000916756.jpg'
+    ];
+    const img = document.getElementById('slideImage');
+    const indexLabel = document.getElementById('slideIndex');
+    const slideName = document.getElementById('slideName');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const toggleDetailsBtn = document.getElementById('toggleDetailsBtn');
+    const detailsPanel = document.getElementById('detailsPanel');
+    let currentSlide = 0;
+    let playing = false;
+    let timer = null;
+
+    const updateSlide = (position) => {
+      if (position < 0) position = slides.length - 1;
+      if (position >= slides.length) position = 0;
+      currentSlide = position;
+      img.style.opacity = '0';
+      setTimeout(() => {
+        img.src = slides[currentSlide];
+        img.alt = 'Cute penguin image ' + (currentSlide + 1);
+        indexLabel.textContent = (currentSlide + 1) + ' / ' + slides.length;
+        slideName.innerHTML = '<strong>Filename:</strong> ' + slides[currentSlide].split('/').pop();
+        img.style.opacity = '1';
+      }, 150);
+    };
+
+    const nextSlide = () => updateSlide(currentSlide + 1);
+    const prevSlide = () => updateSlide(currentSlide - 1);
+
+    const setAutoplay = (enabled) => {
+      playing = enabled;
+      playPauseBtn.textContent = playing ? 'Pause' : 'Play';
+      if (playing) {
+        timer = setInterval(nextSlide, 4500);
+      } else {
+        clearInterval(timer);
+      }
+    };
+
+    prevBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      prevSlide();
+      setAutoplay(false);
+    });
+    nextBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      nextSlide();
+      setAutoplay(false);
+    });
+    playPauseBtn.addEventListener('click', () => setAutoplay(!playing));
+    toggleDetailsBtn.addEventListener('click', () => {
+      detailsPanel.classList.toggle('d-none');
+      toggleDetailsBtn.textContent = detailsPanel.classList.contains('d-none') ? 'Details' : 'Hide';
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight') nextSlide();
+      if (event.key === 'ArrowLeft') prevSlide();
+    });
+    document.querySelector('.slide-view').addEventListener('click', (event) => {
+      if (event.target.closest('button')) return;
+      nextSlide();
+    });
+
+    updateSlide(0);
+  </script>
+</body>
+</html>
