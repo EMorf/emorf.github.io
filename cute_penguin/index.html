@@ -3,27 +3,46 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cute Penguin Slideshow</title>
-  <meta name="description" content="Hidden penguin slideshow at morfiadakis.au/cute_penguin">
+  <title>Ruru's wall</title>
+  <meta name="description" content="Ruru spending time doing what he likes in a full-screen gallery.">
   <meta name="robots" content="noindex, nofollow, noarchive">
   <link rel="canonical" href="https://morfiadakis.au/cute_penguin/">
+  <link rel="icon" href="images/IMG_20240517_214222_054.jpg" type="image/jpeg">
   <link rel="stylesheet" href="../css/bootstrap.min.css">
   <style>
-    body { min-height:100vh; background:#020617; color:#f8fafc; display:flex; align-items:center; justify-content:center; margin:0; padding:1.5rem; font-family:system-ui, sans-serif; }
-    .slideshow { width:100%; max-width:980px; }
-    .slide-card { border:none; background:rgba(15,23,42,0.92); box-shadow:0 30px 80px rgba(8,18,50,.45); }
-    .slide-view { position:relative; overflow:hidden; border-radius:1rem; min-height:420px; background:#000; display:flex; align-items:center; justify-content:center; }
-    .slide-view img { position:relative; z-index:0; width:100%; height:auto; max-height:calc(100vh - 260px); object-fit:contain; transition:opacity .45s ease; display:block; }
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+    html, body { height:100%; }
+    body { min-height:100vh; background:#020617; color:#f8fafc; display:flex; align-items:stretch; justify-content:center; margin:0; padding:0; font-family:'Roboto', 'Helvetica Neue', Arial, sans-serif; position:relative; }
+    .slideshow { width:100%; max-width:none; height:100%; }
+    .slide-card { height:100%; border:none; background:rgba(10,15,30,0.96); box-shadow:0 30px 80px rgba(8,18,50,.45); display:flex; flex-direction:column; }
+    .slide-view { position:relative; overflow:hidden; border-radius:1rem 1rem 0 0; flex:1; background:#000; display:flex; align-items:center; justify-content:center; }
+    .slide-view img { position:relative; z-index:0; width:100%; height:100%; object-fit:cover; transition:opacity .45s ease; display:block; }
     .heart-rain { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:2; }
     .heart-rain .heart { position:absolute; top:-2rem; color:#ff8ab0; font-size:1.25rem; opacity:0; animation:rain 5s linear infinite; text-shadow:0 0 12px rgba(255,138,176,.45); }
     @keyframes rain { 0% { transform: translate3d(0,-20px,0) scale(0.7); opacity:0; }
-    10% { opacity:.9; }
-    100% { transform: translate3d(0,110vh,0) scale(0.85); opacity:0; }}
-    .slide-meta { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
-    .slide-meta small { color:#cbd5e1; }
-    .details { margin-top:1rem; border:1px solid rgba(148,163,184,.2); }
-    .details p { margin:0; }    @media (max-width: 640px) {
+      10% { opacity:.9; }
+      100% { transform: translate3d(0,110vh,0) scale(0.85); opacity:0; }
+    }
+    .card-body { padding:1.5rem 1.75rem 2rem; display:flex; flex-direction:column; justify-content:flex-start; }
+    .slide-meta { display:flex; justify-content:space-between; align-items:flex-start; gap:1.25rem; flex-wrap:wrap; }
+    .slide-header { max-width:calc(100% - 180px); }
+    .slide-header h1 { font-size:2.35rem; font-weight:700; margin:0; letter-spacing:.02em; }
+    .slide-header p { margin:.5rem 0 0; color:#cbd5e1; font-size:1rem; line-height:1.55; }
+    .slide-meta small { color:#7f9cf5; display:block; margin-top:.75rem; }
+    .details { margin-top:1.5rem; border:1px solid rgba(148,163,184,.18); background:rgba(255,255,255,.04); border-radius:.85rem; padding:1.25rem; }
+    .details p { margin:0; color:#e2e8f0; font-size:1rem; line-height:1.75; }
+    .btn-pink { background:#ff8ab0; border-color:#ff7aa0; color:#111; font-weight:700; box-shadow:0 12px 26px rgba(255,138,176,.18); }
+    .btn-pink:hover, .btn-pink:focus { background:#ff6b8a; border-color:#ff5b7b; color:#fff; }
+    .kiss-overlay { position:absolute; inset:0; pointer-events:none; z-index:999; }
+    .lip { position:absolute; font-size:3.25rem; transform:translate(-50%,-50%) scale(0.9); animation:pop 0.18s ease-out forwards; }
+    @keyframes pop { 0% { transform:translate(-50%,-50%) scale(0.5); opacity:0; }
+      60% { transform:translate(-50%,-50%) scale(1.12); opacity:1; }
+      100% { transform:translate(-50%,-50%) scale(1); opacity:1; }
+    }
+    @media (max-width: 768px) {
       .slide-meta { flex-direction:column; align-items:flex-start; }
+      .slide-header h1 { font-size:1.9rem; }
+      .btn-pink { width:100%; }
     }
   </style>
 </head>
@@ -36,15 +55,18 @@
       </div>
       <div class="card-body">
         <div class="slide-meta">
-          <div>
-            <h2 class="h4 mb-1">RURU Gallery</h2>
+          <div class="slide-header">
+            <h1>Ruru's wall</h1>
+            <p>Ruru spending time doing what he likes.</p>
             <small id="slideIndex">1 / 10</small>
           </div>
+          <button id="kissBtn" type="button" class="btn btn-pink btn-lg">Kiss Ruru</button>
         </div>
-        <div id="detailsPanel" class="details p-3 bg-white text-dark rounded-3">
-          <p id="slideName" class="mb-0">Welcome to the RURU Gallery — a refined showcase of curated imagery with softly animated accents.</p>
+        <div id="detailsPanel" class="details">
+          <p id="slideName">Welcome to the RURU Gallery — a refined showcase of curated imagery with softly animated accents.</p>
         </div>
       </div>
+      <div class="kiss-overlay" aria-hidden="true"></div> 
     </div>
   </div>
 
@@ -65,8 +87,11 @@
     const indexLabel = document.getElementById('slideIndex');
     const slideName = document.getElementById('slideName');
     const heartRain = document.querySelector('.heart-rain');
+    const kissBtn = document.getElementById('kissBtn');
+    const kissOverlay = document.querySelector('.kiss-overlay');
     let currentSlide = 0;
     let timer = null;
+    let lipVisible = false;
 
     const createHeart = () => {
       const heart = document.createElement('span');
@@ -75,9 +100,24 @@
       heart.style.left = `${Math.random() * 100}%`;
       heart.style.fontSize = `${1 + Math.random() * 1.2}rem`;
       heart.style.animationDuration = `${4 + Math.random() * 3}s`;
-      heart.style.opacity = '0';
       heartRain.appendChild(heart);
       heart.addEventListener('animationend', () => heart.remove());
+    };
+
+    const showKiss = () => {
+      if (lipVisible) return;
+      lipVisible = true;
+      const lip = document.createElement('span');
+      lip.className = 'lip';
+      lip.textContent = '💋';
+      lip.style.left = `${10 + Math.random() * 80}%`;
+      lip.style.top = `${10 + Math.random() * 80}%`;
+      kissOverlay.appendChild(lip);
+      const duration = 3000 + Math.random() * 1000;
+      setTimeout(() => {
+        lip.remove();
+        lipVisible = false;
+      }, duration);
     };
 
     const updateSlide = (position) => {
@@ -108,6 +148,7 @@
     document.querySelector('.slide-view').addEventListener('click', () => {
       nextSlide();
     });
+    kissBtn.addEventListener('click', showKiss);
 
     setAutoplay(true);
     setInterval(createHeart, 400);
