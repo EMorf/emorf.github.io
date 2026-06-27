@@ -29,8 +29,6 @@
     .slide-header h1 { font-size:2.35rem; font-weight:700; margin:0; letter-spacing:.02em; }
     .slide-header p { margin:.5rem 0 0; color:#cbd5e1; font-size:1rem; line-height:1.55; }
     .slide-meta small { color:#7f9cf5; display:block; margin-top:.75rem; }
-    .details { margin-top:1.5rem; border:1px solid rgba(148,163,184,.18); background:rgba(255,255,255,.04); border-radius:.85rem; padding:1.25rem; }
-    .details p { margin:0; color:#e2e8f0; font-size:1rem; line-height:1.75; }
     .btn-pink { background:#ff8ab0; border-color:#ff7aa0; color:#111; font-weight:700; box-shadow:0 12px 26px rgba(255,138,176,.18); }
     .btn-pink:hover, .btn-pink:focus { background:#ff6b8a; border-color:#ff5b7b; color:#fff; }
     .slide-actions { display:flex; gap:0.75rem; align-items:center; }
@@ -68,9 +66,6 @@
             <button id="muteBtn" type="button" class="btn btn-pink btn-lg" title="Unmute music">🔇</button>
           </div>
         </div>
-        <div id="detailsPanel" class="details">
-          <p id="slideName">Welcome to the RURU Gallery — a refined showcase of curated imagery with softly animated accents.</p>
-        </div>
       </div>
       <div class="kiss-overlay" aria-hidden="true"></div> 
     </div>
@@ -91,7 +86,6 @@
     ];
     const img = document.getElementById('slideImage');
     const indexLabel = document.getElementById('slideIndex');
-    const slideName = document.getElementById('slideName');
     const heartRain = document.querySelector('.heart-rain');
     const kissBtn = document.getElementById('kissBtn');
     const muteBtn = document.getElementById('muteBtn');
@@ -136,7 +130,6 @@
         img.src = slides[currentSlide];
         img.alt = 'Cute penguin image ' + (currentSlide + 1);
         indexLabel.textContent = (currentSlide + 1) + ' / ' + slides.length;
-        slideName.textContent = 'A cozy little penguin slideshow.';
         img.style.opacity = '1';
       }, 150);
     };
