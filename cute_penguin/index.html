@@ -13,13 +13,16 @@
     .slideshow { width:100%; max-width:980px; }
     .slide-card { border:none; background:rgba(15,23,42,0.92); box-shadow:0 30px 80px rgba(8,18,50,.45); }
     .slide-view { position:relative; overflow:hidden; border-radius:1rem; min-height:420px; background:#000; display:flex; align-items:center; justify-content:center; }
-    .slide-view img { width:100%; height:auto; max-height:calc(100vh - 260px); object-fit:contain; transition:opacity .45s ease; display:block; }
+    .slide-view img { position:relative; z-index:0; width:100%; height:auto; max-height:calc(100vh - 260px); object-fit:contain; transition:opacity .45s ease; display:block; }
+    .heart-rain { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:2; }
+    .heart-rain .heart { position:absolute; top:-2rem; color:#ff8ab0; font-size:1.25rem; opacity:0; animation:rain 5s linear infinite; text-shadow:0 0 12px rgba(255,138,176,.45); }
+    @keyframes rain { 0% { transform: translate3d(0,-20px,0) scale(0.7); opacity:0; }
+    10% { opacity:.9; }
+    100% { transform: translate3d(0,110vh,0) scale(0.85); opacity:0; }}
     .slide-meta { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
     .slide-meta small { color:#cbd5e1; }
-    .btn-group .btn { min-width:100px; }
     .details { margin-top:1rem; border:1px solid rgba(148,163,184,.2); }
-    .details p { margin:0; }
-    @media (max-width: 640px) {
+    .details p { margin:0; }    @media (max-width: 640px) {
       .slide-meta { flex-direction:column; align-items:flex-start; }
     }
   </style>
@@ -28,21 +31,18 @@
   <div class="slideshow">
     <div class="card slide-card">
       <div class="slide-view">
-        <img id="slideImage" src="images/PXL_20250609_000925302.jpg" alt="Cute penguin slideshow image" loading="lazy">
+        <img id="slideImage" src="images/PXL_20250609_000925302.jpg" alt="RURU gallery image" loading="lazy">
+        <div class="heart-rain" aria-hidden="true"></div>
       </div>
       <div class="card-body">
         <div class="slide-meta">
           <div>
-            <h2 class="h4 mb-1">Cute Penguin Collection</h2>
+            <h2 class="h4 mb-1">RURU Gallery</h2>
             <small id="slideIndex">1 / 10</small>
           </div>
-          <div class="btn-group" role="group" aria-label="Slideshow controls">
-            <button id="playPauseBtn" type="button" class="btn btn-sm btn-outline-light">Play</button>
-            <button id="toggleDetailsBtn" type="button" class="btn btn-sm btn-outline-light">Details</button>
-          </div>
         </div>
-        <div id="detailsPanel" class="details p-3 bg-white text-dark rounded-3 d-none">
-          <p id="slideName" class="mb-0">A cozy little penguin slideshow.</p>
+        <div id="detailsPanel" class="details p-3 bg-white text-dark rounded-3">
+          <p id="slideName" class="mb-0">Welcome to the RURU Gallery — a refined showcase of curated imagery with softly animated accents.</p>
         </div>
       </div>
     </div>
@@ -64,88 +64,20 @@
     const img = document.getElementById('slideImage');
     const indexLabel = document.getElementById('slideIndex');
     const slideName = document.getElementById('slideName');
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const toggleDetailsBtn = document.getElementById('toggleDetailsBtn');
-    const detailsPanel = document.getElementById('detailsPanel');
+    const heartRain = document.querySelector('.heart-rain');
     let currentSlide = 0;
-    let playing = false;
     let timer = null;
-    let jazzContext = null;
-    let jazzGain = null;
-    let jazzStarted = false;
-    let jazzStep = 0;
 
-    const playJazzChord = (frequencies, duration, gainLevel = 0.018) => {
-      if (!jazzContext || !jazzGain) return;
-      const now = jazzContext.currentTime;
-      frequencies.forEach((frequency, index) => {
-        const osc = jazzContext.createOscillator();
-        const gain = jazzContext.createGain();
-        const filter = jazzContext.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(1200 + index * 180, now);
-        osc.type = index % 2 === 0 ? 'triangle' : 'sine';
-        osc.frequency.setValueAtTime(frequency, now);
-        gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.exponentialRampToValueAtTime(gainLevel, now + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(jazzGain);
-        osc.start(now);
-        osc.stop(now + duration);
-      });
-    };
-
-    const playJazzBass = (frequency, duration) => {
-      if (!jazzContext || !jazzGain) return;
-      const now = jazzContext.currentTime;
-      const osc = jazzContext.createOscillator();
-      const gain = jazzContext.createGain();
-      const filter = jazzContext.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(500, now);
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(frequency, now);
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(jazzGain);
-      osc.start(now);
-      osc.stop(now + duration);
-    };
-
-    const startSmoothJazz = () => {
-      if (jazzStarted) return;
-      if (!jazzContext) {
-        jazzContext = new (window.AudioContext || window.webkitAudioContext)();
-        jazzGain = jazzContext.createGain();
-        jazzGain.gain.value = 0.04;
-        jazzGain.connect(jazzContext.destination);
-      }
-      if (jazzContext.state === 'suspended') {
-        jazzContext.resume().catch(() => {});
-      }
-
-      const chordProgression = [
-        [261.63, 329.63, 392.0, 493.88],
-        [293.66, 369.99, 440.0, 523.25],
-        [246.94, 293.66, 392.0, 466.16],
-        [261.63, 329.63, 392.0, 440.0]
-      ];
-      const bassProgression = [130.81, 110.0, 146.83, 98.0];
-
-      const playLoopStep = () => {
-        playJazzChord(chordProgression[jazzStep % chordProgression.length], 1.4);
-        playJazzBass(bassProgression[jazzStep % bassProgression.length], 1.4);
-        jazzStep = (jazzStep + 1) % chordProgression.length;
-      };
-
-      jazzStarted = true;
-      playLoopStep();
-      setInterval(playLoopStep, 1600);
+    const createHeart = () => {
+      const heart = document.createElement('span');
+      heart.className = 'heart';
+      heart.textContent = '❤';
+      heart.style.left = `${Math.random() * 100}%`;
+      heart.style.fontSize = `${1 + Math.random() * 1.2}rem`;
+      heart.style.animationDuration = `${4 + Math.random() * 3}s`;
+      heart.style.opacity = '0';
+      heartRain.appendChild(heart);
+      heart.addEventListener('animationend', () => heart.remove());
     };
 
     const updateSlide = (position) => {
@@ -166,31 +98,22 @@
     const prevSlide = () => updateSlide(currentSlide - 1);
 
     const setAutoplay = (enabled) => {
-      playing = enabled;
-      playPauseBtn.textContent = playing ? 'Pause' : 'Play';
-      if (playing) {
-        startSmoothJazz();
+      if (enabled) {
         timer = setInterval(nextSlide, 4500);
       } else {
         clearInterval(timer);
       }
     };
 
-    playPauseBtn.addEventListener('click', () => {
-      setAutoplay(!playing);
-      startSmoothJazz();
-    });
-    toggleDetailsBtn.addEventListener('click', () => {
-      detailsPanel.classList.toggle('d-none');
-      toggleDetailsBtn.textContent = detailsPanel.classList.contains('d-none') ? 'Details' : 'Hide';
-    });
-    document.querySelector('.slide-view').addEventListener('click', (event) => {
-      if (event.target.closest('button')) return;
-      startSmoothJazz();
+    document.querySelector('.slide-view').addEventListener('click', () => {
       nextSlide();
     });
-    window.addEventListener('pointerdown', startSmoothJazz, { once: true });
-    window.addEventListener('load', startSmoothJazz);
+
+    setAutoplay(true);
+    setInterval(createHeart, 400);
+    for (let i = 0; i < 8; i += 1) {
+      setTimeout(createHeart, i * 260);
+    }
 
     updateSlide(0);
   </script>
