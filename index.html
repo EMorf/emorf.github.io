@@ -5,7 +5,21 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Emmanuel's personal webpage</title>
+    <meta name="description" content="Emmanuel Morfiadakis is a Senior Software Engineer based in Adelaide, working across software engineering, automation, and scalable systems.">
+    <meta name="author" content="Emmanuel Morfiadakis">
+    <meta name="robots" content="index,follow">
+    <meta property="og:title" content="Emmanuel Morfiadakis | Senior Software Engineer">
+    <meta property="og:description" content="Senior Software Engineer based in Adelaide with experience in software engineering, automation, and delivery.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://emorf.github.io/">
+    <meta property="og:image" content="https://emorf.github.io/images/me.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Emmanuel Morfiadakis | Senior Software Engineer">
+    <meta name="twitter:description" content="Senior Software Engineer based in Adelaide with experience in software engineering, automation, and delivery.">
+    <meta name="twitter:image" content="https://emorf.github.io/images/me.png">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://formspree.io https://ajax.googleapis.com https://cdn.credly.com; connect-src 'self' https://formspree.io; frame-src https://www.credly.com;">
+    <link rel="canonical" href="https://emorf.github.io/">
+    <title>Emmanuel Morfiadakis | Senior Software Engineer</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
@@ -82,7 +96,7 @@
                 </div>
 
                 <div class="col-md-2">
-                    <img src="images/me.png" width="200" height="200px" />
+                    <img src="images/me.png" width="200" height="200px" alt="Portrait of Emmanuel Morfiadakis" loading="lazy" />
                 </div>
             </div>
         </div>
@@ -98,7 +112,7 @@
                 <h3>Console Connect</h3>
                 <h4>Service Layer Software Engineer</h4>
                 <p>
-                    Working with the wonderful team at Console Connect to handle automation of network device configuration.
+                    Developing software to perform automated configuration of devices in a large-scale network, using Python. The software is used to manage the configuration of thousands of devices across multiple data centres.
                 </p>
             </div>
 
@@ -167,7 +181,7 @@
 
                 <div class="project shadow-large">
                     <div class="project-image">
-                        <img src="images/p_fit.jpg" />
+                        <img src="images/p_fit.jpg" alt="PairFit application preview" loading="lazy" />
                     </div>
                     <!-- End .project-image -->
                     <div class="project-info">
@@ -186,7 +200,7 @@
 
                 <div class="project shadow-large">
                     <div class="project-image">
-                        <img src="images/timetable.jpg" />
+                        <img src="images/timetable.jpg" alt="ANU Timetable project preview" loading="lazy" />
                     </div>
                     <!-- End .project-image -->
                     <div class="project-info">
@@ -197,7 +211,7 @@
                             expanding the features of the website, bug chasing and fixing, responding to user queries,
                             and in general anything that has to do with running a popular website.
                         </p>
-                        <a href="http://www.anutimetable.com">View Project</a>
+                        <a href="https://timetable.cssa.club/contributors.html">View Project</a>
                     </div>
                     <!-- End .project-info -->
                 </div>
@@ -205,7 +219,7 @@
 
                 <div class="project shadow-large">
                     <div class="project-image">
-                        <img src="images/mdog.png" />
+                        <img src="images/mdog.png" alt="Message Dog project preview" loading="lazy" />
                     </div>
                     <!-- End .project-image -->
                     <div class="project-info">
@@ -230,8 +244,8 @@
     </div>
     <!-- End #projects -->
 
-    <div id="skills">
-        <h2 class="heading">Techincal Skills</h2>
+    <div class="skills-section">
+        <h2 class="heading">Technical Skills</h2>
         <ul>
             <li>C++</li>
             <li>C#</li>
@@ -256,7 +270,7 @@
     </div>
 
 
-    <div id="skills">
+    <div class="skills-section">
         <h2 class="heading">Project Management Skills</h2>
         <ul>
             <li>Time Management</li>
@@ -271,13 +285,13 @@
     </div>
     <!-- End #skills -->
 
-    <div id="skills">
+    <div class="skills-section">
         <h2 class="heading">Certifications</h2>
-        <ul>
-
-            <li>Certified Kubernetes Application Developer</li>
-
-        </ul>
+        <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+            <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="c364dcd9-6081-4fa6-9838-6b6d0235ebb8" data-share-badge-host="https://www.credly.com"></div>
+            <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="52337de8-b8ef-4c9c-81d5-7f0918eaa7cc" data-share-badge-host="https://www.credly.com"></div>
+        </div>
+        <script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
     </div>
     <!-- End #skills -->
 
@@ -324,7 +338,7 @@
             <div class="row">
                 <div class="col-sm-5 copyright">
                     <p>
-                        Copyright &copy; 2025 Emmanuel Morfiadakis
+                        Copyright &copy; <span id="current-year"></span> Emmanuel Morfiadakis
                     </p>
                 </div>
                 <div class="col-sm-2 top">
@@ -335,11 +349,11 @@
                 <div class="col-sm-5 social">
                     <ul>
                         <li>
-                            <a href="https://github.com/EMorf" target="_blank"><i class="fa fa-github"
+                            <a href="https://github.com/EMorf" target="_blank" rel="noopener noreferrer"><i class="fa fa-github"
                                     aria-hidden="true"></i></a>
                         </li>
                         <li>
-                            <a href="https://www.linkedin.com/in/emorfiadakis/" target="_blank"><i
+                            <a href="https://www.linkedin.com/in/emorfiadakis/" target="_blank" rel="noopener noreferrer"><i
                                     class="fa fa-linkedin" aria-hidden="true"></i></a>
                         </li>
 
@@ -354,6 +368,9 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/scripts.min.js"></script>
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
 </body>
 
 </html>
