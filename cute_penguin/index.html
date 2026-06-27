@@ -31,20 +31,46 @@
     .slide-meta small { color:#7f9cf5; display:block; margin-top:.75rem; }
     .details { margin-top:1.5rem; border:1px solid rgba(148,163,184,.18); background:rgba(255,255,255,.04); border-radius:.85rem; padding:1.25rem; }
     .details p { margin:0; color:#e2e8f0; font-size:1rem; line-height:1.75; }
-    .btn-pink { background:#ff8ab0; border-color:#ff7aa0; color:#111; font-weight:700; box-shadow:0 12px 26px rgba(255,138,176,.18); }
+    .btn-pink { background:#ff8ab0; border-color:#ff7aa0; color:#111; font-weight:700; box-shadow:0 12px 26px rgba(255,138,176,.18); white-space: nowrap; }
     .btn-pink:hover, .btn-pink:focus { background:#ff6b8a; border-color:#ff5b7b; color:#fff; }
-    .slide-actions { display:flex; gap:0.75rem; align-items:center; }
+    .slide-actions { display:flex; gap:0.5rem; align-items:center; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
+    .slide-actions .btn { display: flex; align-items: center; justify-content: center; min-height: 48px; }
     .kiss-overlay { position:absolute; inset:0; pointer-events:none; z-index:999; }
     .lip { position:absolute; font-size:3.25rem; transform:translate(-50%,-50%) scale(0.9); animation:pop 0.18s ease-out forwards; }
     @keyframes pop { 0% { transform:translate(-50%,-50%) scale(0.5); opacity:0; }
       60% { transform:translate(-50%,-50%) scale(1.12); opacity:1; }
       100% { transform:translate(-50%,-50%) scale(1); opacity:1; }
     }
+    .days-counter { font-weight: 700; color: #ff8ab0; margin-bottom: 0.5rem; display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .brat-mode-toggle { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; user-select: none; margin-top: 0.5rem; }
+    .brat-mode-toggle input { cursor: pointer; }
+    .sticker-item { position: absolute; cursor: move; font-size: 3rem; user-select: none; z-index: 10; touch-action: none; pointer-events: auto; }
+    .sparkle { position: absolute; pointer-events: none; font-size: 1.5rem; z-index: 100; animation: sparkle-anim 0.8s ease-out forwards; }
+    @keyframes sparkle-anim {
+      0% { transform: scale(0) rotate(0deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
+    }
+    .fish-animation { position: absolute; font-size: 2.5rem; z-index: 50; animation: fish-swim 1s ease-in-out forwards; }
+    @keyframes fish-swim {
+      0% { transform: translate(-50%, 100%) rotate(0deg); opacity: 0; }
+      50% { opacity: 1; transform: translate(-50%, 50%) rotate(-20deg); }
+      100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    }
+
+    /* Brat Mode Styles */
+    body.brat-mode { background: #1a0b2e; }
+    body.brat-mode .slide-card { background: rgba(30, 10, 40, 0.96); }
+    body.brat-mode .btn-pink { background: #b08aff; border-color: #a07aff; }
+    body.brat-mode .days-counter { color: #b08aff; }
+    body.brat-mode .heart { color: #b08aff; text-shadow: 0 0 12px rgba(176, 138, 255, 0.45); }
+
     @media (max-width: 768px) {
-      .slide-meta { flex-direction: column; align-items: flex-start; }
-      .slide-header { max-width: 100%; }
+      .slide-meta { flex-direction: column; align-items: center; text-align: center; }
+      .slide-header { max-width: 100%; margin-bottom: 1rem; }
       .slide-header h1 { font-size: 1.9rem; }
-      .btn-pink { width: 100%; margin-top: 1rem; }
+      .btn-pink { flex: 1 1 calc(33.33% - 0.5rem); min-width: 80px; padding: 0.5rem; font-size: 0.85rem; }
+      .slide-actions { width: 100%; }
     }
   </style>
 </head>
@@ -57,14 +83,22 @@
         <div class="heart-rain" aria-hidden="true"></div>
       </div>
       <div class="card-body">
+        <span id="daysCounter" class="days-counter">Loading days...</span>
         <div class="slide-meta">
           <div class="slide-header">
             <h1>Ruru's wall</h1>
-            <p>Ruru spending time doing what he likes.</p>
+            <p id="slideDesc">Ruru spending time doing what he likes.</p>
             <small id="slideIndex">1 / 10</small>
+            <label class="brat-mode-toggle">
+              <input type="checkbox" id="bratModeToggle"> Brat Mode 😈
+            </label>
           </div>
           <div class="slide-actions">
-            <button id="kissBtn" type="button" class="btn btn-pink btn-lg">Kiss Ruru</button>
+            <button id="prevBtn" type="button" class="btn btn-pink btn-lg" title="Previous Slide">⬅️</button>
+            <button id="kissBtn" type="button" class="btn btn-pink btn-lg">Kiss 💋</button>
+            <button id="feedBtn" type="button" class="btn btn-pink btn-lg">Feed 🐟</button>
+            <button id="stickerBtn" type="button" class="btn btn-pink btn-lg">Sticker ✨</button>
+            <button id="nextBtn" type="button" class="btn btn-pink btn-lg" title="Next Slide">➡️</button>
             <button id="muteBtn" type="button" class="btn btn-pink btn-lg" title="Unmute music">🔇</button>
           </div>
         </div>
@@ -92,10 +126,18 @@
     const img = document.getElementById('slideImage');
     const indexLabel = document.getElementById('slideIndex');
     const slideName = document.getElementById('slideName');
+    const slideDesc = document.getElementById('slideDesc');
     const heartRain = document.querySelector('.heart-rain');
     const kissBtn = document.getElementById('kissBtn');
+    const feedBtn = document.getElementById('feedBtn');
+    const stickerBtn = document.getElementById('stickerBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
     const muteBtn = document.getElementById('muteBtn');
     const kissOverlay = document.querySelector('.kiss-overlay');
+    const bratModeToggle = document.getElementById('bratModeToggle');
+    const daysCounter = document.getElementById('daysCounter');
+
     let currentSlide = 0;
     let timer = null;
     let lipVisible = false;
@@ -103,12 +145,40 @@
     const createHeart = () => {
       const heart = document.createElement('span');
       heart.className = 'heart';
-      heart.textContent = '❤';
+      heart.textContent = bratModeToggle.checked ? '🦴' : '❤';
       heart.style.left = `${Math.random() * 100}%`;
       heart.style.fontSize = `${1 + Math.random() * 1.2}rem`;
       heart.style.animationDuration = `${4 + Math.random() * 3}s`;
       heartRain.appendChild(heart);
       heart.addEventListener('animationend', () => heart.remove());
+    };
+
+    // Audio Context for chirping
+    let audioCtx = null;
+    const playChirp = () => {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.2);
+    };
+
+    const spawnSparkle = (x, y) => {
+      const sparkle = document.createElement('span');
+      sparkle.className = 'sparkle';
+      sparkle.textContent = '✨';
+      sparkle.style.left = `${x}px`;
+      sparkle.style.top = `${y}px`;
+      kissOverlay.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 800);
+      playChirp();
     };
 
     const showKiss = () => {
@@ -117,14 +187,89 @@
       const lip = document.createElement('span');
       lip.className = 'lip';
       lip.textContent = '💋';
-      lip.style.left = `${10 + Math.random() * 80}%`;
-      lip.style.top = `${10 + Math.random() * 80}%`;
+      const x = 10 + Math.random() * 80;
+      const y = 10 + Math.random() * 80;
+      lip.style.left = `${x}%`;
+      lip.style.top = `${y}%`;
       kissOverlay.appendChild(lip);
+      playChirp();
       const duration = 3000 + Math.random() * 1000;
       setTimeout(() => {
         lip.remove();
         lipVisible = false;
       }, duration);
+    };
+
+    const feedRuru = () => {
+      const fish = document.createElement('span');
+      fish.className = 'fish-animation';
+      fish.textContent = '🐟';
+      fish.style.left = '50%';
+      fish.style.bottom = '20%';
+      kissOverlay.appendChild(fish);
+      playChirp();
+      setTimeout(() => {
+        fish.remove();
+        const msg = bratModeToggle.checked ? "More! Bring me MORE FISH! 😈" : "Yum! Ruru is a happy boy! 🐧";
+        slideName.textContent = msg;
+      }, 1000);
+    };
+
+    const stickers = ['🎩', '🎀', '😎'];
+    const spawnSticker = () => {
+      const emoji = stickers[Math.floor(Math.random() * stickers.length)];
+      const sticker = document.createElement('div');
+      sticker.className = 'sticker-item';
+      sticker.textContent = emoji;
+      sticker.style.left = '40%';
+      sticker.style.top = '40%';
+      kissOverlay.appendChild(sticker);
+
+      // Make Draggable
+      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      sticker.onmousedown = dragMouseDown;
+      sticker.ontouchstart = dragTouchStart;
+
+      function dragMouseDown(e) {
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+      }
+
+      function dragTouchStart(e) {
+        pos3 = e.touches[0].clientX;
+        pos4 = e.touches[0].clientY;
+        document.ontouchend = closeDragElement;
+        document.ontouchmove = elementTouchDrag;
+      }
+
+      function elementDrag(e) {
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        sticker.style.top = (sticker.offsetTop - pos2) + "px";
+        sticker.style.left = (sticker.offsetLeft - pos1) + "px";
+      }
+
+      function elementTouchDrag(e) {
+        pos1 = pos3 - e.touches[0].clientX;
+        pos2 = pos4 - e.touches[0].clientY;
+        pos3 = e.touches[0].clientX;
+        pos4 = e.touches[0].clientY;
+        sticker.style.top = (sticker.offsetTop - pos2) + "px";
+        sticker.style.left = (sticker.offsetLeft - pos1) + "px";
+      }
+
+      function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+        document.ontouchend = null;
+        document.ontouchmove = null;
+      }
     };
 
     const updateSlide = (position) => {
@@ -136,7 +281,15 @@
         img.src = slides[currentSlide];
         img.alt = 'Cute penguin image ' + (currentSlide + 1);
         indexLabel.textContent = (currentSlide + 1) + ' / ' + slides.length;
-        slideName.textContent = 'A cozy little penguin slideshow.';
+
+        if (bratModeToggle.checked) {
+          slideName.textContent = 'I am the ruler of this domain. 😈';
+          slideDesc.textContent = 'Ruru being a little brat.';
+        } else {
+          slideName.textContent = 'A cozy little penguin slideshow.';
+          slideDesc.textContent = 'Ruru spending time doing what he likes.';
+        }
+
         img.style.opacity = '1';
       }, 150);
     };
@@ -152,10 +305,47 @@
       }
     };
 
-    document.querySelector('.slide-view').addEventListener('click', () => {
-      nextSlide();
+    document.querySelector('.slide-view').addEventListener('click', (e) => {
+      if (e.target.tagName === 'IMG' || e.target.classList.contains('slide-view')) {
+        const rect = e.target.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        spawnSparkle(x, y);
+      }
     });
+
+    // Tap to pet on mobile
+    document.querySelector('.slide-view').addEventListener('touchstart', (e) => {
+        if (e.target.tagName === 'IMG' || e.target.classList.contains('slide-view')) {
+            const rect = e.target.getBoundingClientRect();
+            const x = e.touches[0].clientX - rect.left;
+            const y = e.touches[0].clientY - rect.top;
+            spawnSparkle(x, y);
+        }
+    });
+
     kissBtn.addEventListener('click', showKiss);
+    feedBtn.addEventListener('click', feedRuru);
+    stickerBtn.addEventListener('click', spawnSticker);
+    prevBtn.addEventListener('click', () => { prevSlide(); setAutoplay(false); setAutoplay(true); });
+    nextBtn.addEventListener('click', () => { nextSlide(); setAutoplay(false); setAutoplay(true); });
+
+    bratModeToggle.addEventListener('change', () => {
+        if (bratModeToggle.checked) {
+            document.body.classList.add('brat-mode');
+        } else {
+            document.body.classList.remove('brat-mode');
+        }
+        updateSlide(currentSlide);
+    });
+
+    const updateDaysCounter = () => {
+        const start = new Date('2022-08-13');
+        const now = new Date();
+        const diff = now - start;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        daysCounter.textContent = `Ruru has been with us for ${days} days`;
+    };
 
     // YouTube Player API
     let player;
@@ -205,6 +395,8 @@
     }
 
     updateSlide(0);
+    updateDaysCounter();
+    setInterval(updateDaysCounter, 1000 * 60 * 60); // Update every hour
   </script>
 </body>
 </html>
