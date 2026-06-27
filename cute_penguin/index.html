@@ -33,6 +33,7 @@
     .details p { margin:0; color:#e2e8f0; font-size:1rem; line-height:1.75; }
     .btn-pink { background:#ff8ab0; border-color:#ff7aa0; color:#111; font-weight:700; box-shadow:0 12px 26px rgba(255,138,176,.18); }
     .btn-pink:hover, .btn-pink:focus { background:#ff6b8a; border-color:#ff5b7b; color:#fff; }
+    .slide-actions { display:flex; gap:0.75rem; align-items:center; }
     .kiss-overlay { position:absolute; inset:0; pointer-events:none; z-index:999; }
     .lip { position:absolute; font-size:3.25rem; transform:translate(-50%,-50%) scale(0.9); animation:pop 0.18s ease-out forwards; }
     @keyframes pop { 0% { transform:translate(-50%,-50%) scale(0.5); opacity:0; }
@@ -47,6 +48,7 @@
   </style>
 </head>
 <body>
+  <div id="youtube-player" style="position:absolute; width:0; height:0; border:0; pointer-events:none; visibility:hidden;"></div>
   <div class="slideshow">
     <div class="card slide-card">
       <div class="slide-view">
@@ -60,7 +62,10 @@
             <p>Ruru spending time doing what he likes.</p>
             <small id="slideIndex">1 / 10</small>
           </div>
-          <button id="kissBtn" type="button" class="btn btn-pink btn-lg">Kiss Ruru</button>
+          <div class="slide-actions">
+            <button id="kissBtn" type="button" class="btn btn-pink btn-lg">Kiss Ruru</button>
+            <button id="muteBtn" type="button" class="btn btn-pink btn-lg" title="Unmute music">🔇</button>
+          </div>
         </div>
         <div id="detailsPanel" class="details">
           <p id="slideName">Welcome to the RURU Gallery — a refined showcase of curated imagery with softly animated accents.</p>
@@ -88,6 +93,7 @@
     const slideName = document.getElementById('slideName');
     const heartRain = document.querySelector('.heart-rain');
     const kissBtn = document.getElementById('kissBtn');
+    const muteBtn = document.getElementById('muteBtn');
     const kissOverlay = document.querySelector('.kiss-overlay');
     let currentSlide = 0;
     let timer = null;
@@ -149,6 +155,47 @@
       nextSlide();
     });
     kissBtn.addEventListener('click', showKiss);
+
+    // YouTube Player API
+    let player;
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    window.onYouTubeIframeAPIReady = () => {
+      player = new YT.Player('youtube-player', {
+        height: '0',
+        width: '0',
+        videoId: 'JkiglO98YYo',
+        playerVars: {
+          'autoplay': 1,
+          'loop': 1,
+          'playlist': 'JkiglO98YYo',
+          'controls': 0,
+          'showinfo': 0,
+          'rel': 0,
+          'mute': 1
+        },
+        events: {
+          'onReady': (event) => {
+            event.target.playVideo();
+          }
+        }
+      });
+    };
+
+    muteBtn.addEventListener('click', () => {
+      if (player && player.isMuted()) {
+        player.unMute();
+        muteBtn.textContent = '🔊';
+        muteBtn.title = 'Mute music';
+      } else if (player) {
+        player.mute();
+        muteBtn.textContent = '🔇';
+        muteBtn.title = 'Unmute music';
+      }
+    });
 
     setAutoplay(true);
     setInterval(createHeart, 400);
