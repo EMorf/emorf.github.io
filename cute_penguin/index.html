@@ -8,9 +8,12 @@
   <meta name="robots" content="noindex, nofollow, noarchive">
   <link rel="canonical" href="https://morfiadakis.au/cute_penguin/">
   <link rel="icon" href="images/IMG_20240517_214222_054.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://www.youtube.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
   <link rel="stylesheet" href="../css/bootstrap.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
     html, body { min-height: 100dvh; }
     body { background: #020617; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0; padding: 0; font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif; position: relative; }
     body::before, body::after { content: ""; flex-grow: 1; }
@@ -234,7 +237,7 @@
     };
 
     const stickers = ['🎩', '🎀', '😎'];
-    const slideViewElement = document.querySelector('.slide-view');
+    // const slideViewElement = document.querySelector('.slide-view'); // Removed redundant declaration to fix JS syntax error
     const spawnSparkle = (x, y) => {
       const sparkle = document.createElement('div');
       sparkle.className = 'sparkle';
