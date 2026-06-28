@@ -355,29 +355,11 @@
       }
     };
 
-    const handleInteraction = (e) => {
-      const isTouch = e.type === 'touchstart';
-      const clientX = isTouch ? e.touches[0].clientX : e.clientX;
-      const clientY = isTouch ? e.touches[0].clientY : e.clientY;
-
-      if (e.target.tagName === 'IMG' || e.target.classList.contains('slide-view')) {
-        const rect = e.target.getBoundingClientRect();
-        const x = clientX - rect.left;
-        const y = clientY - rect.top;
-        spawnSparkle(x, y);
-        if (isTouch && e.cancelable) e.preventDefault();
-      }
-    };
-
-    const slideViewElement = document.querySelector('.slide-view');
-    slideViewElement.addEventListener('click', handleInteraction);
-    slideViewElement.addEventListener('touchstart', handleInteraction, { passive: false });
-
-    kissBtn.addEventListener('click', (e) => { e.preventDefault(); showKiss(); });
-    feedBtn.addEventListener('click', (e) => { e.preventDefault(); feedRuru(); });
-    stickerBtn.addEventListener('click', (e) => { e.preventDefault(); spawnSticker(); });
-    prevBtn.addEventListener('click', (e) => { e.preventDefault(); prevSlide(); setAutoplay(false); setAutoplay(true); });
-    nextBtn.addEventListener('click', (e) => { e.preventDefault(); nextSlide(); setAutoplay(false); setAutoplay(true); });
+    kissBtn.addEventListener('click', showKiss);
+    feedBtn.addEventListener('click', feedRuru);
+    stickerBtn.addEventListener('click', spawnSticker);
+    prevBtn.addEventListener('click', () => { prevSlide(); setAutoplay(false); setAutoplay(true); });
+    nextBtn.addEventListener('click', () => { nextSlide(); setAutoplay(false); setAutoplay(true); });
 
     bratModeToggle.addEventListener('change', () => {
         if (bratModeToggle.checked) {
