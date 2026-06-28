@@ -19,7 +19,7 @@
     .slide-view { position: relative; overflow: hidden; flex: 1; background: #000; display: flex; align-items: center; justify-content: center; aspect-ratio: 1 / 1; width: 100%; }
     .slide-view img { position: relative; z-index: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity .45s ease; display: block; user-select: none; -webkit-user-drag: none; }
     .heart-rain { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:2; }
-    .heart-rain .heart { position:absolute; top:-2rem; color:#ff8ab0; font-size:1.25rem; opacity:0; animation:rain 5s linear infinite; text-shadow:0 0 12px rgba(255,138,176,.45); }
+    .heart-rain .heart { position:absolute; top:-2rem; color:#ff8ab0; font-size:1.25rem; opacity:0; animation:rain 5s linear forwards; text-shadow:0 0 12px rgba(255,138,176,.45); }
     @keyframes rain { 0% { transform: translate3d(0,-20px,0) scale(0.7); opacity:0; }
       10% { opacity:.9; }
       100% { transform: translate3d(0,110vh,0) scale(0.85); opacity:0; }
@@ -232,6 +232,7 @@
     };
 
     const stickers = ['🎩', '🎀', '😎'];
+    const slideViewElement = document.querySelector('.slide-view');
     const spawnSparkle = (x, y) => {
       const sparkle = document.createElement('div');
       sparkle.className = 'sparkle';
@@ -240,6 +241,20 @@
       slideViewElement.appendChild(sparkle);
       sparkle.addEventListener('animationend', () => sparkle.remove());
     };
+
+    slideViewElement.addEventListener('click', (e) => {
+      const rect = slideViewElement.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      spawnSparkle(x, y);
+    });
+
+    slideViewElement.addEventListener('touchstart', (e) => {
+      const rect = slideViewElement.getBoundingClientRect();
+      const x = e.touches[0].clientX - rect.left;
+      const y = e.touches[0].clientY - rect.top;
+      spawnSparkle(x, y);
+    }, { passive: true });
 
     const spawnSticker = () => {
       const emoji = stickers[Math.floor(Math.random() * stickers.length)];
@@ -361,14 +376,18 @@
     prevBtn.addEventListener('click', () => { prevSlide(); setAutoplay(false); setAutoplay(true); });
     nextBtn.addEventListener('click', () => { nextSlide(); setAutoplay(false); setAutoplay(true); });
 
-    bratModeToggle.addEventListener('change', () => {
+    const syncBratMode = () => {
         if (bratModeToggle.checked) {
             document.body.classList.add('brat-mode');
+            localStorage.setItem('bratMode', 'enabled');
         } else {
             document.body.classList.remove('brat-mode');
+            localStorage.setItem('bratMode', 'disabled');
         }
         updateSlide(currentSlide, true);
-    });
+    };
+
+    bratModeToggle.addEventListener('change', syncBratMode);
 
     const updateDaysCounter = () => {
         const start = new Date('2022-08-13');
@@ -425,6 +444,14 @@
     for (let i = 0; i < 8; i += 1) {
       setTimeout(createHeart, i * 260);
     }
+
+    // Restore Brat Mode state
+    if (localStorage.getItem('bratMode') === 'enabled') {
+        bratModeToggle.checked = true;
+    } else if (localStorage.getItem('bratMode') === 'disabled') {
+        bratModeToggle.checked = false;
+    }
+    syncBratMode();
 
     updateSlide(0);
     updateDaysCounter();
