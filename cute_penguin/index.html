@@ -114,6 +114,9 @@
             <label class="brat-mode-toggle">
               <input type="checkbox" id="bratModeToggle"> Brat Mode 😈
             </label>
+            <label class="brat-mode-toggle">
+              <input type="checkbox" id="songSharkToggle"> Baby Shark 🦈
+            </label>
           </div>
           <div class="slide-actions">
             <button id="prevBtn" type="button" class="btn btn-pink btn-lg" title="Previous Slide">⬅️</button>
@@ -159,6 +162,7 @@
     const slideViewElement = document.getElementById('slideView');
     const kissOverlay = document.querySelector('.kiss-overlay');
     const bratModeToggle = document.getElementById('bratModeToggle');
+    const songSharkToggle = document.getElementById('songSharkToggle');
     const daysCounter = document.getElementById('daysCounter');
 
     let currentSlide = 0;
@@ -394,6 +398,24 @@
 
     bratModeToggle.addEventListener('change', syncBratMode);
 
+    const SONGS = {
+      default: 'JkiglO98YYo',
+      shark: 'XqZsoesa55w'
+    };
+
+    songSharkToggle.addEventListener('change', () => {
+      if (player) {
+        const videoId = songSharkToggle.checked ? SONGS.shark : SONGS.default;
+        player.loadVideoById({
+          videoId: videoId,
+          startSeconds: 0
+        });
+        // Ensure it keeps looping
+        // Note: loadVideoById with a single videoId might lose the 'playlist' loop context
+        // but YouTube IFrame API loop usually needs playlist to work reliably.
+      }
+    });
+
     const updateDaysCounter = () => {
         const start = new Date('2022-08-13');
         const now = new Date();
@@ -413,11 +435,11 @@
       player = new YT.Player('youtube-player', {
         height: '0',
         width: '0',
-        videoId: 'JkiglO98YYo',
+        videoId: SONGS.default,
         playerVars: {
           'autoplay': 1,
           'loop': 1,
-          'playlist': 'JkiglO98YYo',
+          'playlist': SONGS.default,
           'controls': 0,
           'showinfo': 0,
           'rel': 0,
@@ -426,6 +448,11 @@
         events: {
           'onReady': (event) => {
             event.target.playVideo();
+          },
+          'onStateChange': (event) => {
+            if (event.data === YT.PlayerState.ENDED) {
+                player.playVideo();
+            }
           }
         }
       });
