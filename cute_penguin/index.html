@@ -46,12 +46,6 @@
     .brat-mode-toggle { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; user-select: none; margin-top: 0.5rem; }
     .brat-mode-toggle input { cursor: pointer; }
     .sticker-item { position: absolute; cursor: move; font-size: 3rem; user-select: none; z-index: 10; touch-action: none; pointer-events: auto; }
-    .sparkle { position: absolute; pointer-events: none; font-size: 1.5rem; z-index: 100; animation: sparkle-anim 0.8s ease-out forwards; }
-    @keyframes sparkle-anim {
-      0% { transform: scale(0) rotate(0deg); opacity: 0; }
-      50% { opacity: 1; }
-      100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
-    }
     .fish-animation { position: absolute; font-size: 2.5rem; z-index: 50; animation: fish-swim 1s ease-in-out forwards; }
     @keyframes fish-swim {
       0% { transform: translate(-50%, 100%) rotate(0deg); opacity: 0; }
@@ -181,17 +175,6 @@
       gain.connect(audioCtx.destination);
       osc.start();
       osc.stop(audioCtx.currentTime + 0.2);
-    };
-
-    const spawnSparkle = (x, y) => {
-      const sparkle = document.createElement('span');
-      sparkle.className = 'sparkle';
-      sparkle.textContent = '✨';
-      sparkle.style.left = `${x}px`;
-      sparkle.style.top = `${y}px`;
-      kissOverlay.appendChild(sparkle);
-      setTimeout(() => sparkle.remove(), 800);
-      playChirp();
     };
 
     const showKiss = () => {
