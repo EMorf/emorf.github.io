@@ -31,7 +31,7 @@
     });
 
     // Scroll to first element
-    $('#lead-down span').click(function() {
+    $('#lead-down button').click(function() {
         var scrollDistance = $('#lead').next().offset().top;
         $('html, body').animate({
             scrollTop: scrollDistance + 'px'

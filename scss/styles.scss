@@ -201,6 +201,15 @@ header {
     padding: 0 7px;
     border-radius: 4px;
     background: $background;
+    border: none;
+
+    &:focus {
+        outline: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $base-color;
+    }
 }
 
 #mobile-menu-close {
@@ -213,6 +222,15 @@ header {
     padding-top: 10px;
     cursor: pointer;
     color: $base-color;
+    border: none;
+
+    &:focus {
+        outline: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $base-color;
+    }
 
     span {
         font-size: 0.5em;
@@ -240,7 +258,7 @@ footer {
 .top {
     text-align: center;
 
-    span {
+    button {
         cursor: pointer;
         display: block;
         margin: 15px auto 0 auto;
@@ -249,6 +267,17 @@ footer {
         border-radius: 50%;
         border: 3px solid lighten($text, 25%);
         text-align:center;
+        background: transparent;
+        padding: 0;
+
+        &:focus {
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $base-color;
+            outline-offset: 2px;
+        }
     }
 
     i {
@@ -396,7 +425,7 @@ footer {
     bottom: 15px;
     color: #fff;
 
-    span {
+    button {
         cursor: pointer;
         display: block;
         margin: 0 auto;
@@ -405,6 +434,17 @@ footer {
         border-radius: 50%;
         border: 3px solid lighten($base-color, 25%);
         text-align:center;
+        background: transparent;
+        padding: 0;
+
+        &:focus {
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
     }
 
     i {
