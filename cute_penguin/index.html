@@ -16,8 +16,8 @@
     body::before, body::after { content: ""; flex-grow: 1; }
     .slideshow { width: 100%; max-width: 500px; display: flex; align-items: center; justify-content: center; z-index: 1; }
     .slide-card { width: 100%; border: none; background: rgba(10,15,30,0.96); box-shadow: 0 30px 80px rgba(8,18,50,.45); display: flex; flex-direction: column; }
-    .slide-view { position: relative; overflow: hidden; flex: 1; background: #000; display: flex; align-items: center; justify-content: center; }
-    .slide-view img { position: relative; z-index: 0; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; transition: opacity .45s ease; display: block; }
+    .slide-view { position: relative; overflow: hidden; flex: 1; background: #000; display: flex; align-items: center; justify-content: center; aspect-ratio: 1 / 1; width: 100%; }
+    .slide-view img { position: relative; z-index: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity .45s ease; display: block; user-select: none; -webkit-user-drag: none; }
     .heart-rain { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:2; }
     .heart-rain .heart { position:absolute; top:-2rem; color:#ff8ab0; font-size:1.25rem; opacity:0; animation:rain 5s linear infinite; text-shadow:0 0 12px rgba(255,138,176,.45); }
     @keyframes rain { 0% { transform: translate3d(0,-20px,0) scale(0.7); opacity:0; }
@@ -26,16 +26,16 @@
     }
     .card-body { padding: 1.5rem 1.75rem 2rem; display: flex; flex-direction: column; justify-content: flex-start; flex-shrink: 0; }
     .slide-meta { display:flex; justify-content:space-between; align-items:flex-start; gap:1.25rem; flex-wrap:wrap; }
-    .slide-header { max-width:calc(100% - 180px); }
+    .slide-header { max-width:calc(100% - 180px); min-height: 160px; }
     .slide-header h1 { font-size:2.35rem; font-weight:700; margin:0; letter-spacing:.02em; }
-    .slide-header p { margin:.5rem 0 0; color:#cbd5e1; font-size:1rem; line-height:1.55; }
+    .slide-header p { margin:.5rem 0 0; color:#cbd5e1; font-size:1rem; line-height:1.55; min-height: 1.55em; }
     .slide-meta small { color:#7f9cf5; display:block; margin-top:.75rem; }
     .details { margin-top:1.5rem; border:1px solid rgba(148,163,184,.18); background:rgba(255,255,255,.04); border-radius:.85rem; padding:1.25rem; }
     .details p { margin:0; color:#e2e8f0; font-size:1rem; line-height:1.75; }
-    .btn-pink { background:#ff8ab0; border-color:#ff7aa0; color:#111; font-weight:700; box-shadow:0 12px 26px rgba(255,138,176,.18); white-space: nowrap; }
+    .btn-pink { background:#ff8ab0; border-color:#ff7aa0; color:#111; font-weight:700; box-shadow:0 12px 26px rgba(255,138,176,.18); white-space: nowrap; touch-action: manipulation; }
     .btn-pink:hover, .btn-pink:focus { background:#ff6b8a; border-color:#ff5b7b; color:#fff; }
     .slide-actions { display:flex; gap:0.5rem; align-items:center; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
-    .slide-actions .btn { display: flex; align-items: center; justify-content: center; min-height: 48px; }
+    .slide-actions .btn { display: flex; align-items: center; justify-content: center; min-height: 48px; font-size: 1.25rem; }
     .kiss-overlay { position:absolute; inset:0; pointer-events:none; z-index:999; }
     .lip { position:absolute; font-size:3.25rem; transform:translate(-50%,-50%) scale(0.9); animation:pop 0.18s ease-out forwards; }
     @keyframes pop { 0% { transform:translate(-50%,-50%) scale(0.5); opacity:0; }
@@ -53,6 +53,26 @@
       100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
     }
 
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #ff8ab0;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 100;
+      animation: sparkle-fade 0.8s ease-out forwards;
+      box-shadow: 0 0 10px rgba(255,138,176,0.8);
+    }
+    @keyframes sparkle-fade {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+    }
+    body.brat-mode .sparkle {
+      background: #b08aff;
+      box-shadow: 0 0 10px rgba(176,138,255,0.8);
+    }
+
     /* Brat Mode Styles */
     body.brat-mode { background: #1a0b2e; }
     body.brat-mode .slide-card { background: rgba(30, 10, 40, 0.96); }
@@ -62,7 +82,7 @@
 
     @media (max-width: 768px) {
       .slide-meta { flex-direction: column; align-items: center; text-align: center; }
-      .slide-header { max-width: 100%; margin-bottom: 1rem; }
+      .slide-header { max-width: 100%; margin-bottom: 1rem; min-height: auto; }
       .slide-header h1 { font-size: 1.9rem; }
       .btn-pink { flex: 1 1 calc(33.33% - 0.5rem); min-width: 80px; padding: 0.5rem; font-size: 0.85rem; }
       .slide-actions { width: 100%; }
@@ -74,7 +94,8 @@
   <div class="slideshow">
     <div class="card slide-card">
       <div class="slide-view">
-        <img id="slideImage" src="images/PXL_20250609_000925302.jpg" alt="RURU gallery image" loading="lazy">
+        <img id="slideImage" src="images/PXL_20250609_000925302.jpg" alt="RURU gallery image" style="position: absolute; opacity: 1;">
+        <img id="slideImageNext" src="" alt="" style="position: absolute; opacity: 0;">
         <div class="heart-rain" aria-hidden="true"></div>
       </div>
       <div class="card-body">
@@ -117,6 +138,10 @@
       'images/PXL_20250609_000916756.jpg'
     ];
     const img = document.getElementById('slideImage');
+    const imgNext = document.getElementById('slideImageNext');
+    let activeImg = img;
+    let inactiveImg = imgNext;
+
     const indexLabel = document.getElementById('slideIndex');
     const slideName = document.getElementById('slideName');
     const slideDesc = document.getElementById('slideDesc');
@@ -134,6 +159,15 @@
     let currentSlide = 0;
     let timer = null;
     let lipVisible = false;
+    const preloadedImages = [];
+
+    const preloadImages = () => {
+      slides.forEach((src) => {
+        const img = new Image();
+        img.src = src;
+        preloadedImages.push(img);
+      });
+    };
 
     const createHeart = () => {
       const heart = document.createElement('span');
@@ -198,6 +232,15 @@
     };
 
     const stickers = ['🎩', '🎀', '😎'];
+    const spawnSparkle = (x, y) => {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      sparkle.style.left = `${x}px`;
+      sparkle.style.top = `${y}px`;
+      slideViewElement.appendChild(sparkle);
+      sparkle.addEventListener('animationend', () => sparkle.remove());
+    };
+
     const spawnSticker = () => {
       const emoji = stickers[Math.floor(Math.random() * stickers.length)];
       const sticker = document.createElement('div');
@@ -238,6 +281,7 @@
       }
 
       function elementTouchDrag(e) {
+        if (e.cancelable) e.preventDefault();
         pos1 = pos3 - e.touches[0].clientX;
         pos2 = pos4 - e.touches[0].clientY;
         pos3 = e.touches[0].clientX;
@@ -254,26 +298,50 @@
       }
     };
 
-    const updateSlide = (position) => {
+    let isTransitioning = false;
+    const updateSlide = (position, force = false) => {
+      if (isTransitioning) return;
       if (position < 0) position = slides.length - 1;
       if (position >= slides.length) position = 0;
+
+      const isInitial = imgNext.src === '' && currentSlide === 0 && position === 0;
+      if (!isInitial && !force && position === currentSlide) return;
+
       currentSlide = position;
-      img.style.opacity = '0';
+
+      if (bratModeToggle.checked) {
+        slideName.textContent = 'I am the ruler of this domain. 😈';
+        slideDesc.textContent = 'Ruru being a little brat.';
+      } else {
+        slideName.textContent = 'A cozy little penguin slideshow.';
+        slideDesc.textContent = 'Ruru spending time doing what he likes.';
+      }
+      indexLabel.textContent = (currentSlide + 1) + ' / ' + slides.length;
+
+      if (isInitial) {
+        activeImg.src = slides[0];
+        activeImg.alt = 'Cute penguin image 1';
+        activeImg.style.opacity = '1';
+        inactiveImg.style.opacity = '0';
+        return;
+      }
+
+      isTransitioning = true;
+      inactiveImg.src = slides[currentSlide];
+      inactiveImg.alt = 'Cute penguin image ' + (currentSlide + 1);
+
+      // Start cross-fade
+      inactiveImg.style.opacity = '1';
+      activeImg.style.opacity = '0';
+
+      // Swap which image is active
+      const temp = activeImg;
+      activeImg = inactiveImg;
+      inactiveImg = temp;
+
       setTimeout(() => {
-        img.src = slides[currentSlide];
-        img.alt = 'Cute penguin image ' + (currentSlide + 1);
-        indexLabel.textContent = (currentSlide + 1) + ' / ' + slides.length;
-
-        if (bratModeToggle.checked) {
-          slideName.textContent = 'I am the ruler of this domain. 😈';
-          slideDesc.textContent = 'Ruru being a little brat.';
-        } else {
-          slideName.textContent = 'A cozy little penguin slideshow.';
-          slideDesc.textContent = 'Ruru spending time doing what he likes.';
-        }
-
-        img.style.opacity = '1';
-      }, 150);
+        isTransitioning = false;
+      }, 500); // Slightly longer than transition duration (0.45s) to be safe
     };
 
     const nextSlide = () => updateSlide(currentSlide + 1);
@@ -299,7 +367,7 @@
         } else {
             document.body.classList.remove('brat-mode');
         }
-        updateSlide(currentSlide);
+        updateSlide(currentSlide, true);
     });
 
     const updateDaysCounter = () => {
@@ -339,7 +407,8 @@
       });
     };
 
-    muteBtn.addEventListener('click', () => {
+    muteBtn.addEventListener('click', (e) => {
+      e.preventDefault();
       if (player && player.isMuted()) {
         player.unMute();
         muteBtn.textContent = '🔊';
@@ -359,6 +428,7 @@
 
     updateSlide(0);
     updateDaysCounter();
+    preloadImages();
     setInterval(updateDaysCounter, 1000 * 60 * 60); // Update every hour
   </script>
 </body>
