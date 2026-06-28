@@ -26,14 +26,15 @@
     }
     .card-body { padding: 1.5rem 1.75rem 2rem; display: flex; flex-direction: column; justify-content: flex-start; flex-shrink: 0; }
     .slide-meta { display:flex; justify-content:space-between; align-items:flex-start; gap:1.25rem; flex-wrap:wrap; }
-    .slide-header { max-width:calc(100% - 180px); min-height: 160px; }
+    .slide-header { max-width:calc(100% - 180px); min-height: 180px; }
     .slide-header h1 { font-size:2.35rem; font-weight:700; margin:0; letter-spacing:.02em; }
-    .slide-header p { margin:.5rem 0 0; color:#cbd5e1; font-size:1rem; line-height:1.55; min-height: 1.55em; }
+    .slide-header p { margin:.5rem 0 0; color:#cbd5e1; font-size:1rem; line-height:1.55; min-height: 3.1em; }
     .slide-meta small { color:#7f9cf5; display:block; margin-top:.75rem; }
     .details { margin-top:1.5rem; border:1px solid rgba(148,163,184,.18); background:rgba(255,255,255,.04); border-radius:.85rem; padding:1.25rem; }
     .details p { margin:0; color:#e2e8f0; font-size:1rem; line-height:1.75; }
-    .btn-pink { background:#ff8ab0; border-color:#ff7aa0; color:#111; font-weight:700; box-shadow:0 12px 26px rgba(255,138,176,.18); white-space: nowrap; touch-action: manipulation; }
-    .btn-pink:hover, .btn-pink:focus { background:#ff6b8a; border-color:#ff5b7b; color:#fff; }
+    .btn-pink { background:#ff8ab0; border-color:#ff7aa0; color:#111; font-weight:700; border-radius: 2rem; box-shadow:0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08); transition: all 0.2s ease; white-space: nowrap; touch-action: manipulation; }
+    .btn-pink:hover, .btn-pink:focus { background:#ff6b8a; border-color:#ff5b7b; color:#fff; transform: translateY(-1px); box-shadow: 0 7px 14px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.08); }
+    .btn-pink:active { transform: translateY(0); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     .slide-actions { display:flex; gap:0.5rem; align-items:center; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
     .slide-actions .btn { display: flex; align-items: center; justify-content: center; min-height: 48px; font-size: 1.25rem; }
     .kiss-overlay { position:absolute; inset:0; pointer-events:none; z-index:999; }
@@ -82,7 +83,7 @@
 
     @media (max-width: 768px) {
       .slide-meta { flex-direction: column; align-items: center; text-align: center; }
-      .slide-header { max-width: 100%; margin-bottom: 1rem; min-height: auto; }
+      .slide-header { max-width: 100%; margin-bottom: 1rem; min-height: 180px; }
       .slide-header h1 { font-size: 1.9rem; }
       .btn-pink { flex: 1 1 calc(33.33% - 0.5rem); min-width: 80px; padding: 0.5rem; font-size: 0.85rem; }
       .slide-actions { width: 100%; }
@@ -93,10 +94,11 @@
   <div id="youtube-player" style="position:absolute; width:0; height:0; border:0; pointer-events:none; visibility:hidden;"></div>
   <div class="slideshow">
     <div class="card slide-card">
-      <div class="slide-view">
+      <div class="slide-view" id="slideView">
         <img id="slideImage" src="images/PXL_20250609_000925302.jpg" alt="RURU gallery image" style="position: absolute; opacity: 1;">
         <img id="slideImageNext" src="" alt="" style="position: absolute; opacity: 0;">
         <div class="heart-rain" aria-hidden="true"></div>
+        <div class="kiss-overlay" aria-hidden="true"></div>
       </div>
       <div class="card-body">
         <span id="daysCounter" class="days-counter">Loading days...</span>
@@ -120,7 +122,6 @@
           </div>
         </div>
       </div>
-      <div class="kiss-overlay" aria-hidden="true"></div> 
     </div>
   </div>
 
@@ -152,6 +153,7 @@
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const muteBtn = document.getElementById('muteBtn');
+    const slideViewElement = document.getElementById('slideView');
     const kissOverlay = document.querySelector('.kiss-overlay');
     const bratModeToggle = document.getElementById('bratModeToggle');
     const daysCounter = document.getElementById('daysCounter');
