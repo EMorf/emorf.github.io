@@ -36,7 +36,9 @@
     .details { margin-top:1.5rem; border:1px solid rgba(148,163,184,.18); background:rgba(255,255,255,.04); border-radius:.85rem; padding:1.25rem; }
     .details p { margin:0; color:#e2e8f0; font-size:1rem; line-height:1.75; }
     .btn-pink { background:#ff8ab0; border-color:#ff7aa0; color:#111; font-weight:700; border-radius: 2rem; box-shadow:0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08); transition: all 0.2s ease; white-space: nowrap; touch-action: manipulation; }
-    .btn-pink:hover, .btn-pink:focus { background:#ff6b8a; border-color:#ff5b7b; color:#fff; transform: translateY(-1px); box-shadow: 0 7px 14px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.08); }
+    .btn-pink:hover, .btn-pink:focus-visible { background:#ff6b8a; border-color:#ff5b7b; color:#111; transform: translateY(-1px); box-shadow: 0 7px 14px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.08); }
+    .btn-pink:focus-visible { outline: 2px solid #ff8ab0; outline-offset: 2px; }
+    .btn-pink:focus:not(:focus-visible) { outline: none; }
     .btn-pink:active { transform: translateY(0); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     .slide-actions { display:flex; gap:0.5rem; align-items:stretch; flex-wrap: nowrap; justify-content: center; margin-top: auto; width: 100%; }
     .slide-actions .btn { display: flex; align-items: center; justify-content: center; min-height: 48px; font-size: 1.25rem; flex: 1 1 0; }
@@ -119,12 +121,12 @@
             </label>
           </div>
           <div class="slide-actions">
-            <button id="prevBtn" type="button" class="btn btn-pink btn-lg" title="Previous Slide">⬅️</button>
-            <button id="kissBtn" type="button" class="btn btn-pink btn-lg">Kiss 💋</button>
-            <button id="feedBtn" type="button" class="btn btn-pink btn-lg">Feed 🐟</button>
-            <button id="stickerBtn" type="button" class="btn btn-pink btn-lg">Sticker ✨</button>
-            <button id="nextBtn" type="button" class="btn btn-pink btn-lg" title="Next Slide">➡️</button>
-            <button id="muteBtn" type="button" class="btn btn-pink btn-lg" title="Unmute music">🔇</button>
+            <button id="prevBtn" type="button" class="btn btn-pink btn-lg" title="Previous Slide" aria-label="Previous Slide">⬅️</button>
+            <button id="kissBtn" type="button" class="btn btn-pink btn-lg" aria-label="Give Ruru a kiss">Kiss 💋</button>
+            <button id="feedBtn" type="button" class="btn btn-pink btn-lg" aria-label="Feed Ruru a fish">Feed 🐟</button>
+            <button id="stickerBtn" type="button" class="btn btn-pink btn-lg" aria-label="Place a random sticker">Sticker ✨</button>
+            <button id="nextBtn" type="button" class="btn btn-pink btn-lg" title="Next Slide" aria-label="Next Slide">➡️</button>
+            <button id="muteBtn" type="button" class="btn btn-pink btn-lg" title="Unmute music" aria-label="Unmute background music">🔇</button>
           </div>
         </div>
       </div>
@@ -464,10 +466,24 @@
         player.unMute();
         muteBtn.textContent = '🔊';
         muteBtn.title = 'Mute music';
+        muteBtn.setAttribute('aria-label', 'Mute background music');
       } else if (player) {
         player.mute();
         muteBtn.textContent = '🔇';
         muteBtn.title = 'Unmute music';
+        muteBtn.setAttribute('aria-label', 'Unmute background music');
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        prevSlide();
+        setAutoplay(false);
+        setAutoplay(true);
+      } else if (e.key === 'ArrowRight') {
+        nextSlide();
+        setAutoplay(false);
+        setAutoplay(true);
       }
     });
 
