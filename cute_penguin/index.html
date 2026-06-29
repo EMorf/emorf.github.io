@@ -171,14 +171,18 @@
     const preloadedImages = [];
 
     const preloadImages = () => {
+      // Performance: Preload images asychronously to avoid blocking the main thread
       slides.forEach((src) => {
         const img = new Image();
         img.src = src;
+        img.decoding = 'async';
         preloadedImages.push(img);
       });
     };
 
     const createHeart = () => {
+      // Performance: Skip heart creation when the page is not visible to save CPU/battery
+      if (document.visibilityState !== 'visible') return;
       const heart = document.createElement('span');
       heart.className = 'heart';
       heart.textContent = bratModeToggle.checked ? '🦴' : '❤';
@@ -487,7 +491,12 @@
 
     updateSlide(0);
     updateDaysCounter();
-    preloadImages();
+    // Performance: Defer image preloading until the main thread is idle
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => preloadImages());
+    } else {
+      setTimeout(preloadImages, 1000);
+    }
     setInterval(updateDaysCounter, 1000 * 60 * 60); // Update every hour
   </script>
 </body>

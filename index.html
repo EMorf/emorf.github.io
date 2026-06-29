@@ -25,10 +25,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://formspree.io">
+    <!-- Performance: Establish early connections to external domains used by the app -->
+    <link rel="preconnect" href="https://ajax.googleapis.com">
+    <link rel="preconnect" href="https://cdn.credly.com">
+    <!-- Performance: Preload Largest Contentful Paint (LCP) image to improve load speed -->
+    <link rel="preload" as="image" href="images/lead-bg.jpg" fetchpriority="high">
+    <!-- Performance: Preload critical font to prevent Flash of Invisible Text (FOIT) -->
+    <link rel="preload" href="libs/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3" as="font" type="font/woff2" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
+    <!-- Performance: Defer script loading to prevent blocking the HTML parser -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" defer></script>
+    <script src="js/scripts.min.js" defer></script>
 </head>
 
 <body>
@@ -102,7 +112,8 @@
                 </div>
 
                 <div class="col-md-2">
-                    <img src="images/me.png" width="200" height="200px" alt="Portrait of Emmanuel Morfiadakis" loading="lazy" />
+                    <!-- Performance: decoding="async" allows the browser to process other content while the image is being decoded -->
+                    <img src="images/me.png" width="200" height="200px" alt="Portrait of Emmanuel Morfiadakis" loading="lazy" decoding="async" />
                 </div>
             </div>
         </div>
@@ -368,10 +379,10 @@
     </footer>
     <!-- End footer -->
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="js/scripts.min.js"></script>
     <script>
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+        });
     </script>
 </body>
 
