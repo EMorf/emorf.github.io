@@ -8,3 +8,12 @@
 **Action:**
 1. Always use semantic `<button>` elements for interactive controls and provide descriptive `aria-label` attributes for icon-only buttons.
 2. Use `:focus-visible` in SCSS to provide a clear focus indicator (using `$base-color`) that only appears for keyboard users, maintaining both accessibility and visual polish.
+
+## 2025-05-20 - [Dynamic ARIA Labels and Keyboard Interactivity]
+**Learning:**
+1. Interactive controls with toggling states (like a mute button) must have their `aria-label` updated dynamically in JavaScript to ensure screen reader users receive accurate state information.
+2. Supplementing mouse-driven slideshows with keyboard navigation (Arrow keys) significantly improves accessibility for power users and those with motor impairments.
+
+**Action:**
+1. Use `setAttribute('aria-label', ...)` within event handlers for stateful UI elements.
+2. Implement global `keydown` listeners for common navigation patterns, ensuring they also synchronize with other logic like autoplay timers.
