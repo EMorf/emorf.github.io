@@ -328,17 +328,7 @@
       }
     };
 
-    let isTransitioning = false;
-    const updateSlide = (position, force = false) => {
-      if (isTransitioning) return;
-      if (position < 0) position = slides.length - 1;
-      if (position >= slides.length) position = 0;
-
-      const isInitial = imgNext.src === '' && currentSlide === 0 && position === 0;
-      if (!isInitial && !force && position === currentSlide) return;
-
-      currentSlide = position;
-
+    const updateMetadata = () => {
       if (bratModeToggle.checked) {
         slideName.textContent = 'I am the ruler of this domain. 😈';
         slideDesc.textContent = 'Ruru being a little brat.';
@@ -347,6 +337,19 @@
         slideDesc.textContent = 'Ruru spending time doing what he likes.';
       }
       indexLabel.textContent = (currentSlide + 1) + ' / ' + slides.length;
+    };
+
+    let isTransitioning = false;
+    const updateSlide = (position) => {
+      if (isTransitioning) return;
+      if (position < 0) position = slides.length - 1;
+      if (position >= slides.length) position = 0;
+
+      const isInitial = imgNext.src === '' && currentSlide === 0 && position === 0;
+      if (!isInitial && position === currentSlide) return;
+
+      currentSlide = position;
+      updateMetadata();
 
       if (isInitial) {
         activeImg.src = slides[0];
@@ -399,7 +402,7 @@
             document.body.classList.remove('brat-mode');
             localStorage.setItem('bratMode', 'disabled');
         }
-        updateSlide(currentSlide, true);
+        updateMetadata();
     };
 
     bratModeToggle.addEventListener('change', syncBratMode);
