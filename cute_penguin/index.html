@@ -96,6 +96,7 @@
   </style>
 </head>
 <body>
+  <div id="a11y-announcer" aria-live="polite" style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;"></div>
   <div id="youtube-player" style="position:absolute; width:0; height:0; border:0; pointer-events:none; visibility:hidden;"></div>
   <div class="slideshow">
     <div class="card slide-card">
@@ -110,8 +111,8 @@
         <div class="slide-meta">
           <div class="slide-header">
             <h1>Ruru's wall</h1>
-            <p id="slideName"></p>
-            <p id="slideDesc">Ruru spending time doing what he likes.</p>
+            <p id="slideName" aria-live="polite"></p>
+            <p id="slideDesc" aria-live="polite">Ruru spending time doing what he likes.</p>
             <small id="slideIndex">1 / 10</small>
             <label class="brat-mode-toggle">
               <input type="checkbox" id="bratModeToggle"> Brat Mode 😈
@@ -121,12 +122,12 @@
             </label>
           </div>
           <div class="slide-actions">
-            <button id="prevBtn" type="button" class="btn btn-pink btn-lg" title="Previous Slide" aria-label="Previous Slide">⬅️</button>
+            <button id="prevBtn" type="button" class="btn btn-pink btn-lg" title="Previous Slide (Arrow Left)" aria-label="Previous Slide">⬅️</button>
             <button id="kissBtn" type="button" class="btn btn-pink btn-lg" aria-label="Give Ruru a kiss">Kiss 💋</button>
             <button id="feedBtn" type="button" class="btn btn-pink btn-lg" aria-label="Feed Ruru a fish">Feed 🐟</button>
             <button id="stickerBtn" type="button" class="btn btn-pink btn-lg" aria-label="Place a random sticker">Sticker ✨</button>
-            <button id="nextBtn" type="button" class="btn btn-pink btn-lg" title="Next Slide" aria-label="Next Slide">➡️</button>
-            <button id="muteBtn" type="button" class="btn btn-pink btn-lg" title="Unmute music" aria-label="Unmute background music">🔇</button>
+            <button id="nextBtn" type="button" class="btn btn-pink btn-lg" title="Next Slide (Arrow Right)" aria-label="Next Slide">➡️</button>
+            <button id="muteBtn" type="button" class="btn btn-pink btn-lg" title="Unmute music (m)" aria-label="Unmute background music">🔇</button>
           </div>
         </div>
       </div>
@@ -166,11 +167,17 @@
     const bratModeToggle = document.getElementById('bratModeToggle');
     const songSharkToggle = document.getElementById('songSharkToggle');
     const daysCounter = document.getElementById('daysCounter');
+    const a11yAnnouncer = document.getElementById('a11y-announcer');
 
     let currentSlide = 0;
     let timer = null;
     let lipVisible = false;
     const preloadedImages = [];
+
+    const announce = (message) => {
+      // Toggle a non-breaking space to ensure consecutive identical messages are announced
+      a11yAnnouncer.textContent = a11yAnnouncer.textContent === message ? message + "\u00A0" : message;
+    };
 
     const preloadImages = () => {
       // Performance: Preload images asychronously to avoid blocking the main thread
@@ -224,6 +231,7 @@
       lip.style.top = `${y}%`;
       kissOverlay.appendChild(lip);
       playChirp();
+      announce("Gave Ruru a kiss!");
       const duration = 3000 + Math.random() * 1000;
       setTimeout(() => {
         lip.remove();
@@ -239,6 +247,7 @@
       fish.style.bottom = '20%';
       kissOverlay.appendChild(fish);
       playChirp();
+      announce("Fed Ruru a fish!");
       setTimeout(() => {
         fish.remove();
         const msg = bratModeToggle.checked ? "More! Bring me MORE FISH! 😈" : "Yum! Ruru is a happy boy! 🐧";
@@ -279,6 +288,7 @@
       sticker.style.left = '40%';
       sticker.style.top = '40%';
       kissOverlay.appendChild(sticker);
+      announce("Placed a sticker!");
 
       // Make Draggable
       let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -467,19 +477,25 @@
       });
     };
 
-    muteBtn.addEventListener('click', (e) => {
-      e.preventDefault();
+    const toggleMute = () => {
       if (player && player.isMuted()) {
         player.unMute();
         muteBtn.textContent = '🔊';
-        muteBtn.title = 'Mute music';
+        muteBtn.title = 'Mute music (m)';
         muteBtn.setAttribute('aria-label', 'Mute background music');
+        announce("Music unmuted");
       } else if (player) {
         player.mute();
         muteBtn.textContent = '🔇';
-        muteBtn.title = 'Unmute music';
+        muteBtn.title = 'Unmute music (m)';
         muteBtn.setAttribute('aria-label', 'Unmute background music');
+        announce("Music muted");
       }
+    };
+
+    muteBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleMute();
     });
 
     window.addEventListener('keydown', (e) => {
@@ -491,6 +507,8 @@
         nextSlide();
         setAutoplay(false);
         setAutoplay(true);
+      } else if (e.key.toLowerCase() === 'm') {
+        toggleMute();
       }
     });
 
