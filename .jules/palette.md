@@ -17,3 +17,12 @@
 **Action:**
 1. Use `setAttribute('aria-label', ...)` within event handlers for stateful UI elements.
 2. Implement global `keydown` listeners for common navigation patterns, ensuring they also synchronize with other logic like autoplay timers.
+
+## 2025-05-23 - [Accessible Feedback for Dynamic Interactions]
+**Learning:**
+1. Actions that trigger visual-only feedback (e.g., spawning stickers, heart rain) are invisible to screen reader users unless accompanied by an `aria-live` announcement.
+2. Screen readers may ignore identical consecutive updates to an `aria-live` region.
+
+**Action:**
+1. Implement a visually-hidden "announcer" element with `aria-live="polite"` and a helper function to communicate visual-only events to assistive technology.
+2. Force re-announcement by toggling a non-breaking space (`\u00A0`) at the end of the message if it's identical to the previous one.
