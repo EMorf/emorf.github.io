@@ -17,7 +17,7 @@
     <meta name="twitter:title" content="Emmanuel Morfiadakis | Senior Software Engineer">
     <meta name="twitter:description" content="Senior Software Engineer based in Adelaide with experience in software engineering, automation, and delivery.">
     <meta name="twitter:image" content="https://morfiadakis.au/images/me.png">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://formspree.io https://ajax.googleapis.com https://cdn.credly.com; connect-src 'self' https://formspree.io; frame-src https://www.credly.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://formspree.io https://ajax.googleapis.com https://cdn.credly.com; connect-src 'self' https://formspree.io https://ajax.googleapis.com https://cdn.credly.com; frame-src https://www.credly.com;">
     <link rel="canonical" href="https://morfiadakis.au/">
     <title>Emmanuel Morfiadakis | Senior Software Engineer</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -29,16 +29,13 @@
     <link rel="preconnect" href="https://ajax.googleapis.com">
     <link rel="preconnect" href="https://cdn.credly.com">
     <!-- Performance: Preload Largest Contentful Paint (LCP) image to improve load speed -->
-    <link rel="preload" as="image" href="images/lead-bg.jpg" fetchpriority="high">
+    <link rel="preload" as="image" href="images/lead-bg.jpg">
     <!-- Performance: Preload critical font to prevent Flash of Invisible Text (FOIT) -->
     <link rel="preload" href="libs/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3" as="font" type="font/woff2" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
-    <!-- Performance: Defer script loading to prevent blocking the HTML parser -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" defer></script>
-    <script src="js/scripts.min.js" defer></script>
 </head>
 
 <body>
@@ -112,8 +109,7 @@
                 </div>
 
                 <div class="col-md-2">
-                    <!-- Performance: decoding="async" allows the browser to process other content while the image is being decoded -->
-                    <img src="images/me.png" width="200" height="200px" alt="Portrait of Emmanuel Morfiadakis" loading="lazy" decoding="async" />
+                    <img src="images/me.png" width="200" height="200px" alt="Portrait of Emmanuel Morfiadakis" loading="lazy" />
                 </div>
             </div>
         </div>
@@ -379,10 +375,10 @@
     </footer>
     <!-- End footer -->
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/scripts.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('current-year').textContent = new Date().getFullYear();
-        });
+        document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
 </body>
 
