@@ -11,6 +11,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://www.youtube.com">
+  <!-- Performance: Preload LCP image and YouTube API for faster initial load -->
+  <link rel="preload" as="image" href="images/PXL_20250609_000925302.jpg" fetchpriority="high">
+  <link rel="preload" as="script" href="https://www.youtube.com/iframe_api">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
   <link rel="stylesheet" href="../css/bootstrap.min.css">
   <style>
@@ -22,7 +25,7 @@
     .slide-view { position: relative; overflow: hidden; flex: 1; background: #000; display: flex; align-items: center; justify-content: center; aspect-ratio: 1 / 1; width: 100%; }
     .slide-view img { position: relative; z-index: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity .45s ease; display: block; user-select: none; -webkit-user-drag: none; }
     .heart-rain { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:2; }
-    .heart-rain .heart { position:absolute; top:-2rem; color:#ff8ab0; font-size:1.25rem; opacity:0; animation:rain 5s linear forwards; text-shadow:0 0 12px rgba(255,138,176,.45); }
+    .heart-rain .heart { position:absolute; top:-2rem; color:#ff8ab0; font-size:1.25rem; opacity:0; animation:rain 5s linear forwards; text-shadow:0 0 12px rgba(255,138,176,.45); will-change: transform, opacity; }
     @keyframes rain { 0% { transform: translate3d(0,-20px,0) scale(0.7); opacity:0; }
       10% { opacity:.9; }
       100% { transform: translate3d(0,110vh,0) scale(0.85); opacity:0; }
@@ -69,6 +72,7 @@
       z-index: 100;
       animation: sparkle-fade 0.8s ease-out forwards;
       box-shadow: 0 0 10px rgba(255,138,176,0.8);
+      will-change: transform, opacity;
     }
     @keyframes sparkle-fade {
       0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
@@ -100,8 +104,8 @@
   <div class="slideshow">
     <div class="card slide-card">
       <div class="slide-view" id="slideView">
-        <img id="slideImage" src="images/PXL_20250609_000925302.jpg" alt="RURU gallery image" style="position: absolute; opacity: 1;">
-        <img id="slideImageNext" src="" alt="" style="position: absolute; opacity: 0;">
+        <img id="slideImage" src="images/PXL_20250609_000925302.jpg" alt="RURU gallery image" style="position: absolute; opacity: 1;" decoding="async">
+        <img id="slideImageNext" src="" alt="" style="position: absolute; opacity: 0;" decoding="async">
         <div class="heart-rain" aria-hidden="true"></div>
         <div class="kiss-overlay" aria-hidden="true"></div>
       </div>
@@ -192,8 +196,14 @@
       heart.style.fontSize = `${1 + Math.random() * 1.2}rem`;
       heart.style.animationDuration = `${4 + Math.random() * 3}s`;
       heartRain.appendChild(heart);
-      heart.addEventListener('animationend', () => heart.remove());
     };
+
+    // Performance: Use event delegation for animation cleanup to reduce memory overhead
+    heartRain.addEventListener('animationend', (e) => {
+      if (e.target.classList.contains('heart')) {
+        e.target.remove();
+      }
+    });
 
     // Audio Context for chirping
     let audioCtx = null;
@@ -254,8 +264,14 @@
       sparkle.style.left = `${x}px`;
       sparkle.style.top = `${y}px`;
       slideViewElement.appendChild(sparkle);
-      sparkle.addEventListener('animationend', () => sparkle.remove());
     };
+
+    // Performance: Use event delegation for animation cleanup
+    slideViewElement.addEventListener('animationend', (e) => {
+      if (e.target.classList.contains('sparkle')) {
+        e.target.remove();
+      }
+    });
 
     slideViewElement.addEventListener('click', (e) => {
       const rect = slideViewElement.getBoundingClientRect();
