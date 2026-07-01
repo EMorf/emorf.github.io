@@ -26,3 +26,12 @@
 **Action:**
 1. Implement a visually-hidden "announcer" element with `aria-live="polite"` and a helper function to communicate visual-only events to assistive technology.
 2. Force re-announcement by toggling a non-breaking space (`\u00A0`) at the end of the message if it's identical to the previous one.
+
+## 2025-05-24 - [Skip Links and Semantic Landmarks]
+**Learning:**
+1. Skip links are essential for keyboard users to bypass repetitive navigation blocks, but they must be carefully styled to be visible on focus to avoid being "ghost" links.
+2. Semantic landmarks (like `<main>`) combined with a skip link provide the most efficient navigation pattern for both screen reader and keyboard-only users.
+
+**Action:**
+1. Implement a "Skip to content" link as the first focusable element on every page, using a `:focus` transition to reveal it.
+2. Wrap the primary content of the page in a `<main>` tag with an ID that matches the skip link's target, ensuring focus lands directly on the start of the core information.
