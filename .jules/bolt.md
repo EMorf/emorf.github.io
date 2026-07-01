@@ -37,3 +37,14 @@
 1. Use event delegation for cleanup of repeated transient elements.
 2. Apply `will-change` to elements with heavy transform/opacity animations.
 3. Use `decoding="async"` for slideshow and gallery images.
+
+## 2025-07-01 - [DOM Consolidation & Legacy Asset Optimization]
+**Learning:**
+1. Legacy scripts often use multiple jQuery passes (e.g., three separate `.each()` loops for the same container) to build UI components like timelines. Consolidating these into a single pass reduces DOM traversals and layout thrashing.
+2. Legacy Font Awesome versions (4.x) lack `font-display: swap` by default; adding it manually to the `@font-face` declaration is a trivial but effective way to eliminate Flash of Invisible Text (FOIT).
+3. When optimizing minified assets, avoid unnecessary reformatting (e.g., using `sed` or surgical replacements) to keep PR diffs readable and focused on the change.
+
+**Action:**
+1. Audit jQuery/JS logic for redundant loops over the same DOM collections.
+2. Ensure all `@font-face` declarations include `font-display: swap`.
+3. Use surgical text replacement for minified files to preserve original formatting where possible.

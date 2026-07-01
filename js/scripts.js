@@ -38,30 +38,30 @@
         }, 500);
     });
 
-    // Create timeline
+    // Performance: Consolidate timeline creation into a single loop to reduce DOM manipulations
     $('#experience-timeline').each(function() {
+        var $this = $(this);
+        var $userContent = $this.children('div');
 
-        $this = $(this); // Store reference to this
-        $userContent = $this.children('div'); // user content
-
-        // Create each timeline block
         $userContent.each(function() {
-            $(this).addClass('vtimeline-content').wrap('<div class="vtimeline-point"><div class="vtimeline-block"></div></div>');
-        });
+            var $content = $(this);
+            var date = $content.data('date');
 
-        // Add icons to each block
-        $this.find('.vtimeline-point').each(function() {
-            $(this).prepend('<div class="vtimeline-icon"><i class="fa fa-map-marker"></i></div>');
-        });
+            // Add class and wrap in necessary containers
+            $content.addClass('vtimeline-content').wrap('<div class="vtimeline-point"><div class="vtimeline-block"></div></div>');
 
-        // Add dates to the timeline if exists
-        $this.find('.vtimeline-content').each(function() {
-            var date = $(this).data('date');
-            if (date) { // Prepend if exists
-                $(this).parent().prepend('<span class="vtimeline-date">'+date+'</span>');
+            // Get the newly created containers
+            var $block = $content.parent();
+            var $point = $block.parent();
+
+            // Add icon to the point container
+            $point.prepend('<div class="vtimeline-icon"><i class="fa fa-map-marker"></i></div>');
+
+            // Add date to the block container if it exists
+            if (date) {
+                $block.prepend('<span class="vtimeline-date">' + date + '</span>');
             }
         });
-
     });
 
     // Open mobile menu
