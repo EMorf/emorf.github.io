@@ -77,6 +77,27 @@ body {
     font-family: 'Lato', sans-serif;
     font-size: 16px;
 
+    // Accessibility: Skip to content link
+    .skip-to-content {
+        position: absolute;
+        top: -100px;
+        left: 0;
+        background: $base-color;
+        color: #fff;
+        padding: 10px 20px;
+        z-index: 1000;
+        text-decoration: none;
+        font-weight: 700;
+        border-bottom-right-radius: 4px;
+        @include transition(0.3s);
+
+        &:focus {
+            top: 0;
+            outline: 2px solid #fff;
+            outline-offset: -4px;
+        }
+    }
+
     &.active {
         overflow: hidden;
         z-index: -1;
@@ -170,6 +191,13 @@ header {
         &:focus {
             color: $base-color;
             text-decoration: none;
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $base-color;
+            outline-offset: -2px;
+            border-radius: 4px;
         }
     }
 
@@ -306,6 +334,16 @@ footer {
 
         &:hover {
             color: $base-color;
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $base-color;
+            outline-offset: -2px;
+            border-radius: 4px;
         }
     }
 }
