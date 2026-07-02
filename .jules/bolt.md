@@ -37,3 +37,15 @@
 1. Use event delegation for cleanup of repeated transient elements.
 2. Apply `will-change` to elements with heavy transform/opacity animations.
 3. Use `decoding="async"` for slideshow and gallery images.
+
+## 2025-07-01 - [DOM Traversal & Scoping Optimization]
+**Learning:**
+1. Using multiple jQuery `.each()` loops on the same selector results in redundant DOM traversals and can lead to layout thrashing if each loop performs DOM mutations.
+2. Consolidating logic into a single `.each()` pass reduces CPU overhead and improves execution speed for dynamic content generation.
+3. Implicit global variables in jQuery callbacks (e.g., failing to use `var`/`let`/`const`) can lead to unexpected state leaks and conflicts in the global namespace.
+4. In this repository, the build process (Gulp) must be manually triggered to synchronize `js/scripts.min.js` with changes made to `js/scripts.js`.
+
+**Action:**
+1. Batch DOM manipulations within a single loop whenever possible.
+2. Always use explicit variable declarations (`var` or `let`/`const`) to prevent global scoping leaks.
+3. Verify that minified artifacts are updated following source code modifications.
