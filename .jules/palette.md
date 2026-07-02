@@ -26,3 +26,12 @@
 **Action:**
 1. Implement a visually-hidden "announcer" element with `aria-live="polite"` and a helper function to communicate visual-only events to assistive technology.
 2. Force re-announcement by toggling a non-breaking space (`\u00A0`) at the end of the message if it's identical to the previous one.
+
+## 2025-05-24 - [Mobile Menu Accessibility and Focus Management]
+**Learning:**
+1. Mobile menus that overlay the screen should behave like modal dialogs, requiring the "Escape" key to close and preventing focus from getting lost.
+2. Returning focus to the trigger element after closing a menu is essential for a continuous keyboard navigation experience.
+
+**Action:**
+1. Implement a global `keyup` listener for `Escape` that specifically checks if the mobile menu is active.
+2. Explicitly `.focus()` the open button when the menu is closed via any method (button, link, or key).
