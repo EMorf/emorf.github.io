@@ -37,3 +37,15 @@
 1. Use event delegation for cleanup of repeated transient elements.
 2. Apply `will-change` to elements with heavy transform/opacity animations.
 3. Use `decoding="async"` for slideshow and gallery images.
+
+## 2025-07-03 - [DOM Iteration & Layout Thrashing Optimization]
+**Learning:**
+1. Redundant jQuery `.each()` loops and repeated `.find()` operations on the same DOM elements cause unnecessary layout recalculations and main-thread blocking during initialization.
+2. The original timeline generation logic performed three separate passes over the same elements to add classes, icons, and dates.
+3. Consolidating these into a single pass reduces DOM traversals and ensures a cleaner, more efficient execution flow.
+4. Using `var` or `const` for local jQuery references prevents polluting the global window object, which was an existing anti-pattern in the codebase.
+
+**Action:**
+1. Always aim for "single-pass" DOM transformations.
+2. Use local scoping for all jQuery objects.
+3. Verify that optimized DOM manipulation produces identical end-state HTML to avoid breaking CSS selectors.

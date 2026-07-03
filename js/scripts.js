@@ -42,25 +42,19 @@
     // Create timeline
     $('#experience-timeline').each(function() {
 
-        $this = $(this); // Store reference to this
-        $userContent = $this.children('div'); // user content
+        var $this = $(this); // Store reference to this
+        var $userContent = $this.children('div'); // user content
 
-        // Create each timeline block
+        // Performance: Create each timeline block in a single pass to reduce DOM traversals and layout thrashing
         $userContent.each(function() {
-            $(this).addClass('vtimeline-content').wrap('<div class="vtimeline-point"><div class="vtimeline-block"></div></div>');
-        });
+            var $content = $(this).addClass('vtimeline-content');
+            var date = $content.data('date');
+            var dateHtml = date ? '<span class="vtimeline-date">' + date + '</span>' : '';
 
-        // Add icons to each block
-        $this.find('.vtimeline-point').each(function() {
-            $(this).prepend('<div class="vtimeline-icon"><i class="fa fa-map-marker"></i></div>');
-        });
-
-        // Add dates to the timeline if exists
-        $this.find('.vtimeline-content').each(function() {
-            var date = $(this).data('date');
-            if (date) { // Prepend if exists
-                $(this).parent().prepend('<span class="vtimeline-date">'+date+'</span>');
-            }
+            // Wrap the content and add the icon and date in one pass
+            $content.wrap('<div class="vtimeline-point"><div class="vtimeline-block"></div></div>');
+            $content.before(dateHtml);
+            $content.parent().before('<div class="vtimeline-icon"><i class="fa fa-map-marker"></i></div>');
         });
 
     });
