@@ -77,6 +77,22 @@ body {
     font-family: 'Lato', sans-serif;
     font-size: 16px;
 
+    .skip-link {
+        position: absolute;
+        top: -100px;
+        left: 0;
+        background: $base-color;
+        color: #fff;
+        padding: 8px 16px;
+        z-index: 1000;
+        @include transition(0.3s);
+
+        &:focus {
+            top: 0;
+            outline: none;
+        }
+    }
+
     &.active {
         overflow: hidden;
         z-index: -1;
@@ -677,6 +693,12 @@ footer {
     overflow: hidden;
     background: #fff;
     border-radius: 4px;
+    @include transition(0.3s);
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.1);
+    }
 }
 
 .project-image {
