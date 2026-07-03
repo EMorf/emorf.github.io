@@ -35,3 +35,14 @@
 **Action:**
 1. Implement a global `keyup` listener for `Escape` that specifically checks if the mobile menu is active.
 2. Explicitly `.focus()` the open button when the menu is closed via any method (button, link, or key).
+
+## 2025-05-25 - [Skip Links and Contextual Link Labels]
+**Learning:**
+1. Skip links are essential for single-page portfolios with long navigation headers to allow keyboard users to bypass repetitive content.
+2. Link text like "View Project" is ambiguous for screen reader users when multiple such links exist; they require contextual labels to be distinguishable in a list of links.
+3. Testing off-screen elements with automated tools (like Playwright) requires checking positional attributes rather than standard visibility, as "visible" usually implies "visible in the viewport".
+
+**Action:**
+1. Always include a "Skip to content" link as the first focusable element on landing pages.
+2. Use `aria-label` to provide unique context to generic action links (e.g., "View [Project Name] website").
+3. Verify accessibility features by checking their CSS state (e.g., `top` coordinate) during focus events in automated tests.
