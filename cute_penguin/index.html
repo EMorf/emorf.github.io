@@ -111,7 +111,7 @@
         <div class="kiss-overlay" aria-hidden="true"></div>
       </div>
       <div class="card-body">
-        <span id="daysCounter" class="days-counter">Loading days...</span>
+        <span id="daysCounter" class="days-counter" aria-live="polite">Loading days...</span>
         <div class="slide-meta">
           <div class="slide-header">
             <h1>Ruru's wall</h1>
@@ -127,9 +127,9 @@
           </div>
           <div class="slide-actions">
             <button id="prevBtn" type="button" class="btn btn-pink btn-lg" title="Previous Slide (Arrow Left)" aria-label="Previous Slide">⬅️</button>
-            <button id="kissBtn" type="button" class="btn btn-pink btn-lg" aria-label="Give Ruru a kiss">Kiss 💋</button>
-            <button id="feedBtn" type="button" class="btn btn-pink btn-lg" aria-label="Feed Ruru a fish">Feed 🐟</button>
-            <button id="stickerBtn" type="button" class="btn btn-pink btn-lg" aria-label="Place a random sticker">Sticker ✨</button>
+            <button id="kissBtn" type="button" class="btn btn-pink btn-lg" title="Give Ruru a kiss (k)" aria-label="Give Ruru a kiss">Kiss 💋</button>
+            <button id="feedBtn" type="button" class="btn btn-pink btn-lg" title="Feed Ruru a fish (f)" aria-label="Feed Ruru a fish">Feed 🐟</button>
+            <button id="stickerBtn" type="button" class="btn btn-pink btn-lg" title="Place a random sticker (s)" aria-label="Place a random sticker">Sticker ✨</button>
             <button id="nextBtn" type="button" class="btn btn-pink btn-lg" title="Next Slide (Arrow Right)" aria-label="Next Slide">➡️</button>
             <button id="muteBtn" type="button" class="btn btn-pink btn-lg" title="Unmute music (m)" aria-label="Unmute background music">🔇</button>
           </div>
@@ -303,6 +303,11 @@
       sticker.textContent = emoji;
       sticker.style.left = '40%';
       sticker.style.top = '40%';
+      sticker.title = "Double-click to remove";
+      sticker.addEventListener('dblclick', () => {
+        sticker.remove();
+        announce("Removed sticker");
+      });
       kissOverlay.appendChild(sticker);
       announce("Placed a sticker!");
 
@@ -525,6 +530,12 @@
         setAutoplay(true);
       } else if (e.key.toLowerCase() === 'm') {
         toggleMute();
+      } else if (e.key.toLowerCase() === 'k') {
+        showKiss();
+      } else if (e.key.toLowerCase() === 'f') {
+        feedRuru();
+      } else if (e.key.toLowerCase() === 's') {
+        spawnSticker();
       }
     });
 
