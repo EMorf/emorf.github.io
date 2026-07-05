@@ -105,7 +105,7 @@
   <div class="slideshow">
     <div class="card slide-card">
       <div class="slide-view" id="slideView">
-        <img id="slideImage" src="images/PXL_20250609_000925302.jpg" alt="RURU gallery image" style="position: absolute; opacity: 1;" decoding="async">
+        <img id="slideImage" src="images/PXL_20250609_000925302.jpg" width="2256" height="4000" alt="RURU gallery image" style="position: absolute; opacity: 1;" decoding="async">
         <img id="slideImageNext" src="" alt="" style="position: absolute; opacity: 0;" decoding="async">
         <div class="heart-rain" aria-hidden="true"></div>
         <div class="kiss-overlay" aria-hidden="true"></div>
@@ -185,7 +185,8 @@
 
     const preloadImages = () => {
       // Performance: Preload images asychronously to avoid blocking the main thread
-      slides.forEach((src) => {
+      // Skip the first image as it's already loaded initially and preloaded via <link rel="preload">
+      slides.slice(1).forEach((src) => {
         const img = new Image();
         img.src = src;
         img.decoding = 'async';
