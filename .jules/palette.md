@@ -46,3 +46,12 @@
 1. Always include a "Skip to content" link as the first focusable element on landing pages.
 2. Use `aria-label` to provide unique context to generic action links (e.g., "View [Project Name] website").
 3. Verify accessibility features by checking their CSS state (e.g., `top` coordinate) during focus events in automated tests.
+
+## 2025-06-10 - [User-Generated Content Lifecycle and State Persistence]
+**Learning:**
+1. Dynamic UI elements (like stickers) need a clear removal path to prevent interface clutter and maintain user control.
+2. Synchronizing initial state from `localStorage` before external library initialization (e.g., YouTube API) ensures a consistent user experience without jarring transitions or incorrect initial settings.
+
+**Action:**
+1. Implement "Double-click to remove" patterns for user-placed objects, paired with `title` hints and `aria-live` announcements.
+2. Group state restoration logic early in the execution flow to ensure DOM and configuration are ready before the app becomes interactive.

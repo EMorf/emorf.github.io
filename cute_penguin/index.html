@@ -127,9 +127,9 @@
           </div>
           <div class="slide-actions">
             <button id="prevBtn" type="button" class="btn btn-pink btn-lg" title="Previous Slide (Arrow Left)" aria-label="Previous Slide">⬅️</button>
-            <button id="kissBtn" type="button" class="btn btn-pink btn-lg" aria-label="Give Ruru a kiss">Kiss 💋</button>
-            <button id="feedBtn" type="button" class="btn btn-pink btn-lg" aria-label="Feed Ruru a fish">Feed 🐟</button>
-            <button id="stickerBtn" type="button" class="btn btn-pink btn-lg" aria-label="Place a random sticker">Sticker ✨</button>
+            <button id="kissBtn" type="button" class="btn btn-pink btn-lg" title="Kiss (k)" aria-label="Give Ruru a kiss">Kiss 💋</button>
+            <button id="feedBtn" type="button" class="btn btn-pink btn-lg" title="Feed (f)" aria-label="Feed Ruru a fish">Feed 🐟</button>
+            <button id="stickerBtn" type="button" class="btn btn-pink btn-lg" title="Sticker (s)" aria-label="Place a random sticker">Sticker ✨</button>
             <button id="nextBtn" type="button" class="btn btn-pink btn-lg" title="Next Slide (Arrow Right)" aria-label="Next Slide">➡️</button>
             <button id="muteBtn" type="button" class="btn btn-pink btn-lg" title="Unmute music (m)" aria-label="Unmute background music">🔇</button>
           </div>
@@ -172,6 +172,19 @@
     const songSharkToggle = document.getElementById('songSharkToggle');
     const daysCounter = document.getElementById('daysCounter');
     const a11yAnnouncer = document.getElementById('a11y-announcer');
+
+    // Restore state from localStorage as early as possible
+    if (localStorage.getItem('bratMode') === 'enabled') {
+        bratModeToggle.checked = true;
+    } else if (localStorage.getItem('bratMode') === 'disabled') {
+        bratModeToggle.checked = false;
+    }
+
+    if (localStorage.getItem('babyShark') === 'enabled') {
+        songSharkToggle.checked = true;
+    } else if (localStorage.getItem('babyShark') === 'disabled') {
+        songSharkToggle.checked = false;
+    }
 
     let currentSlide = 0;
     let timer = null;
@@ -303,8 +316,14 @@
       sticker.textContent = emoji;
       sticker.style.left = '40%';
       sticker.style.top = '40%';
+      sticker.title = "Double-click to remove (Double-tap on mobile)";
       kissOverlay.appendChild(sticker);
       announce("Placed a sticker!");
+
+      sticker.ondblclick = () => {
+        sticker.remove();
+        announce("Sticker removed!");
+      };
 
       // Make Draggable
       let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -439,6 +458,12 @@
     };
 
     songSharkToggle.addEventListener('change', () => {
+      if (songSharkToggle.checked) {
+        localStorage.setItem('babyShark', 'enabled');
+      } else {
+        localStorage.setItem('babyShark', 'disabled');
+      }
+
       if (player) {
         const videoId = songSharkToggle.checked ? SONGS.shark : SONGS.default;
         player.loadVideoById({
@@ -467,14 +492,15 @@
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     window.onYouTubeIframeAPIReady = () => {
+      const initialVideoId = songSharkToggle.checked ? SONGS.shark : SONGS.default;
       player = new YT.Player('youtube-player', {
         height: '0',
         width: '0',
-        videoId: SONGS.default,
+        videoId: initialVideoId,
         playerVars: {
           'autoplay': 1,
           'loop': 1,
-          'playlist': SONGS.default,
+          'playlist': initialVideoId,
           'controls': 0,
           'showinfo': 0,
           'rel': 0,
@@ -525,6 +551,12 @@
         setAutoplay(true);
       } else if (e.key.toLowerCase() === 'm') {
         toggleMute();
+      } else if (e.key.toLowerCase() === 'k') {
+        showKiss();
+      } else if (e.key.toLowerCase() === 'f') {
+        feedRuru();
+      } else if (e.key.toLowerCase() === 's') {
+        spawnSticker();
       }
     });
 
@@ -534,12 +566,6 @@
       setTimeout(createHeart, i * 260);
     }
 
-    // Restore Brat Mode state
-    if (localStorage.getItem('bratMode') === 'enabled') {
-        bratModeToggle.checked = true;
-    } else if (localStorage.getItem('bratMode') === 'disabled') {
-        bratModeToggle.checked = false;
-    }
     syncBratMode();
 
     updateSlide(0);
