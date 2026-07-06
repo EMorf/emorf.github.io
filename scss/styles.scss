@@ -186,6 +186,12 @@ header {
         &:focus {
             color: $base-color;
             text-decoration: none;
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $base-color;
+            border-radius: 4px;
         }
     }
 
@@ -724,6 +730,17 @@ footer {
         margin: 0 0 15px 0;
         font-size: 0.9em;
     }
+
+    a {
+        &:focus {
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $base-color;
+            outline-offset: 2px;
+        }
+    }
 }
 
 .no-image {
@@ -771,6 +788,11 @@ footer {
         list-style: none;
         cursor: default;
         font-size: 1.2em;
+        @include transition(0.2s);
+
+        &:hover {
+            background: darken($background-alt, 10%);
+        }
     }
 }
 

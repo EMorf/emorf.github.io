@@ -57,3 +57,14 @@
 1. Implement a `dblclick` listener for removable dynamic elements and announce their removal via `aria-live`.
 2. Include shortcut keys in `title` attributes (e.g., "Action (key)") to improve discoverability.
 3. Use Playwright for verification of DOM state changes (addition/removal) even for simple static pages.
+
+## 2025-06-25 - [Anchor Consistency and Inclusive Focus Indicators]
+**Learning:**
+1. Navigation links that point to missing IDs (e.g., `#skills` link with no `id="skills"` element) are common regression points in static portfolios that degrade the user experience for all users.
+2. Relying on default browser focus outlines can lead to poor contrast on custom backgrounds. Using `:focus-visible` allows for high-contrast, theme-consistent indicators (e.g., using `#07889B`) that only appear for keyboard users, avoiding "clutter" for mouse users.
+3. External links should always communicate their behavior (e.g., "Opens in a new tab") to avoid surprising the user and to assist screen reader users in managing their tabs/windows.
+
+**Action:**
+1. Periodically verify all internal anchor links during UX audits.
+2. Use `:focus-visible` to style focus states with the brand's primary accent color and a distinct `outline-offset`.
+3. Add `title` or visually-hidden text to links with `target="_blank"`.
