@@ -46,3 +46,14 @@
 1. Always include a "Skip to content" link as the first focusable element on landing pages.
 2. Use `aria-label` to provide unique context to generic action links (e.g., "View [Project Name] website").
 3. Verify accessibility features by checking their CSS state (e.g., `top` coordinate) during focus events in automated tests.
+
+## 2025-06-10 - [Sticker Management and Shortcut Discoverability]
+**Learning:**
+1. Dynamically placed UI elements (like stickers) need an intuitive "undo" or removal mechanism to prevent the interface from becoming cluttered and unusable.
+2. Keyboard shortcuts significantly improve UX for power users, but they are "hidden" unless explicitly communicated through tooltips (`title` attributes) or help menus.
+3. Automated verification of interactive state (like spawning and removing elements) is more reliable than manual checks when using `file://` protocols for static site testing.
+
+**Action:**
+1. Implement a `dblclick` listener for removable dynamic elements and announce their removal via `aria-live`.
+2. Include shortcut keys in `title` attributes (e.g., "Action (key)") to improve discoverability.
+3. Use Playwright for verification of DOM state changes (addition/removal) even for simple static pages.
