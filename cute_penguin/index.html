@@ -184,11 +184,12 @@
     };
 
     const preloadImages = () => {
-      // Performance: Preload images asychronously to avoid blocking the main thread
-      slides.forEach((src) => {
+      // Performance: Preload images asychronously to avoid blocking the main thread.
+      // We skip the first image (slides[0]) because it is already preloaded via <link rel="preload">.
+      slides.slice(1).forEach((src) => {
         const img = new Image();
-        img.src = src;
         img.decoding = 'async';
+        img.src = src;
         preloadedImages.push(img);
       });
     };
