@@ -49,3 +49,14 @@
 1. Always aim for "single-pass" DOM transformations.
 2. Use local scoping for all jQuery objects.
 3. Verify that optimized DOM manipulation produces identical end-state HTML to avoid breaking CSS selectors.
+
+## 2025-07-07 - [Legacy Page Optimization & Resource Discovery]
+**Learning:**
+1. Legacy Mahara export pages often lack standard mobile meta tags (viewport), causing the browser to fall back to desktop rendering and slower layout calculations.
+2. Distributed assets like iframes and content images in these legacy files can cause significant network congestion if loaded all at once.
+3. Third-party scripts (like Formspree) placed at the end of the body delay resource discovery by the browser's lookahead scanner.
+
+**Action:**
+1. Always include a viewport meta tag in all HTML files to ensure efficient mobile rendering.
+2. Apply `loading="lazy"` and `decoding="async"` to all off-screen assets in legacy pages to preserve main-thread and network bandwidth.
+3. Move `defer` scripts to the `<head>` to enable parallel discovery and downloading.
