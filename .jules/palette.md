@@ -57,3 +57,12 @@
 1. Implement a `dblclick` listener for removable dynamic elements and announce their removal via `aria-live`.
 2. Include shortcut keys in `title` attributes (e.g., "Action (key)") to improve discoverability.
 3. Use Playwright for verification of DOM state changes (addition/removal) even for simple static pages.
+
+## 2025-06-15 - [Smooth Scroll Focus Management]
+**Learning:**
+1. Smooth scrolling to internal anchors creates an accessibility gap where the visual viewport moves but keyboard and screen reader focus remains on the trigger element.
+2. Programmatically moving focus to the target section after scrolling ensures a continuous and accessible navigation experience.
+
+**Action:**
+1. Apply `tabindex="-1"` to target sections and call `.focus()` on the target element within the scroll animation's completion callback.
+2. Use CSS to suppress the focus outline on these large containers (when focused via script) to maintain visual polish while preserving functional accessibility.
