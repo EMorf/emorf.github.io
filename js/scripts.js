@@ -15,7 +15,9 @@
 
         $('html, body').animate({
             scrollTop: scrollDistance + 'px'
-        }, Math.abs(window.pageYOffset - $(heading).offset().top) / 1);
+        }, Math.abs(window.pageYOffset - $(heading).offset().top) / 1, function() {
+            $(heading).focus();
+        });
 
         // Hide the menu once clicked if mobile
         if ($('header').hasClass('active')) {
@@ -28,7 +30,9 @@
     $('#to-top').click(function() {
         $('html, body').animate({
             scrollTop: 0
-        }, 500);
+        }, 500, function() {
+            $('.skip-link').focus();
+        });
     });
 
     // Scroll to first element
@@ -36,7 +40,9 @@
         var scrollDistance = $('#lead').next().offset().top;
         $('html, body').animate({
             scrollTop: scrollDistance + 'px'
-        }, 500);
+        }, 500, function() {
+            $('#lead').next().focus();
+        });
     });
 
     // Create timeline
@@ -54,7 +60,7 @@
             // Wrap the content and add the icon and date in one pass
             $content.wrap('<div class="vtimeline-point"><div class="vtimeline-block"></div></div>');
             $content.before(dateHtml);
-            $content.parent().before('<div class="vtimeline-icon"><i class="fa fa-map-marker"></i></div>');
+            $content.parent().before('<div class="vtimeline-icon"><i class="fa fa-map-marker" aria-hidden="true"></i></div>');
         });
 
     });
