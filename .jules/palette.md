@@ -66,3 +66,12 @@
 **Action:**
 1. Apply `tabindex="-1"` to target sections and call `.focus()` on the target element within the scroll animation's completion callback.
 2. Use CSS to suppress the focus outline on these large containers (when focused via script) to maintain visual polish while preserving functional accessibility.
+
+## 2025-06-25 - [External Link Context and Interactive Feedback]
+**Learning:**
+1. Providing explicit visual and textual context for external links (icons, titles, and ARIA labels) reduces user confusion and improves accessibility for screen reader users by managing navigation expectations.
+2. Adding subtle, high-quality hover interactions (lift, color change, shadow) to static lists (like skills) significantly enhances the perceived polish and interactivity of a portfolio.
+
+**Action:**
+1. Always append external link icons and "opens in a new tab" notices to links leading away from the primary site.
+2. Use CSS transitions and transformations to provide tactile-like feedback on interactive elements that don't have standard "button" appearances.
