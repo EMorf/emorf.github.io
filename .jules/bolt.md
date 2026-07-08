@@ -60,3 +60,13 @@
 1. Always include a viewport meta tag in all HTML files to ensure efficient mobile rendering.
 2. Apply `loading="lazy"` and `decoding="async"` to all off-screen assets in legacy pages to preserve main-thread and network bandwidth.
 3. Move `defer` scripts to the `<head>` to enable parallel discovery and downloading.
+
+## 2026-07-08 - [Multi-depth Resource Preloading]
+**Learning:**
+1. Mahara export pages are distributed across various directory depths (root, `views/`, `files/file/images/`), making absolute-relative paths (e.g., `../../`) brittle if applied uniformly.
+2. These legacy pages load a large number of blocking stylesheets (13+), which significantly delays the discovery of the primary brand asset (ANU logo) by the browser's lookahead scanner.
+3. Preloading the logo with `fetchpriority="high"` bypasses the CSS-blocked discovery phase, allowing the browser to parallelize the image fetch with the CSS downloads.
+
+**Action:**
+1. When applying performance hints to distributed legacy files, always audit directory depth to ensure correct relative pathing for assets.
+2. Prioritize preloading the primary logo/hero in pages with heavy blocking CSS to optimize LCP.
