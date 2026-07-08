@@ -778,6 +778,14 @@ footer {
         list-style: none;
         cursor: default;
         font-size: 1.2em;
+        @include transition(0.2s);
+
+        &:hover {
+            background: $base-color;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
     }
 }
 
