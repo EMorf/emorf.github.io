@@ -75,3 +75,39 @@
 **Action:**
 1. Always append external link icons and "opens in a new tab" notices to links leading away from the primary site.
 2. Use CSS transitions and transformations to provide tactile-like feedback on interactive elements that don't have standard "button" appearances.
+
+## 2024-07-10 - [Conditional Scroll Offsets for Hybrid Sticky Headers]
+**Learning:**
+1. When implementing a sticky header that only becomes fixed after a scroll threshold (hybrid state), smooth-scroll calculations must dynamically check for the header's current state.
+2. Fixed-offset subtractions applied when the header is not yet sticky result in a visual "gap" regression at the top of the viewport.
+
+**Action:**
+1. In smooth-scroll handlers, use a conditional check (e.g., `.hasClass('sticky')`) to decide whether to subtract the header height from the target scroll position.
+2. Always verify navigation transitions starting from the very top of the page to catch hybrid state bugs.
+
+## 2024-07-10 - [Performance-First Scroll-Spy and Terminal State Handling]
+**Learning:**
+1. Binding expensive DOM operations (like class toggling on multiple links) to the scroll event can cause layout thrashing and input lag.
+2. Standard scroll-spy logic often fails to highlight the final section if it's shorter than the viewport, as the trigger point may never be reached.
+
+**Action:**
+1. Wrap scroll-driven UI updates in `window.requestAnimationFrame` to throttle execution to the browser's refresh rate.
+2. Implement an explicit "bottom-of-page" check in scroll-spy logic (`scrollTop + windowHeight >= documentHeight`) to force-highlight the final navigation link, ensuring a complete and intuitive UX.
+
+## 2024-07-10 - [Conditional Scroll Offsets for Hybrid Sticky Headers]
+**Learning:**
+1. When implementing a sticky header that only becomes fixed after a scroll threshold (hybrid state), smooth-scroll calculations must dynamically check for the header's current state.
+2. Fixed-offset subtractions applied when the header is not yet sticky result in a visual "gap" regression at the top of the viewport.
+
+**Action:**
+1. In smooth-scroll handlers, use a conditional check (e.g., `$('header').hasClass('sticky')`) to decide whether to subtract the header height from the target scroll position.
+2. Always verify navigation transitions starting from the very top of the page to catch hybrid state bugs.
+
+## 2024-07-10 - [Performance-First Scroll-Spy and Terminal State Handling]
+**Learning:**
+1. Binding expensive DOM operations (like class toggling on multiple links) to the scroll event can cause layout thrashing and input lag.
+2. Standard scroll-spy logic often fails to highlight the final section if it's shorter than the viewport, as the trigger point may never be reached.
+
+**Action:**
+1. Wrap scroll-driven UI updates in `window.requestAnimationFrame` to throttle execution to the browser's refresh rate.
+2. Implement an explicit "bottom-of-page" check in scroll-spy logic (`scrollTop + windowHeight >= documentHeight`) to force-highlight the final navigation link, ensuring a complete and intuitive UX.
