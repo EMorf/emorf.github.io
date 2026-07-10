@@ -11,12 +11,13 @@
 
         e.preventDefault();
         var heading = $(this).attr('href');
-        var scrollDistance = $(heading).offset().top;
+        var $target = $(heading);
+        var scrollDistance = $target.offset().top;
 
         $('html, body').animate({
             scrollTop: scrollDistance + 'px'
-        }, Math.abs(window.pageYOffset - $(heading).offset().top) / 1, function() {
-            $(heading).focus();
+        }, Math.abs(window.pageYOffset - scrollDistance) / 1, function() {
+            $target.focus();
         });
 
         // Hide the menu once clicked if mobile
@@ -37,30 +38,39 @@
 
     // Scroll to first element
     $('#lead-down button').click(function() {
-        var scrollDistance = $('#lead').next().offset().top;
+        var $nextSection = $('#lead').next();
+        var scrollDistance = $nextSection.offset().top;
         $('html, body').animate({
             scrollTop: scrollDistance + 'px'
         }, 500, function() {
-            $('#lead').next().focus();
+            $nextSection.focus();
         });
     });
 
     // Create timeline
     $('#experience-timeline').each(function() {
 
-        var $this = $(this); // Store reference to this
-        var $userContent = $this.children('div'); // user content
+        var $container = $(this);
+        var $userContent = $container.children('div');
 
-        // Performance: Create each timeline block in a single pass to reduce DOM traversals and layout thrashing
+        // Performance: Build the entire timeline structure off-DOM to minimize reflows and layout thrashing
         $userContent.each(function() {
-            var $content = $(this).addClass('vtimeline-content');
+            var $content = $(this);
             var date = $content.data('date');
             var dateHtml = date ? '<span class="vtimeline-date">' + date + '</span>' : '';
+            var contentHtml = $content.addClass('vtimeline-content')[0].outerHTML;
 
-            // Wrap the content and add the icon and date in one pass
-            $content.wrap('<div class="vtimeline-point"><div class="vtimeline-block"></div></div>');
-            $content.before(dateHtml);
-            $content.parent().before('<div class="vtimeline-icon"><i class="fa fa-map-marker" aria-hidden="true"></i></div>');
+            // Construct the full block as a single HTML structure
+            var blockHtml =
+                '<div class="vtimeline-point">' +
+                    '<div class="vtimeline-icon"><i class="fa fa-map-marker" aria-hidden="true"></i></div>' +
+                    '<div class="vtimeline-block">' +
+                        dateHtml +
+                        contentHtml +
+                    '</div>' +
+                '</div>';
+
+            $content.replaceWith(blockHtml);
         });
 
     });
