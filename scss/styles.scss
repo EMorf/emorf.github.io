@@ -181,17 +181,28 @@ header {
         display: block;
         color: $base-color;
         padding: 10px;
+        border-radius: 4px;
+        @include transition(0.2s);
 
         &:hover {
             color: $base-color-hover;
             text-decoration: none;
             background: #eee;
-            border-radius: 4px;
         }
 
         &:focus {
             color: $base-color;
             text-decoration: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $base-color;
+            outline-offset: -2px;
+        }
+
+        &.active {
+            background: $background-alt;
+            font-weight: 700;
         }
     }
 

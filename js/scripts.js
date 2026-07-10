@@ -11,7 +11,9 @@
 
         e.preventDefault();
         var heading = $(this).attr('href');
-        var scrollDistance = $(heading).offset().top;
+        var isSticky = $('header').hasClass('sticky');
+        var headerHeight = isSticky ? $('header').outerHeight() : 0;
+        var scrollDistance = $(heading).offset().top - headerHeight;
 
         $('html, body').animate({
             scrollTop: scrollDistance + 'px'
@@ -37,13 +39,69 @@
 
     // Scroll to first element
     $('#lead-down button').click(function() {
-        var scrollDistance = $('#lead').next().offset().top;
+        var isSticky = $('header').hasClass('sticky');
+        var headerHeight = isSticky ? $('header').outerHeight() : 0;
+        var scrollDistance = $('#lead').next().offset().top - headerHeight;
         $('html, body').animate({
             scrollTop: scrollDistance + 'px'
         }, 500, function() {
             $('#lead').next().focus();
         });
     });
+
+    // Sticky header and scroll-spy with requestAnimationFrame for performance
+    var isScrolling = false;
+    $(window).on('scroll', function() {
+        if (!isScrolling) {
+            window.requestAnimationFrame(function() {
+                updateNavigation();
+                isScrolling = false;
+            });
+            isScrolling = true;
+        }
+    });
+
+    function updateNavigation() {
+        var scrollPos = $(window).scrollTop();
+        var headerHeight = $('header').outerHeight();
+        var leadHeight = $('#lead').outerHeight();
+        var windowHeight = $(window).height();
+        var docHeight = $(document).height();
+
+        // Sticky header - activates after scrolling past the lead section
+        if (scrollPos >= leadHeight) {
+            $('header').addClass('sticky');
+        } else {
+            $('header').removeClass('sticky');
+        }
+
+        // Scroll-spy logic
+        var activeSet = false;
+
+        // Check if we are at the bottom of the page
+        if (scrollPos + windowHeight >= docHeight - 10) {
+            $('#menu a').removeClass('active');
+            $('#menu a').last().addClass('active');
+            return;
+        }
+
+        $('#menu a').each(function() {
+            var currLink = $(this);
+            var refElement = $(currLink.attr('href'));
+            if (refElement.length) {
+                var elementTop = refElement.offset().top - headerHeight - 1;
+                var elementBottom = elementTop + refElement.outerHeight();
+
+                if (scrollPos >= elementTop && scrollPos < elementBottom) {
+                    $('#menu a').removeClass('active');
+                    currLink.addClass('active');
+                    activeSet = true;
+                } else {
+                    currLink.removeClass('active');
+                }
+            }
+        });
+    }
 
     // Create timeline
     $('#experience-timeline').each(function() {
