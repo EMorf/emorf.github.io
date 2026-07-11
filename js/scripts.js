@@ -11,7 +11,15 @@
 
         e.preventDefault();
         var heading = $(this).attr('href');
+        var headerHeight = $('header').outerHeight();
+        var isSticky = $('header').hasClass('sticky');
         var scrollDistance = $(heading).offset().top;
+
+        // If the header is already sticky, or if scrolling to the section will make it sticky,
+        // we need to offset the scroll distance by the header height.
+        if (isSticky || scrollDistance > $('#lead').outerHeight()) {
+            scrollDistance -= headerHeight;
+        }
 
         $('html, body').animate({
             scrollTop: scrollDistance + 'px'
@@ -37,11 +45,18 @@
 
     // Scroll to first element
     $('#lead-down button').click(function() {
-        var scrollDistance = $('#lead').next().offset().top;
+        var $nextSection = $('#lead').next();
+        var scrollDistance = $nextSection.offset().top;
+        var headerHeight = $('header').outerHeight();
+
+        // Account for header height as scrolling from #lead to the next section
+        // will likely trigger the sticky header.
+        scrollDistance -= headerHeight;
+
         $('html, body').animate({
             scrollTop: scrollDistance + 'px'
         }, 500, function() {
-            $('#lead').next().focus();
+            $nextSection.focus();
         });
     });
 
@@ -91,6 +106,51 @@
         e.preventDefault();
         $(this).fadeOut(300, function() {
             $('#more-projects').fadeIn(300);
+        });
+    });
+
+    // Sticky header and scroll-spy logic
+    var $header = $('header');
+    var $menuLinks = $('#menu a');
+    var $sections = $('#about, #experience, #education, #projects, #skills');
+    var leadHeight = $('#lead').outerHeight();
+
+    $(window).on('scroll', function() {
+        window.requestAnimationFrame(function() {
+            var scrollPos = $(window).scrollTop();
+            var headerHeight = $header.outerHeight();
+
+            // Toggle sticky header
+            if (scrollPos > leadHeight) {
+                $header.addClass('sticky');
+            } else {
+                $header.removeClass('sticky');
+            }
+
+            // Scroll-spy logic
+            var currentSectionId = '';
+
+            // Check if at the bottom of the page
+            if (scrollPos + $(window).height() >= $(document).height() - 10) {
+                currentSectionId = $sections.last().attr('id');
+            } else {
+                $sections.each(function() {
+                    var $this = $(this);
+                    // If header is sticky, we must account for its height in the trigger point
+                    var offset = $header.hasClass('sticky') ? headerHeight : 0;
+                    var sectionTop = $this.offset().top - offset - 10;
+                    if (scrollPos >= sectionTop) {
+                        currentSectionId = $this.attr('id');
+                    }
+                });
+            }
+
+            if (currentSectionId) {
+                $menuLinks.removeClass('active');
+                $('#menu a[href="#' + currentSectionId + '"]').addClass('active');
+            } else if (scrollPos < leadHeight) {
+                $menuLinks.removeClass('active');
+            }
         });
     });
 
