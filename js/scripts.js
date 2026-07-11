@@ -3,6 +3,9 @@
     // Remove no-js class
     $('html').removeClass('no-js');
 
+    // Performance: Cache common jQuery selectors to avoid repeated DOM lookups
+    var $root = $('html, body');
+
     // Animate to section when nav is clicked
     $('header a').click(function(e) {
 
@@ -11,12 +14,15 @@
 
         e.preventDefault();
         var heading = $(this).attr('href');
-        var scrollDistance = $(heading).offset().top;
+        var $target = $(heading);
+        if (!$target.length) return;
 
-        $('html, body').animate({
+        var scrollDistance = $target.offset().top;
+
+        $root.animate({
             scrollTop: scrollDistance + 'px'
-        }, Math.abs(window.pageYOffset - $(heading).offset().top) / 1, function() {
-            $(heading).focus();
+        }, Math.abs(window.pageYOffset - scrollDistance) / 1, function() {
+            $target.focus();
         });
 
         // Hide the menu once clicked if mobile
@@ -28,7 +34,7 @@
 
     // Scroll to top
     $('#to-top').click(function() {
-        $('html, body').animate({
+        $root.animate({
             scrollTop: 0
         }, 500, function() {
             $('.skip-link').focus();
@@ -37,32 +43,40 @@
 
     // Scroll to first element
     $('#lead-down button').click(function() {
-        var scrollDistance = $('#lead').next().offset().top;
-        $('html, body').animate({
+        var $leadNext = $('#lead').next();
+        var scrollDistance = $leadNext.offset().top;
+        $root.animate({
             scrollTop: scrollDistance + 'px'
         }, 500, function() {
-            $('#lead').next().focus();
+            $leadNext.focus();
         });
     });
 
     // Create timeline
     $('#experience-timeline').each(function() {
 
-        var $this = $(this); // Store reference to this
-        var $userContent = $this.children('div'); // user content
+        var $container = $(this);
+        var $userContent = $container.children('div');
+        var timelineHtml = '';
 
-        // Performance: Create each timeline block in a single pass to reduce DOM traversals and layout thrashing
+        // Performance: Build the entire timeline HTML off-DOM and perform a single injection
+        // to significantly reduce layout thrashing and reflows.
         $userContent.each(function() {
-            var $content = $(this).addClass('vtimeline-content');
+            var $content = $(this);
             var date = $content.data('date');
             var dateHtml = date ? '<span class="vtimeline-date">' + date + '</span>' : '';
 
-            // Wrap the content and add the icon and date in one pass
-            $content.wrap('<div class="vtimeline-point"><div class="vtimeline-block"></div></div>');
-            $content.before(dateHtml);
-            $content.parent().before('<div class="vtimeline-icon"><i class="fa fa-map-marker" aria-hidden="true"></i></div>');
+            timelineHtml +=
+                '<div class="vtimeline-point">' +
+                    '<div class="vtimeline-icon"><i class="fa fa-map-marker" aria-hidden="true"></i></div>' +
+                    '<div class="vtimeline-block">' +
+                        dateHtml +
+                        $content.addClass('vtimeline-content').prop('outerHTML') +
+                    '</div>' +
+                '</div>';
         });
 
+        $container.html(timelineHtml);
     });
 
     // Open mobile menu
