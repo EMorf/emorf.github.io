@@ -3,6 +3,10 @@
     // Remove no-js class
     $('html').removeClass('no-js');
 
+    // Performance: Cache window and header for repeated use
+    var $window = $(window);
+    var $header = $('header');
+
     // Animate to section when nav is clicked
     $('header a').click(function(e) {
 
@@ -11,16 +15,20 @@
 
         e.preventDefault();
         var heading = $(this).attr('href');
-        var scrollDistance = $(heading).offset().top;
+        var $target = $(heading);
+        var scrollDistance = $target.offset().top;
 
-        $('html, body').animate({
+        // Performance: Use .stop() to prevent animation queueing and cap duration for better UX
+        var duration = Math.min(800, Math.abs($window.scrollTop() - scrollDistance));
+
+        $('html, body').stop().animate({
             scrollTop: scrollDistance + 'px'
-        }, Math.abs(window.pageYOffset - $(heading).offset().top) / 1, function() {
-            $(heading).focus();
+        }, duration, function() {
+            $target.focus();
         });
 
         // Hide the menu once clicked if mobile
-        if ($('header').hasClass('active')) {
+        if ($header.hasClass('active')) {
             $('header, body').removeClass('active');
             $('#mobile-menu-open').attr('aria-expanded', 'false').focus();
         }
@@ -28,7 +36,7 @@
 
     // Scroll to top
     $('#to-top').click(function() {
-        $('html, body').animate({
+        $('html, body').stop().animate({
             scrollTop: 0
         }, 500, function() {
             $('.skip-link').focus();
@@ -37,11 +45,12 @@
 
     // Scroll to first element
     $('#lead-down button').click(function() {
-        var scrollDistance = $('#lead').next().offset().top;
-        $('html, body').animate({
+        var $target = $('#lead').next();
+        var scrollDistance = $target.offset().top;
+        $('html, body').stop().animate({
             scrollTop: scrollDistance + 'px'
         }, 500, function() {
-            $('#lead').next().focus();
+            $target.focus();
         });
     });
 
@@ -51,16 +60,15 @@
         var $this = $(this); // Store reference to this
         var $userContent = $this.children('div'); // user content
 
-        // Performance: Create each timeline block in a single pass to reduce DOM traversals and layout thrashing
+        // Performance: Consolidate DOM manipulations to minimize reflows
         $userContent.each(function() {
             var $content = $(this).addClass('vtimeline-content');
             var date = $content.data('date');
             var dateHtml = date ? '<span class="vtimeline-date">' + date + '</span>' : '';
 
-            // Wrap the content and add the icon and date in one pass
             $content.wrap('<div class="vtimeline-point"><div class="vtimeline-block"></div></div>');
             $content.before(dateHtml);
-            $content.parent().before('<div class="vtimeline-icon"><i class="fa fa-map-marker" aria-hidden="true"></i></div>');
+            $content.closest('.vtimeline-block').before('<div class="vtimeline-icon"><i class="fa fa-map-marker" aria-hidden="true"></i></div>');
         });
 
     });
