@@ -11,12 +11,23 @@
 
         e.preventDefault();
         var heading = $(this).attr('href');
-        var scrollDistance = $(heading).offset().top;
+
+        // Calculate header height - use 0 if header is not yet sticky and won't be (unlikely in this design)
+        // or if it's already sticky.
+        // Actually, if we are scrolling from top, it WILL become sticky.
+        var header = $('header');
+        var headerHeight = header.outerHeight();
+        var scrollDistance = $(heading).offset().top - headerHeight;
 
         $('html, body').animate({
             scrollTop: scrollDistance + 'px'
-        }, Math.abs(window.pageYOffset - $(heading).offset().top) / 1, function() {
-            $(heading).focus();
+        }, Math.abs($(window).scrollTop() - scrollDistance) / 1.5, function() {
+            var $target = $(heading);
+            if ($target.length) {
+                $target[0].focus({
+                    preventScroll: true
+                });
+            }
         });
 
         // Hide the menu once clicked if mobile
@@ -37,11 +48,17 @@
 
     // Scroll to first element
     $('#lead-down button').click(function() {
-        var scrollDistance = $('#lead').next().offset().top;
+        var headerHeight = $('header').outerHeight();
+        var $target = $('#lead').next();
+        var scrollDistance = $target.offset().top - headerHeight;
         $('html, body').animate({
             scrollTop: scrollDistance + 'px'
         }, 500, function() {
-            $('#lead').next().focus();
+            if ($target.length) {
+                $target[0].focus({
+                    preventScroll: true
+                });
+            }
         });
     });
 
@@ -93,5 +110,57 @@
             $('#more-projects').fadeIn(300);
         });
     });
+
+    // Scroll-spy and Sticky Header
+    var ticking = false;
+    $(window).on('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                updateNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    function updateNav() {
+        var scrollPos = $(window).scrollTop();
+        var header = $('header');
+        var leadHeight = $('#lead').outerHeight();
+        var headerHeight = header.outerHeight();
+
+        // Sticky Header toggling
+        if (scrollPos >= leadHeight) {
+            header.addClass('sticky');
+        } else {
+            header.removeClass('sticky');
+        }
+
+        // Scroll-spy highlighting
+        var menuLinks = $('#menu a');
+        var fromTop = scrollPos + headerHeight + 15;
+
+        var cur = menuLinks.map(function() {
+            var section = $($(this).attr('href'));
+            if (section.length && section.offset().top <= fromTop) {
+                return section;
+            }
+        });
+
+        cur = cur[cur.length - 1];
+        var id = cur && cur.length ? cur[0].id : "";
+
+        // Force active the last link if at the very bottom
+        if (Math.ceil(scrollPos + $(window).height()) >= $(document).height()) {
+            id = menuLinks.last().attr('href').substring(1);
+        }
+
+        if (id) {
+            menuLinks.removeClass('active');
+            $('#menu a[href="#' + id + '"]').addClass('active');
+        }
+    }
+
+    updateNav(); // Initial call
 
 })(jQuery);
