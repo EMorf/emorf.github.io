@@ -1,34 +1,43 @@
 (function($) {
 
+    // Performance: Cache frequently used selectors to reduce DOM traversals
+    var $window = $(window);
+    var $htmlBody = $('html, body');
+    var $header = $('header');
+
     // Remove no-js class
     $('html').removeClass('no-js');
 
     // Animate to section when nav is clicked
-    $('header a').click(function(e) {
+    $header.find('a').click(function(e) {
 
         // Treat as normal link if no-scroll class
         if ($(this).hasClass('no-scroll')) return;
 
         e.preventDefault();
         var heading = $(this).attr('href');
-        var scrollDistance = $(heading).offset().top;
+        var $target = $(heading);
+        var scrollDistance = $target.offset().top;
 
-        $('html, body').animate({
+        // Performance: Use .stop() to prevent animation queue buildup during rapid clicks.
+        // Also cap duration to 800ms for better perceived performance.
+        $htmlBody.stop().animate({
             scrollTop: scrollDistance + 'px'
-        }, Math.abs(window.pageYOffset - $(heading).offset().top) / 1, function() {
-            $(heading).focus();
+        }, Math.min(Math.abs($window.scrollTop() - scrollDistance), 800), function() {
+            $target.focus();
         });
 
         // Hide the menu once clicked if mobile
-        if ($('header').hasClass('active')) {
-            $('header, body').removeClass('active');
+        if ($header.hasClass('active')) {
+            $header.removeClass('active');
+            $('body').removeClass('active');
             $('#mobile-menu-open').attr('aria-expanded', 'false').focus();
         }
     });
 
     // Scroll to top
     $('#to-top').click(function() {
-        $('html, body').animate({
+        $htmlBody.stop().animate({
             scrollTop: 0
         }, 500, function() {
             $('.skip-link').focus();
@@ -37,11 +46,12 @@
 
     // Scroll to first element
     $('#lead-down button').click(function() {
-        var scrollDistance = $('#lead').next().offset().top;
-        $('html, body').animate({
+        var $nextSection = $('#lead').next();
+        var scrollDistance = $nextSection.offset().top;
+        $htmlBody.stop().animate({
             scrollTop: scrollDistance + 'px'
         }, 500, function() {
-            $('#lead').next().focus();
+            $nextSection.focus();
         });
     });
 
