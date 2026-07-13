@@ -75,3 +75,6 @@
 **Action:**
 1. Always append external link icons and "opens in a new tab" notices to links leading away from the primary site.
 2. Use CSS transitions and transformations to provide tactile-like feedback on interactive elements that don't have standard "button" appearances.
+## 2026-07-13 - [Sticky Header & Scroll Spy]
+**Learning:** Adding a sticky header and scroll spy to a single-page portfolio significantly improves navigation context, but requires careful offset calculations to prevent 'jumping' and ensure correct highlighting near section boundaries. Using `preventScroll: true` in `.focus()` is critical when managing accessibility after a custom scroll animation.
+**Action:** Always account for fixed/sticky header height in scroll offset calculations and use a small buffer (e.g., 5px) for scroll-spy triggers to improve reliability.

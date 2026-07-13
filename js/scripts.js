@@ -5,25 +5,34 @@
 
     // Animate to section when nav is clicked
     $('header a').click(function(e) {
-
-        // Treat as normal link if no-scroll class
         if ($(this).hasClass('no-scroll')) return;
-
         e.preventDefault();
         var heading = $(this).attr('href');
-        var scrollDistance = $(heading).offset().top;
+        var scrollDistance = $(heading).offset().top - ($('header').hasClass('sticky') ? $('header').outerHeight() : 0);
 
-        $('html, body').animate({
+        $('html, body').stop().animate({
             scrollTop: scrollDistance + 'px'
-        }, Math.abs(window.pageYOffset - $(heading).offset().top) / 1, function() {
-            $(heading).focus();
+        }, 500, function() {
+            $(heading).focus({ preventScroll: true });
         });
 
-        // Hide the menu once clicked if mobile
         if ($('header').hasClass('active')) {
             $('header, body').removeClass('active');
             $('#mobile-menu-open').attr('aria-expanded', 'false').focus();
         }
+    });
+
+    // Sticky Header and Scroll Spy
+    $(window).on('scroll', function() {
+        var scrollPos = $(this).scrollTop(), headerHeight = $('header').outerHeight();
+        $('header').toggleClass('sticky', scrollPos > $('#lead').height());
+        $('#menu a').each(function() {
+            var currLink = $(this), refElement = $(currLink.attr('href'));
+            if (refElement.length && (refElement.offset().top - headerHeight) <= scrollPos + 5 && (refElement.offset().top - headerHeight + refElement.outerHeight()) > scrollPos) {
+                $('#menu a').removeClass('active');
+                currLink.addClass('active');
+            }
+        });
     });
 
     // Scroll to top

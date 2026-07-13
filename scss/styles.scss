@@ -182,7 +182,7 @@ header {
         color: $base-color;
         padding: 10px;
 
-        &:hover {
+        &:hover, &.active {
             color: $base-color-hover;
             text-decoration: none;
             background: #eee;
@@ -202,6 +202,11 @@ header {
     &.sticky {
         position: fixed;
         z-index: 999;
+
+        ul {
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
     }
 }
 
