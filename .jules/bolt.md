@@ -70,3 +70,15 @@
 **Action:**
 1. When applying performance hints to distributed legacy files, always audit directory depth to ensure correct relative pathing for assets.
 2. Prioritize preloading the primary logo/hero in pages with heavy blocking CSS to optimize LCP.
+
+## 2025-07-09 - [Scroll Navigation & DOM Access Optimization]
+**Learning:**
+1. Performing multiple DOM lookups and layout property reads (like `.offset()` or `.outerHeight()`) directly inside a scroll event listener causes significant layout thrashing and main-thread congestion.
+2. Throttling the scroll event with `requestAnimationFrame` ensures that DOM updates occur at most once per frame, maintaining a smooth 60fps experience.
+3. Pre-mapping navigation links to their target elements during initialization avoids expensive selector lookups and attribute parsing during the scroll lifecycle.
+4. Caching jQuery objects for frequently accessed elements (window, body, header) prevents redundant object creation and DOM traversals.
+
+**Action:**
+1. Always throttle high-frequency events like 'scroll' or 'resize' using `requestAnimationFrame` or a debounce/throttle helper.
+2. Cache jQuery selectors and pre-calculate layout-dependent values at initialization whenever possible.
+3. Use `.hasClass()` checks to avoid redundant DOM writes (e.g., adding/removing the same class repeatedly).

@@ -1,43 +1,80 @@
 (function($) {
 
+    // Performance: Cache frequently accessed jQuery selectors
+    var $window = $(window);
+    var $document = $(document);
+    var $html = $('html');
+    var $body = $('body');
+    var $htmlBody = $html.add($body);
+    var $header = $('header');
+    var $menuLinks = $('#menu a');
+    var $lead = $('#lead');
+
     // Remove no-js class
-    $('html').removeClass('no-js');
+    $html.removeClass('no-js');
+
+    // Pre-calculate navigation targets to avoid repeated selector lookups
+    var navTargets = $menuLinks.map(function() {
+        var $el = $($(this).attr('href'));
+        if ($el.length) return { link: $(this), section: $el };
+    }).get();
 
     // Animate to section when nav is clicked
-    $('header a').click(function(e) {
-        if ($(this).hasClass('no-scroll')) return;
+    $header.find('a').click(function(e) {
+        var $this = $(this);
+        if ($this.hasClass('no-scroll')) return;
         e.preventDefault();
-        var heading = $(this).attr('href');
-        var scrollDistance = $(heading).offset().top - ($('header').hasClass('sticky') ? $('header').outerHeight() : 0);
+        var heading = $this.attr('href');
+        var $target = $(heading);
+        var scrollDistance = $target.offset().top - ($header.hasClass('sticky') ? $header.outerHeight() : 0);
 
-        $('html, body').stop().animate({
+        $htmlBody.stop().animate({
             scrollTop: scrollDistance + 'px'
         }, 500, function() {
-            $(heading).focus({ preventScroll: true });
+            $target.focus({ preventScroll: true });
         });
 
-        if ($('header').hasClass('active')) {
-            $('header, body').removeClass('active');
+        if ($header.hasClass('active')) {
+            $header.add($body).removeClass('active');
             $('#mobile-menu-open').attr('aria-expanded', 'false').focus();
         }
     });
 
     // Sticky Header and Scroll Spy
-    $(window).on('scroll', function() {
-        var scrollPos = $(this).scrollTop(), headerHeight = $('header').outerHeight();
-        $('header').toggleClass('sticky', scrollPos > $('#lead').height());
-        $('#menu a').each(function() {
-            var currLink = $(this), refElement = $(currLink.attr('href'));
-            if (refElement.length && (refElement.offset().top - headerHeight) <= scrollPos + 5 && (refElement.offset().top - headerHeight + refElement.outerHeight()) > scrollPos) {
-                $('#menu a').removeClass('active');
-                currLink.addClass('active');
+    var scrollRequest;
+    $window.on('scroll', function() {
+        if (scrollRequest) return;
+        scrollRequest = requestAnimationFrame(function() {
+            var scrollPos = $window.scrollTop(), headerHeight = $header.outerHeight();
+            $header.toggleClass('sticky', scrollPos > $lead.height());
+
+            // Performance: Force highlight final link at bottom of page
+            if (scrollPos + $window.height() >= $document.height() - 10) {
+                if (!$menuLinks.last().hasClass('active')) {
+                    $menuLinks.removeClass('active');
+                    $menuLinks.last().addClass('active');
+                }
+            } else {
+                // Performance: Use pre-calculated navTargets and minimize DOM writes
+                navTargets.forEach(function(target) {
+                    var $currLink = target.link, $refElement = target.section;
+                    var offset = $refElement.offset().top - headerHeight;
+
+                    if (offset <= scrollPos + 5 && (offset + $refElement.outerHeight()) > scrollPos) {
+                        if (!$currLink.hasClass('active')) {
+                            $menuLinks.removeClass('active');
+                            $currLink.addClass('active');
+                        }
+                    }
+                });
             }
+            scrollRequest = null;
         });
     });
 
     // Scroll to top
     $('#to-top').click(function() {
-        $('html, body').animate({
+        $htmlBody.animate({
             scrollTop: 0
         }, 500, function() {
             $('.skip-link').focus();
@@ -46,11 +83,12 @@
 
     // Scroll to first element
     $('#lead-down button').click(function() {
-        var scrollDistance = $('#lead').next().offset().top;
-        $('html, body').animate({
+        var $next = $lead.next();
+        var scrollDistance = $next.offset().top;
+        $htmlBody.animate({
             scrollTop: scrollDistance + 'px'
         }, 500, function() {
-            $('#lead').next().focus();
+            $next.focus();
         });
     });
 
