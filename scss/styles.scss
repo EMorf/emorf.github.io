@@ -706,6 +706,7 @@ footer {
     background: #fff;
     border-radius: 4px;
     @include transition(0.3s);
+    will-change: transform;
 
     &:hover {
         transform: translateY(-5px);
@@ -715,6 +716,7 @@ footer {
 
 .project-image {
     float: left;
+    cursor: pointer;
 }
 
 .project-info {
@@ -729,6 +731,7 @@ footer {
         font-weight: 300;
         color: $heading;
         margin: 0 0 15px 0;
+        cursor: pointer;
     }
 
     p {

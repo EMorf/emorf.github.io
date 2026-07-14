@@ -103,4 +103,17 @@
         });
     });
 
+    // Project card interaction
+    $('.project').on('click', '.project-image, h3', function() {
+        $(this).closest('.project').find('a').first()[0].click();
+    });
+
+    // Actionable contact instructions
+    $('.open-contact-form').click(function(e) {
+        e.preventDefault();
+        if (typeof formbutton === 'function') {
+            formbutton("open");
+        }
+    });
+
 })(jQuery);
