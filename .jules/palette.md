@@ -78,3 +78,7 @@
 ## 2026-07-13 - [Sticky Header & Scroll Spy]
 **Learning:** Adding a sticky header and scroll spy to a single-page portfolio significantly improves navigation context, but requires careful offset calculations to prevent 'jumping' and ensure correct highlighting near section boundaries. Using `preventScroll: true` in `.focus()` is critical when managing accessibility after a custom scroll animation.
 **Action:** Always account for fixed/sticky header height in scroll offset calculations and use a small buffer (e.g., 5px) for scroll-spy triggers to improve reliability.
+
+## 2025-07-14 - [Increasing Click Targets & Actionable Text]
+**Learning:** Making entire cards (including images and titles) clickable by delegating to a primary link ("big link" pattern) significantly improves mobile and mouse interactivity. Additionally, converting passive instructions like "use the form below" into actionable triggers for floating widgets reduces user friction and navigation effort.
+**Action:** Implement delegated click handlers for complex card components and look for opportunities to transform descriptive text into direct action triggers for core site functionality.
