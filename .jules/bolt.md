@@ -70,3 +70,15 @@
 **Action:**
 1. When applying performance hints to distributed legacy files, always audit directory depth to ensure correct relative pathing for assets.
 2. Prioritize preloading the primary logo/hero in pages with heavy blocking CSS to optimize LCP.
+
+## 2025-07-10 - [Event Throttling & Selector Caching in Legacy JS]
+**Learning:**
+1. High-frequency events like 'scroll' in jQuery-based projects can cause significant layout thrashing if they perform DOM lookups or read layout properties (like `.offset()` or `.outerHeight()`) in every event loop.
+2. Throttling these events with `requestAnimationFrame` ensures the logic runs at most once per frame (60fps), drastically reducing CPU overhead.
+3. Pre-calculating and caching navigation targets at initialization (pre-mapping) eliminates redundant DOM traversals.
+4. Implementing "state change protection" (checking if a class is already present before applying it) reduces unnecessary DOM writes and potential layout recalculations.
+
+**Action:**
+1. Always throttle scroll and resize listeners using `requestAnimationFrame`.
+2. Cache frequently used jQuery selectors and pre-calculate DOM properties whenever possible.
+3. Use backward loops for scroll-spy logic to enable early exits once the active section is found.

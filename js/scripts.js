@@ -1,14 +1,39 @@
 (function($) {
 
+    // Performance: Cache frequently used selectors and pre-map navigation targets
+    var $window = $(window);
+    var $document = $(document);
+    var $html = $('html');
+    var $body = $('body');
+    var $header = $('header');
+    var $menuLinks = $('#menu a');
+    var $lead = $('#lead');
+    var $mobileMenuOpen = $('#mobile-menu-open');
+    var $mobileMenuClose = $('#mobile-menu-close');
+    var navTargets = [];
+    var scrollActive = false;
+
     // Remove no-js class
-    $('html').removeClass('no-js');
+    $html.removeClass('no-js');
+
+    // Pre-map navigation targets to their associated sections to avoid repetitive DOM lookups during scroll
+    $menuLinks.each(function() {
+        var $link = $(this);
+        var $target = $($link.attr('href'));
+        if ($target.length) {
+            navTargets.push({
+                link: $link,
+                target: $target
+            });
+        }
+    });
 
     // Animate to section when nav is clicked
-    $('header a').click(function(e) {
+    $header.find('a').click(function(e) {
         if ($(this).hasClass('no-scroll')) return;
         e.preventDefault();
         var heading = $(this).attr('href');
-        var scrollDistance = $(heading).offset().top - ($('header').hasClass('sticky') ? $('header').outerHeight() : 0);
+        var scrollDistance = $(heading).offset().top - ($header.hasClass('sticky') ? $header.outerHeight() : 0);
 
         $('html, body').stop().animate({
             scrollTop: scrollDistance + 'px'
@@ -16,23 +41,47 @@
             $(heading).focus({ preventScroll: true });
         });
 
-        if ($('header').hasClass('active')) {
-            $('header, body').removeClass('active');
-            $('#mobile-menu-open').attr('aria-expanded', 'false').focus();
+        if ($header.hasClass('active')) {
+            $header.add($body).removeClass('active');
+            $mobileMenuOpen.attr('aria-expanded', 'false').focus();
         }
     });
 
-    // Sticky Header and Scroll Spy
-    $(window).on('scroll', function() {
-        var scrollPos = $(this).scrollTop(), headerHeight = $('header').outerHeight();
-        $('header').toggleClass('sticky', scrollPos > $('#lead').height());
-        $('#menu a').each(function() {
-            var currLink = $(this), refElement = $(currLink.attr('href'));
-            if (refElement.length && (refElement.offset().top - headerHeight) <= scrollPos + 5 && (refElement.offset().top - headerHeight + refElement.outerHeight()) > scrollPos) {
-                $('#menu a').removeClass('active');
-                currLink.addClass('active');
-            }
-        });
+    // Sticky Header and Scroll Spy with requestAnimationFrame throttling for 60fps performance
+    $window.on('scroll', function() {
+        if (!scrollActive) {
+            scrollActive = true;
+            window.requestAnimationFrame(function() {
+                var scrollPos = $window.scrollTop();
+                var headerHeight = $header.outerHeight();
+                var leadHeight = $lead.height();
+                var activeSet = false;
+
+                $header.toggleClass('sticky', scrollPos > leadHeight);
+
+                // Determine the current active section
+                for (var i = navTargets.length - 1; i >= 0; i--) {
+                    var section = navTargets[i];
+                    var sectionTop = section.target.offset().top - headerHeight;
+
+                    // Performance: Only update classes when necessary and handle page bottom edge case
+                    if (sectionTop <= scrollPos + 5 || (i === navTargets.length - 1 && scrollPos + $window.height() >= $document.height() - 10)) {
+                        if (!section.link.hasClass('active')) {
+                            $menuLinks.removeClass('active');
+                            section.link.addClass('active');
+                        }
+                        activeSet = true;
+                        break;
+                    }
+                }
+
+                if (!activeSet) {
+                    $menuLinks.removeClass('active');
+                }
+
+                scrollActive = false;
+            });
+        }
     });
 
     // Scroll to top
@@ -46,11 +95,11 @@
 
     // Scroll to first element
     $('#lead-down button').click(function() {
-        var scrollDistance = $('#lead').next().offset().top;
+        var scrollDistance = $lead.next().offset().top;
         $('html, body').animate({
             scrollTop: scrollDistance + 'px'
         }, 500, function() {
-            $('#lead').next().focus();
+            $lead.next().focus();
         });
     });
 
@@ -75,23 +124,23 @@
     });
 
     // Open mobile menu
-    $('#mobile-menu-open').click(function() {
-        $('header, body').addClass('active');
+    $mobileMenuOpen.click(function() {
+        $header.add($body).addClass('active');
         $(this).attr('aria-expanded', 'true');
-        $('#mobile-menu-close').focus();
+        $mobileMenuClose.focus();
     });
 
     // Close mobile menu
-    $('#mobile-menu-close').click(function() {
-        $('header, body').removeClass('active');
-        $('#mobile-menu-open').attr('aria-expanded', 'false').focus();
+    $mobileMenuClose.click(function() {
+        $header.add($body).removeClass('active');
+        $mobileMenuOpen.attr('aria-expanded', 'false').focus();
     });
 
     // Close mobile menu on Escape key
-    $(document).keyup(function(e) {
-        if (e.keyCode === 27 && $('header').hasClass('active')) {
-            $('header, body').removeClass('active');
-            $('#mobile-menu-open').attr('aria-expanded', 'false').focus();
+    $document.keyup(function(e) {
+        if (e.keyCode === 27 && $header.hasClass('active')) {
+            $header.add($body).removeClass('active');
+            $mobileMenuOpen.attr('aria-expanded', 'false').focus();
         }
     });
 
