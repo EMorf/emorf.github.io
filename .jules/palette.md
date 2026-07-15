@@ -82,3 +82,12 @@
 ## 2025-07-14 - [Increasing Click Targets & Actionable Text]
 **Learning:** Making entire cards (including images and titles) clickable by delegating to a primary link ("big link" pattern) significantly improves mobile and mouse interactivity. Additionally, converting passive instructions like "use the form below" into actionable triggers for floating widgets reduces user friction and navigation effort.
 **Action:** Implement delegated click handlers for complex card components and look for opportunities to transform descriptive text into direct action triggers for core site functionality.
+
+## 2025-07-15 - [Card as a Link Pattern & Keyboard Feedback]
+**Learning:**
+1. Implementing the "Card as a Link" pattern significantly improves the hit target and intuitiveness of project displays, especially for mouse and mobile users.
+2. Using `:focus-within` allows developers to provide the same delightful visual feedback (like a "lift" transform) to keyboard users that mouse users receive on hover, bridging the gap between mouse-driven and keyboard-driven UX.
+
+**Action:**
+1. Use `:focus-within` on card containers to trigger hover-like animations when internal links are focused.
+2. Delegate container-level click events to the primary internal link while ensuring the handler ignores clicks originating directly from links to avoid event recursion.

@@ -707,8 +707,9 @@ footer {
     border-radius: 4px;
     @include transition(0.3s);
     will-change: transform;
+    cursor: pointer;
 
-    &:hover {
+    &:hover, &:focus-within {
         transform: translateY(-5px);
         box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.1);
     }
@@ -716,7 +717,6 @@ footer {
 
 .project-image {
     float: left;
-    cursor: pointer;
 }
 
 .project-info {
@@ -731,7 +731,6 @@ footer {
         font-weight: 300;
         color: $heading;
         margin: 0 0 15px 0;
-        cursor: pointer;
     }
 
     p {
