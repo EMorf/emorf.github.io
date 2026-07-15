@@ -104,8 +104,9 @@
     });
 
     // Project card interaction
-    $('.project').on('click', '.project-image, h3', function() {
-        $(this).closest('.project').find('a').first()[0].click();
+    $('.project').click(function(e) {
+        if ($(e.target).closest('a').length) return;
+        $(this).find('a').first()[0].click();
     });
 
     // Actionable contact instructions
