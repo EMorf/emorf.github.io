@@ -786,6 +786,8 @@ footer {
         cursor: default;
         font-size: 1.2em;
         @include transition(0.2s);
+        // Performance: Promote items to a compositor layer for smooth GPU-accelerated hover animations
+        will-change: transform;
 
         &:hover {
             background: $base-color;

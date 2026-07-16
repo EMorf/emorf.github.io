@@ -1,43 +1,101 @@
 (function($) {
+    // Performance: Cache frequently used jQuery selectors to reduce DOM traversal overhead
+    var $window = $(window),
+        $document = $(document),
+        $html = $('html'),
+        $body = $('body'),
+        $header = $('header'),
+        $menuLinks = $('#menu a'),
+        $lead = $('#lead'),
+        $mobileMenuOpen = $('#mobile-menu-open'),
+        $mobileMenuClose = $('#mobile-menu-close');
 
     // Remove no-js class
-    $('html').removeClass('no-js');
+    $html.removeClass('no-js');
+
+    // Performance: Pre-map navigation targets to avoid redundant attribute lookups and jQuery selections during scroll events
+    var navTargets = $menuLinks.map(function() {
+        var targetId = this.getAttribute('href');
+        if (targetId && targetId.charAt(0) === '#') {
+            var $el = $(targetId);
+            if ($el.length) {
+                return {
+                    link: $(this),
+                    section: $el
+                };
+            }
+        }
+    }).get();
 
     // Animate to section when nav is clicked
     $('header a').click(function(e) {
-        if ($(this).hasClass('no-scroll')) return;
+        var $this = $(this);
+        if ($this.hasClass('no-scroll')) return;
         e.preventDefault();
-        var heading = $(this).attr('href');
-        var scrollDistance = $(heading).offset().top - ($('header').hasClass('sticky') ? $('header').outerHeight() : 0);
+        var headingId = $this.attr('href');
+        var $heading = $(headingId);
+        var headerHeight = $header.outerHeight();
+        var isSticky = $header.hasClass('sticky');
 
+        // Performance: Use cached selector and calculate scroll distance accounting for sticky header
+        var scrollDistance = $heading.offset().top - (isSticky ? headerHeight : 0);
+
+        // Performance: stop() prevents animation queue buildup; duration capped at 800ms for better UX
+        var duration = Math.min(800, Math.max(300, Math.abs($window.scrollTop() - scrollDistance) / 2));
         $('html, body').stop().animate({
             scrollTop: scrollDistance + 'px'
-        }, 500, function() {
-            $(heading).focus({ preventScroll: true });
+        }, duration, function() {
+            // Accessibility: Focus target element without causing native scroll jump
+            $heading.focus({ preventScroll: true });
         });
 
-        if ($('header').hasClass('active')) {
-            $('header, body').removeClass('active');
-            $('#mobile-menu-open').attr('aria-expanded', 'false').focus();
+        if ($header.hasClass('active')) {
+            $header.removeClass('active');
+            $body.removeClass('active');
+            $mobileMenuOpen.attr('aria-expanded', 'false').focus();
         }
     });
 
     // Sticky Header and Scroll Spy
-    $(window).on('scroll', function() {
-        var scrollPos = $(this).scrollTop(), headerHeight = $('header').outerHeight();
-        $('header').toggleClass('sticky', scrollPos > $('#lead').height());
-        $('#menu a').each(function() {
-            var currLink = $(this), refElement = $(currLink.attr('href'));
-            if (refElement.length && (refElement.offset().top - headerHeight) <= scrollPos + 5 && (refElement.offset().top - headerHeight + refElement.outerHeight()) > scrollPos) {
-                $('#menu a').removeClass('active');
-                currLink.addClass('active');
-            }
-        });
+    var scrollTicking = false;
+    $window.on('scroll', function() {
+        if (!scrollTicking) {
+            // Performance: Throttle navigation update logic using requestAnimationFrame to prevent layout thrashing
+            window.requestAnimationFrame(function() {
+                var scrollPos = $window.scrollTop(),
+                    headerHeight = $header.outerHeight(),
+                    leadHeight = $lead.height();
+
+                $header.toggleClass('sticky', scrollPos > leadHeight);
+
+                // Performance: Handle highlighting of the final navigation link at the bottom of the page
+                if (scrollPos + $window.height() >= $document.height() - 10) {
+                    $menuLinks.removeClass('active');
+                    $menuLinks.last().addClass('active');
+                } else {
+                    // Performance: Use the pre-mapped navTargets for efficient scroll-spy calculations
+                    for (var i = 0; i < navTargets.length; i++) {
+                        var target = navTargets[i];
+                        // Use a small pixel buffer (+ 5) to ensure links highlight reliably at section boundaries
+                        var sectionTop = target.section.offset().top - headerHeight;
+                        var sectionBottom = sectionTop + target.section.outerHeight();
+
+                        if (scrollPos + 5 >= sectionTop && scrollPos < sectionBottom) {
+                            $menuLinks.removeClass('active');
+                            target.link.addClass('active');
+                            break;
+                        }
+                    }
+                }
+                scrollTicking = false;
+            });
+            scrollTicking = true;
+        }
     });
 
     // Scroll to top
     $('#to-top').click(function() {
-        $('html, body').animate({
+        $('html, body').stop().animate({
             scrollTop: 0
         }, 500, function() {
             $('.skip-link').focus();
@@ -46,11 +104,12 @@
 
     // Scroll to first element
     $('#lead-down button').click(function() {
-        var scrollDistance = $('#lead').next().offset().top;
-        $('html, body').animate({
+        var $nextSection = $lead.next();
+        var scrollDistance = $nextSection.offset().top;
+        $('html, body').stop().animate({
             scrollTop: scrollDistance + 'px'
         }, 500, function() {
-            $('#lead').next().focus();
+            $nextSection.focus();
         });
     });
 
@@ -75,23 +134,26 @@
     });
 
     // Open mobile menu
-    $('#mobile-menu-open').click(function() {
-        $('header, body').addClass('active');
-        $(this).attr('aria-expanded', 'true');
-        $('#mobile-menu-close').focus();
+    $mobileMenuOpen.click(function() {
+        $header.addClass('active');
+        $body.addClass('active');
+        $mobileMenuOpen.attr('aria-expanded', 'true');
+        $mobileMenuClose.focus();
     });
 
     // Close mobile menu
-    $('#mobile-menu-close').click(function() {
-        $('header, body').removeClass('active');
-        $('#mobile-menu-open').attr('aria-expanded', 'false').focus();
+    $mobileMenuClose.click(function() {
+        $header.removeClass('active');
+        $body.removeClass('active');
+        $mobileMenuOpen.attr('aria-expanded', 'false').focus();
     });
 
     // Close mobile menu on Escape key
-    $(document).keyup(function(e) {
-        if (e.keyCode === 27 && $('header').hasClass('active')) {
-            $('header, body').removeClass('active');
-            $('#mobile-menu-open').attr('aria-expanded', 'false').focus();
+    $document.keyup(function(e) {
+        if (e.keyCode === 27 && $header.hasClass('active')) {
+            $header.removeClass('active');
+            $body.removeClass('active');
+            $mobileMenuOpen.attr('aria-expanded', 'false').focus();
         }
     });
 
