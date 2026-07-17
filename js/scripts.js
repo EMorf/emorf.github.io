@@ -27,6 +27,30 @@
         }
     }).get();
 
+    // Performance: Cache layout dimensions and offsets to prevent layout thrashing on scroll
+    var cachedDimensions = {
+        windowHeight: 0,
+        documentHeight: 0,
+        headerHeight: 0,
+        leadHeight: 0
+    };
+
+    function updateCachedDimensions() {
+        cachedDimensions.windowHeight = $window.height();
+        cachedDimensions.documentHeight = $document.height();
+        cachedDimensions.headerHeight = $header.length ? $header.outerHeight() : 0;
+        cachedDimensions.leadHeight = $lead.length ? $lead.height() : 0;
+
+        for (var i = 0; i < navTargets.length; i++) {
+            var target = navTargets[i];
+            target.offsetTop = target.section.length ? target.section.offset().top : 0;
+            target.outerHeight = target.section.length ? target.section.outerHeight() : 0;
+        }
+    }
+
+    // Recompute on resize or complete resource load to keep dimensions accurate
+    $window.on('resize load', updateCachedDimensions);
+
     // Animate to section when nav is clicked
     $('header a').click(function(e) {
         var $this = $(this);
@@ -62,23 +86,21 @@
         if (!scrollTicking) {
             // Performance: Throttle navigation update logic using requestAnimationFrame to prevent layout thrashing
             window.requestAnimationFrame(function() {
-                var scrollPos = $window.scrollTop(),
-                    headerHeight = $header.outerHeight(),
-                    leadHeight = $lead.height();
+                var scrollPos = $window.scrollTop();
 
-                $header.toggleClass('sticky', scrollPos > leadHeight);
+                $header.toggleClass('sticky', scrollPos > cachedDimensions.leadHeight);
 
                 // Performance: Handle highlighting of the final navigation link at the bottom of the page
-                if (scrollPos + $window.height() >= $document.height() - 10) {
+                if (scrollPos + cachedDimensions.windowHeight >= cachedDimensions.documentHeight - 10) {
                     $menuLinks.removeClass('active');
                     $menuLinks.last().addClass('active');
                 } else {
-                    // Performance: Use the pre-mapped navTargets for efficient scroll-spy calculations
+                    // Performance: Use the pre-mapped navTargets with cached dimensions to avoid layout thrashing during scroll-spy calculations
                     for (var i = 0; i < navTargets.length; i++) {
                         var target = navTargets[i];
                         // Use a small pixel buffer (+ 5) to ensure links highlight reliably at section boundaries
-                        var sectionTop = target.section.offset().top - headerHeight;
-                        var sectionBottom = sectionTop + target.section.outerHeight();
+                        var sectionTop = target.offsetTop - cachedDimensions.headerHeight;
+                        var sectionBottom = sectionTop + target.outerHeight;
 
                         if (scrollPos + 5 >= sectionTop && scrollPos < sectionBottom) {
                             $menuLinks.removeClass('active');
@@ -161,7 +183,10 @@
     $('#view-more-projects').click(function(e){
         e.preventDefault();
         $(this).fadeOut(300, function() {
-            $('#more-projects').fadeIn(300);
+            $('#more-projects').fadeIn(300, function() {
+                // Performance: Recompute dimensions after DOM has expanded to prevent stale scroll-spy offsets
+                updateCachedDimensions();
+            });
         });
     });
 
@@ -178,5 +203,8 @@
             formbutton("open");
         }
     });
+
+    // Initialize dimensions after all synchronous DOM modifications (like timeline wrapping) have finished
+    updateCachedDimensions();
 
 })(jQuery);

@@ -70,3 +70,15 @@
 **Action:**
 1. When applying performance hints to distributed legacy files, always audit directory depth to ensure correct relative pathing for assets.
 2. Prioritize preloading the primary logo/hero in pages with heavy blocking CSS to optimize LCP.
+
+## 2026-07-17 - [DOM Caching & Dynamic Layout Invalidation]
+**Learning:**
+1. Caching layout dimensions and offsets is highly effective to prevent layout thrashing and forced synchronous layouts on scroll.
+2. However, static dimensions can become stale when dynamic elements expand or collapse the DOM (such as the "View More Projects" feature).
+3. Failing to invalidate or update the cached values when the layout height changes leads to broken positioning calculations (e.g. scroll-spy highlighting wrong elements).
+4. DOM-modifying initialization scripts (like experience timeline rendering) must execute before dimensions are cached during the initial page load.
+
+**Action:**
+1. When implementing layout-caching optimizations, identify any transitions, collapsibles, loaders, or dynamic lists that modify page height.
+2. Bind cache invalidation callbacks to run immediately after any layout-modifying operations complete.
+3. Ensure the initial measurement occurs after all synchronous setup scripts have finished modifying the DOM.
