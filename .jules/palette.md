@@ -91,3 +91,12 @@
 **Action:**
 1. Use `:focus-within` on card containers to trigger hover-like animations when internal links are focused.
 2. Delegate container-level click events to the primary internal link while ensuring the handler ignores clicks originating directly from links to avoid event recursion.
+
+## 2025-07-17 - [Interactive Context and Keyboard Visibility]
+**Learning:**
+1. Focus-visible styles are critical for keyboard users to navigate a site effectively; without them, users cannot visually determine which element (like social icons or navigation links) currently holds focus.
+2. Converting plain text/trigger phrases like "form below" into semantically rich elements (using `aria-haspopup` and visual hover/focus indicators) significantly reduces user confusion and clarifies interaction expectations.
+
+**Action:**
+1. Always apply `:focus-visible` with a high-contrast outline on all interactive links (`a`, `button`, etc.) to provide continuous feedback for keyboard-driven sessions.
+2. Elevate visual styling of interactive links using transitions (`@include transition(...)`) and clear hover-color adjustments to establish a professional visual hierarchy.
