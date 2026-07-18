@@ -90,7 +90,54 @@
     body.brat-mode .days-counter { color: #b08aff; }
     body.brat-mode .heart { color: #b08aff; text-shadow: 0 0 12px rgba(176, 138, 255, 0.45); }
 
+    .back-home-container {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      z-index: 100;
+    }
+    .back-home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #ff8ab0;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      background: rgba(10,15,30,0.8);
+      border: 1px solid rgba(255,138,176,0.25);
+      transition: all 0.2s ease;
+    }
+    .back-home-btn:hover, .back-home-btn:focus-visible {
+      color: #ff6b8a;
+      background: rgba(10,15,30,0.95);
+      border-color: #ff6b8a;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255,138,176,0.15);
+      text-decoration: none;
+    }
+    .back-home-btn:focus-visible {
+      outline: 2px solid #ff8ab0;
+      outline-offset: 2px;
+    }
+    body.brat-mode .back-home-btn {
+      color: #b08aff;
+      border-color: rgba(176,138,255,0.25);
+    }
+    body.brat-mode .back-home-btn:hover, body.brat-mode .back-home-btn:focus-visible {
+      color: #a07aff;
+      border-color: #a07aff;
+      box-shadow: 0 4px 12px rgba(176,138,255,0.15);
+    }
+
     @media (max-width: 768px) {
+      .back-home-container {
+        position: static;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
       .slide-meta { text-align: center; }
       .slide-header { margin-bottom: 1rem; }
       .slide-header h1 { font-size: 1.9rem; }
@@ -102,6 +149,11 @@
 <body>
   <div id="a11y-announcer" aria-live="polite" style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;"></div>
   <div id="youtube-player" style="position:absolute; width:0; height:0; border:0; pointer-events:none; visibility:hidden;"></div>
+  <div class="back-home-container">
+    <a href="../index.html" class="back-home-btn" title="Back to Portfolio (Esc)" aria-label="Back to Portfolio">
+      <span class="back-arrow" aria-hidden="true">←</span> Back to Portfolio
+    </a>
+  </div>
   <div class="slideshow">
     <div class="card slide-card">
       <div class="slide-view" id="slideView">
@@ -529,6 +581,8 @@
         nextSlide();
         setAutoplay(false);
         setAutoplay(true);
+      } else if (e.key === 'Escape') {
+        window.location.href = '../index.html';
       } else if (e.key.toLowerCase() === 'm') {
         toggleMute();
       } else if (e.key.toLowerCase() === 'k') {

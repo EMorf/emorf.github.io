@@ -100,3 +100,14 @@
 **Action:**
 1. Always apply `:focus-visible` with a high-contrast outline on all interactive links (`a`, `button`, etc.) to provide continuous feedback for keyboard-driven sessions.
 2. Elevate visual styling of interactive links using transitions (`@include transition(...)`) and clear hover-color adjustments to establish a professional visual hierarchy.
+
+## 2025-10-18 - [Preventing Trapped Subpages and Enhancing Keyboard Redirection]
+**Learning:**
+1. Standalone pages or interactive "easter egg" sub-apps within portfolios often lack visual or keyboard escape paths back to the main application, causing a "dead end" user journey and trapping users on that subpage.
+2. Integrating a responsive, relative back button alongside a keyboard shortcut like `Escape` provides an excellent, multi-modal exit pattern that improves UX for both desktop mouse users, mobile touchscreen users, and keyboard-only power users.
+3. Adapting interactive element colors/borders dynamically to the current visual mode (such as `brat-mode`) maintains strong visual cohesiveness and contrast integrity.
+
+**Action:**
+1. Always design a clear and obvious visual return path (like "Back to Home") on subpages and deeper directory structures.
+2. Pair back/return buttons with a logical keyboard shortcut (like `Escape` or `Backspace`) to allow fluent and intuitive multi-modal interactions.
+3. Ensure custom navigation controls adapt gracefully to dynamic theme overrides (like dark mode or brand variations) to prevent design inconsistencies.
