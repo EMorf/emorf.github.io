@@ -70,3 +70,14 @@
 **Action:**
 1. When applying performance hints to distributed legacy files, always audit directory depth to ensure correct relative pathing for assets.
 2. Prioritize preloading the primary logo/hero in pages with heavy blocking CSS to optimize LCP.
+
+## 2026-07-09 - [Scroll-Spy Layout Thrashing Elimination]
+**Learning:**
+1. Querying DOM geometry properties like `.outerHeight()`, `.height()`, `.offset().top`, and window/document heights inside throttled or animation-frame scroll event handlers causes continuous forced synchronous reflows (layout thrashing) because style/layout becomes dirty on every frame update.
+2. Caching these geometry values in memory and only updating them on window resize (debounced) and onload events reduces layout queries on scroll from 14+ queries to absolutely zero, ensuring silky-smooth 60fps scrolling.
+3. For dynamic elements (such as collapsing or expanding content), recalculating the cached offsets is necessary upon the termination of the layout-altering animation (e.g., when the "view more projects" block finishes fading in).
+
+**Action:**
+1. Avoid layout-triggering DOM queries inside scroll, mousemove, or touch event handlers.
+2. Cache element heights and offsets at initialization/load, and update them on resize.
+3. Bind offset recalculations to the end of any layout-changing animations or DOM mutations.
