@@ -56,29 +56,59 @@
         }
     });
 
+    // Performance: Cache DOM geometry measurements to eliminate scroll-time layout thrashing (from 14+ queries to 0)
+    var headerHeight, leadHeight, windowHeight, documentHeight;
+
+    function updateLayoutDimensions() {
+        headerHeight = $header.outerHeight();
+        leadHeight = $lead.height();
+        windowHeight = $window.height();
+        documentHeight = $document.height();
+
+        // Cache positions of all nav target elements
+        for (var i = 0; i < navTargets.length; i++) {
+            var target = navTargets[i];
+            target.offsetTop = target.section.offset().top;
+            target.outerHeight = target.section.outerHeight();
+        }
+    }
+
+    // Initialize dimensions and update on window load and debounced resize
+    updateLayoutDimensions();
+
+    $window.on('load', function() {
+        updateLayoutDimensions();
+    });
+
+    var resizeTimeout;
+    $window.on('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            updateLayoutDimensions();
+        }, 150);
+    });
+
     // Sticky Header and Scroll Spy
     var scrollTicking = false;
     $window.on('scroll', function() {
         if (!scrollTicking) {
             // Performance: Throttle navigation update logic using requestAnimationFrame to prevent layout thrashing
             window.requestAnimationFrame(function() {
-                var scrollPos = $window.scrollTop(),
-                    headerHeight = $header.outerHeight(),
-                    leadHeight = $lead.height();
+                var scrollPos = $window.scrollTop();
 
                 $header.toggleClass('sticky', scrollPos > leadHeight);
 
                 // Performance: Handle highlighting of the final navigation link at the bottom of the page
-                if (scrollPos + $window.height() >= $document.height() - 10) {
+                if (scrollPos + windowHeight >= documentHeight - 10) {
                     $menuLinks.removeClass('active');
                     $menuLinks.last().addClass('active');
                 } else {
-                    // Performance: Use the pre-mapped navTargets for efficient scroll-spy calculations
+                    // Performance: Use the cached navTargets dimensions for efficient scroll-spy calculations
                     for (var i = 0; i < navTargets.length; i++) {
                         var target = navTargets[i];
                         // Use a small pixel buffer (+ 5) to ensure links highlight reliably at section boundaries
-                        var sectionTop = target.section.offset().top - headerHeight;
-                        var sectionBottom = sectionTop + target.section.outerHeight();
+                        var sectionTop = target.offsetTop - headerHeight;
+                        var sectionBottom = sectionTop + target.outerHeight;
 
                         if (scrollPos + 5 >= sectionTop && scrollPos < sectionBottom) {
                             $menuLinks.removeClass('active');
@@ -161,7 +191,10 @@
     $('#view-more-projects').click(function(e){
         e.preventDefault();
         $(this).fadeOut(300, function() {
-            $('#more-projects').fadeIn(300);
+            $('#more-projects').fadeIn(300, function() {
+                // Performance: Recalculate layout dimensions since new elements have been revealed
+                updateLayoutDimensions();
+            });
         });
     });
 
