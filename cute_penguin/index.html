@@ -83,14 +83,29 @@
       box-shadow: 0 0 10px rgba(176,138,255,0.8);
     }
 
+    .back-btn {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      z-index: 100;
+      text-decoration: none;
+    }
+
     /* Brat Mode Styles */
     body.brat-mode { background: #1a0b2e; }
     body.brat-mode .slide-card { background: rgba(30, 10, 40, 0.96); }
     body.brat-mode .btn-pink { background: #b08aff; border-color: #a07aff; }
+    body.brat-mode .btn-pink:focus-visible { outline-color: #b08aff; }
     body.brat-mode .days-counter { color: #b08aff; }
     body.brat-mode .heart { color: #b08aff; text-shadow: 0 0 12px rgba(176, 138, 255, 0.45); }
 
     @media (max-width: 768px) {
+      .back-btn {
+        top: 1rem;
+        left: 1rem;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+      }
       .slide-meta { text-align: center; }
       .slide-header { margin-bottom: 1rem; }
       .slide-header h1 { font-size: 1.9rem; }
@@ -100,6 +115,7 @@
   </style>
 </head>
 <body>
+  <a class="btn btn-pink back-btn" href="../index.html" title="Back to Portfolio (Escape)" aria-label="Back to Portfolio">⬅️ Back to Portfolio</a>
   <div id="a11y-announcer" aria-live="polite" style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;"></div>
   <div id="youtube-player" style="position:absolute; width:0; height:0; border:0; pointer-events:none; visibility:hidden;"></div>
   <div class="slideshow">
@@ -537,6 +553,8 @@
         feedRuru();
       } else if (e.key.toLowerCase() === 's') {
         spawnSticker();
+      } else if (e.key === 'Escape') {
+        window.location.href = '../index.html';
       }
     });
 

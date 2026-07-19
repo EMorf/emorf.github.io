@@ -100,3 +100,12 @@
 **Action:**
 1. Always apply `:focus-visible` with a high-contrast outline on all interactive links (`a`, `button`, etc.) to provide continuous feedback for keyboard-driven sessions.
 2. Elevate visual styling of interactive links using transitions (`@include transition(...)`) and clear hover-color adjustments to establish a professional visual hierarchy.
+
+## 2025-07-19 - [Subpage Escape Traps and Accessible Back Navigation]
+**Learning:**
+1. Standalone sub-apps or easter-egg pages can easily trap keyboard-only or assistive tech users if they lack a clear, accessible, and easily discoverable path back to the main application.
+2. Implementing a global keyboard shortcut (like `Escape`) alongside a prominent, high-contrast, fully responsive navigation link prevents dead-end journeys and completes the modern desktop-like application experience.
+
+**Action:**
+1. Always include a visible 'Back to Portfolio' button or link at the top of isolated subpages with proper touch targets and focus visibility styling.
+2. Pair back navigation with a global `Escape` key event listener to offer a universal, intuitive escape mechanism for power users and keyboard-only sessions.
