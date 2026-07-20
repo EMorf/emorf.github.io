@@ -88,20 +88,28 @@
         }, 150);
     });
 
-    // Sticky Header and Scroll Spy
+    // Sticky Header and Scroll Spy state cache to prevent redundant DOM updates
     var scrollTicking = false;
+    var isHeaderSticky = null;
+    var $activeLink = null;
+
     $window.on('scroll', function() {
         if (!scrollTicking) {
             // Performance: Throttle navigation update logic using requestAnimationFrame to prevent layout thrashing
             window.requestAnimationFrame(function() {
                 var scrollPos = $window.scrollTop();
 
-                $header.toggleClass('sticky', scrollPos > leadHeight);
+                // Performance: Only toggle sticky class when sticky state actually changes to avoid layout recalculation
+                var shouldBeSticky = scrollPos > leadHeight;
+                if (shouldBeSticky !== isHeaderSticky) {
+                    $header.toggleClass('sticky', shouldBeSticky);
+                    isHeaderSticky = shouldBeSticky;
+                }
 
-                // Performance: Handle highlighting of the final navigation link at the bottom of the page
+                // Performance: Cache currently highlighted active link and only write to DOM when transition occurs
+                var $currentActive = null;
                 if (scrollPos + windowHeight >= documentHeight - 10) {
-                    $menuLinks.removeClass('active');
-                    $menuLinks.last().addClass('active');
+                    $currentActive = $menuLinks.last();
                 } else {
                     // Performance: Use the cached navTargets dimensions for efficient scroll-spy calculations
                     for (var i = 0; i < navTargets.length; i++) {
@@ -111,12 +119,18 @@
                         var sectionBottom = sectionTop + target.outerHeight;
 
                         if (scrollPos + 5 >= sectionTop && scrollPos < sectionBottom) {
-                            $menuLinks.removeClass('active');
-                            target.link.addClass('active');
+                            $currentActive = target.link;
                             break;
                         }
                     }
                 }
+
+                if ($currentActive && (!$activeLink || $currentActive[0] !== $activeLink[0])) {
+                    $menuLinks.removeClass('active');
+                    $currentActive.addClass('active');
+                    $activeLink = $currentActive;
+                }
+
                 scrollTicking = false;
             });
             scrollTicking = true;
