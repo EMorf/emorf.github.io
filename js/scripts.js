@@ -100,8 +100,8 @@
 
                 // Performance: Handle highlighting of the final navigation link at the bottom of the page
                 if (scrollPos + windowHeight >= documentHeight - 10) {
-                    $menuLinks.removeClass('active');
-                    $menuLinks.last().addClass('active');
+                    $menuLinks.removeClass('active').removeAttr('aria-current');
+                    $menuLinks.last().addClass('active').attr('aria-current', 'location');
                 } else {
                     // Performance: Use the cached navTargets dimensions for efficient scroll-spy calculations
                     for (var i = 0; i < navTargets.length; i++) {
@@ -111,8 +111,8 @@
                         var sectionBottom = sectionTop + target.outerHeight;
 
                         if (scrollPos + 5 >= sectionTop && scrollPos < sectionBottom) {
-                            $menuLinks.removeClass('active');
-                            target.link.addClass('active');
+                            $menuLinks.removeClass('active').removeAttr('aria-current');
+                            target.link.addClass('active').attr('aria-current', 'location');
                             break;
                         }
                     }
