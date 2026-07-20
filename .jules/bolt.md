@@ -81,3 +81,12 @@
 1. Avoid layout-triggering DOM queries inside scroll, mousemove, or touch event handlers.
 2. Cache element heights and offsets at initialization/load, and update them on resize.
 3. Bind offset recalculations to the end of any layout-changing animations or DOM mutations.
+
+## 2026-07-10 - [Scroll State Caching & Redundant DOM Write Prevention]
+**Learning:**
+1. Even when scroll listeners are throttled via `requestAnimationFrame` to prevent layout thrashing from DOM reads, performing redundant DOM writes (like calling jQuery's `toggleClass`, `removeClass`, or `addClass`) on *every single scroll frame* forces the browser to run heavy style and layout calculations unnecessarily.
+2. By caching the current sticky state (`isHeaderSticky`) and the active navigation link (`$activeLink`) in memory, we can guard DOM updates and only execute write operations during state transitions. This reduces continuous DOM write pressure to exactly one update per transition.
+
+**Action:**
+1. Always cache visual and state representations in JS variables before executing DOM-altering methods (`addClass`, `removeClass`, `toggleClass`, `html`, `css`, etc.) inside scroll or frequent event handlers.
+2. Ensure state caches are updated in sync with DOM updates to prevent state drift.
