@@ -89,19 +89,31 @@
     });
 
     // Sticky Header and Scroll Spy
+    // Performance: Cache the current active menu link and sticky status to prevent high-frequency DOM writes
+    var isHeaderSticky = false;
+    var $activeLink = null;
     var scrollTicking = false;
+
     $window.on('scroll', function() {
         if (!scrollTicking) {
             // Performance: Throttle navigation update logic using requestAnimationFrame to prevent layout thrashing
             window.requestAnimationFrame(function() {
                 var scrollPos = $window.scrollTop();
 
-                $header.toggleClass('sticky', scrollPos > leadHeight);
+                var shouldBeSticky = scrollPos > leadHeight;
+                if (shouldBeSticky !== isHeaderSticky) {
+                    $header.toggleClass('sticky', shouldBeSticky);
+                    isHeaderSticky = shouldBeSticky;
+                }
 
                 // Performance: Handle highlighting of the final navigation link at the bottom of the page
                 if (scrollPos + windowHeight >= documentHeight - 10) {
-                    $menuLinks.removeClass('active');
-                    $menuLinks.last().addClass('active');
+                    var $lastLink = $menuLinks.last();
+                    if ($activeLink === null || !$activeLink.is($lastLink)) {
+                        $menuLinks.removeClass('active').removeAttr('aria-current');
+                        $lastLink.addClass('active').attr('aria-current', 'location');
+                        $activeLink = $lastLink;
+                    }
                 } else {
                     // Performance: Use the cached navTargets dimensions for efficient scroll-spy calculations
                     for (var i = 0; i < navTargets.length; i++) {
@@ -111,8 +123,11 @@
                         var sectionBottom = sectionTop + target.outerHeight;
 
                         if (scrollPos + 5 >= sectionTop && scrollPos < sectionBottom) {
-                            $menuLinks.removeClass('active');
-                            target.link.addClass('active');
+                            if ($activeLink === null || !$activeLink.is(target.link)) {
+                                $menuLinks.removeClass('active').removeAttr('aria-current');
+                                target.link.addClass('active').attr('aria-current', 'location');
+                                $activeLink = target.link;
+                            }
                             break;
                         }
                     }
