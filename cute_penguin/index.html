@@ -306,11 +306,49 @@
       spawnSparkle(x, y);
     });
 
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartTime = 0;
+
     slideViewElement.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 0) return;
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      touchStartTime = Date.now();
+
       const rect = slideViewElement.getBoundingClientRect();
-      const x = e.touches[0].clientX - rect.left;
-      const y = e.touches[0].clientY - rect.top;
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
       spawnSparkle(x, y);
+    }, { passive: true });
+
+    slideViewElement.addEventListener('touchend', (e) => {
+      if (e.changedTouches.length === 0) return;
+      const touch = e.changedTouches[0];
+      const dX = touch.clientX - touchStartX;
+      const dY = touch.clientY - touchStartY;
+      const duration = Date.now() - touchStartTime;
+
+      const minDistance = 50; // min distance for swipe
+      const maxVerticalDeviation = 50; // max vertical deviation to prevent conflict with scrolling
+      const maxTime = 300; // max time allowed for swipe
+
+      if (duration < maxTime && Math.abs(dX) >= minDistance && Math.abs(dY) < maxVerticalDeviation) {
+        if (dX > 0) {
+          // Swipe Right -> Previous slide
+          prevSlide();
+          setAutoplay(false);
+          setAutoplay(true);
+          announce("Swiped right to previous slide");
+        } else {
+          // Swipe Left -> Next slide
+          nextSlide();
+          setAutoplay(false);
+          setAutoplay(true);
+          announce("Swiped left to next slide");
+        }
+      }
     }, { passive: true });
 
     const spawnSticker = () => {

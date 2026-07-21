@@ -109,3 +109,12 @@
 **Action:**
 1. Always include a visible 'Back to Portfolio' button or link at the top of isolated subpages with proper touch targets and focus visibility styling.
 2. Pair back navigation with a global `Escape` key event listener to offer a universal, intuitive escape mechanism for power users and keyboard-only sessions.
+
+## 2025-07-20 - [Mobile Touch Gesture Accessibility & Screen Reader Announcements]
+**Learning:**
+1. Implementing touch swipe interactions on slideshows greatly enhances mobile user experience, but must use vertical deviation constraints to prevent interfering with vertical page scrolling.
+2. Touch and swipe events are purely visual interactions that screen readers cannot perceive. To keep touch-driven interactions accessible, dynamic gestures must always be accompanied by descriptive `aria-live` announcements to keep non-visual users updated on state changes.
+
+**Action:**
+1. Implement horizontal swipe listeners using `touchstart` and `touchend`, allowing a maximum vertical threshold of ~50px to ensure vertical scrolling is unaffected.
+2. Whenever a touch gesture successfully triggers a state change (such as advancing a slide), programmatically trigger an `aria-live` announcement (e.g. "Swiped left to next slide") via an announcer helper.
