@@ -302,15 +302,17 @@ footer {
 
     button {
         cursor: pointer;
-        display: block;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         margin: 15px auto 0 auto;
-        width: 35px;
-        height: 35px;
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
         border: 3px solid lighten($text, 25%);
-        text-align:center;
         background: transparent;
         padding: 0;
+        @include transition(0.2s, ease, all);
 
         &:focus {
             outline: none;
@@ -320,10 +322,20 @@ footer {
             outline: 2px solid $base-color;
             outline-offset: 2px;
         }
+
+        &:hover {
+            background: $base-color;
+            border-color: $base-color;
+
+            i {
+                color: #fff;
+            }
+        }
     }
 
     i {
         color: $text;
+        @include transition(0.2s, ease, color);
     }
 }
 
@@ -479,15 +491,17 @@ footer {
 
     button {
         cursor: pointer;
-        display: block;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         margin: 0 auto;
-        width: 35px;
-        height: 35px;
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
         border: 3px solid lighten($base-color, 25%);
-        text-align:center;
         background: transparent;
         padding: 0;
+        @include transition(0.2s, ease, all);
 
         &:focus {
             outline: none;
@@ -497,13 +511,23 @@ footer {
             outline: 2px solid #fff;
             outline-offset: 2px;
         }
+
+        &:hover {
+            background: #fff;
+            border-color: #fff;
+
+            i {
+                color: $base-color;
+            }
+        }
     }
 
     i {
         animation: pulsate 1.5s ease;
         animation-iteration-count: infinite;
-        padding-top: 5px;
         will-change: transform;
+        color: #fff;
+        @include transition(0.2s, ease, color);
     }
 }
 
