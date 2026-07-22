@@ -81,20 +81,21 @@
     });
 
     var resizeTimeout;
-    $window.on('resize', function() {
+    window.addEventListener('resize', function() {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(function() {
             updateLayoutDimensions();
         }, 150);
-    });
+    }, { passive: true });
 
     // Sticky Header and Scroll Spy
-    // Performance: Cache the current active menu link and sticky status to prevent high-frequency DOM writes
+    // Performance: Cache the current active menu link, last link, and sticky status to prevent high-frequency DOM writes / queries
     var isHeaderSticky = false;
     var $activeLink = null;
+    var $lastLink = $menuLinks.last();
     var scrollTicking = false;
 
-    $window.on('scroll', function() {
+    window.addEventListener('scroll', function() {
         if (!scrollTicking) {
             // Performance: Throttle navigation update logic using requestAnimationFrame to prevent layout thrashing
             window.requestAnimationFrame(function() {
@@ -108,7 +109,6 @@
 
                 // Performance: Handle highlighting of the final navigation link at the bottom of the page
                 if (scrollPos + windowHeight >= documentHeight - 10) {
-                    var $lastLink = $menuLinks.last();
                     if ($activeLink === null || !$activeLink.is($lastLink)) {
                         $menuLinks.removeClass('active').removeAttr('aria-current');
                         $lastLink.addClass('active').attr('aria-current', 'location');
@@ -136,7 +136,7 @@
             });
             scrollTicking = true;
         }
-    });
+    }, { passive: true });
 
     // Scroll to top
     $('#to-top').click(function() {

@@ -81,3 +81,13 @@
 1. Avoid layout-triggering DOM queries inside scroll, mousemove, or touch event handlers.
 2. Cache element heights and offsets at initialization/load, and update them on resize.
 3. Bind offset recalculations to the end of any layout-changing animations or DOM mutations.
+
+## 2026-07-10 - [Compositor-Layer Scroll Performance Optimization]
+**Learning:**
+1. Event handlers bound via jQuery's `$window.on('scroll')` and `$window.on('resize')` do not support passive event options natively, forcing the browser's scrolling compositor to block on the main JavaScript thread for every scroll event.
+2. Converting high-frequency event listeners to native `window.addEventListener('scroll', ..., { passive: true })` bypasses main-thread execution for standard scroll compositing, ensuring buttery-smooth 60+ fps scrolling.
+3. Caching jQuery element collections (like `$menuLinks.last()`) outside high-frequency frames avoids unnecessary jQuery selector overhead and object allocations during continuous scrolling.
+
+**Action:**
+1. Default to native `addEventListener` with `{ passive: true }` for all non-blocking scroll, wheel, and touch event handlers.
+2. Ensure static collections queried inside loops or high-frequency event listeners are cached at initialization or layout boundaries.
