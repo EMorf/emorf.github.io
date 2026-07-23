@@ -122,3 +122,9 @@
 ## 2025-07-22 - [Standardizing Touch Targets and Visual Hover States]
 **Learning:** Icon-only buttons must meet WCAG's minimum touch target guidelines of at least 44x44px (standardized to 45px) to support comfortable tapping on mobile devices. Using inline-flex displays inside circular buttons guarantees perfect visual centering of glyph icons without using hacky line-height rules. Pairing these larger touch targets with smooth transition animations provides a delightful, polished visual feedback loop.
 **Action:** Ensure all icon-only control buttons are styled with a minimum dimension of 44x44px, use inline-flex for centering, and apply custom transition mixins to smoothly cross-fade colors and backgrounds on hover.
+
+## 2025-07-23 - [Resilient Slideshow Transitions and Keyboard Shortcut Guides]
+**Learning:**
+1. Dynamic, client-driven image gallery slideshows can feel jarring or "broken" on slower/unstable networks when images cross-fade before being fully loaded. Attaching load/error events to images to show a visual indicator keeps the interface intuitive.
+2. Power-user features like keyboard shortcuts are invisible and underutilized unless presented in a non-obtrusive, highly accessible visual guide/legend (e.g., using styled `<kbd>` tags).
+**Action:** Always load dynamic media fully behind a loading spinner or skeleton state before triggering visual cross-fade transitions. Pair any keyboard accessibility shortcuts with explicit visual guides like `<kbd>` tags to ensure great discoverability.
