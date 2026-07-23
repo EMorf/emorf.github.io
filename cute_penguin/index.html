@@ -1,624 +1,1109 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ruru's wall</title>
-  <meta name="description" content="Ruru spending time doing what he likes in a full-screen gallery.">
-  <meta name="robots" content="noindex, nofollow, noarchive">
-  <link rel="canonical" href="https://morfiadakis.au/cute_penguin/">
-  <link rel="icon" href="images/IMG_20240517_214222_054.jpg" type="image/jpeg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://www.youtube.com">
-  <!-- Performance: Preload LCP image and YouTube API for faster initial load -->
-  <link rel="preload" as="image" href="images/PXL_20250609_000925302.jpg" fetchpriority="high">
-  <link rel="preload" as="script" href="https://www.youtube.com/iframe_api">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-  <link rel="stylesheet" href="../css/bootstrap.min.css">
-  <style>
-    html, body { min-height: 100dvh; }
-    body { background: #020617; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0; padding: 0; font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif; position: relative; }
-    body::before, body::after { content: ""; flex-grow: 1; }
-    .slideshow { width: 100%; max-width: 500px; display: flex; align-items: center; justify-content: center; z-index: 1; }
-    .slide-card { width: 100%; border: none; background: rgba(10,15,30,0.96); box-shadow: 0 30px 80px rgba(8,18,50,.45); display: flex; flex-direction: column; }
-    .slide-view { position: relative; overflow: hidden; flex: 1; background: #000; display: flex; align-items: center; justify-content: center; aspect-ratio: 1 / 1; width: 100%; }
-    .slide-view img { position: relative; z-index: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity .45s ease; display: block; user-select: none; -webkit-user-drag: none; }
-    .heart-rain { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:2; }
-    .heart-rain .heart { position:absolute; top:-2rem; color:#ff8ab0; font-size:1.25rem; opacity:0; animation:rain 5s linear forwards; text-shadow:0 0 12px rgba(255,138,176,.45); will-change: transform, opacity; }
-    @keyframes rain { 0% { transform: translate3d(0,-20px,0) scale(0.7); opacity:0; }
-      10% { opacity:.9; }
-      100% { transform: translate3d(0,110vh,0) scale(0.85); opacity:0; }
-    }
-    .card-body { padding: 1.5rem 1rem 2rem; display: flex; flex-direction: column; justify-content: flex-start; flex-shrink: 0; }
-    .slide-meta { display:flex; flex-direction: column; align-items: stretch; gap:1.25rem; flex-grow: 1; }
-    .slide-header { width: 100%; min-height: 180px; }
-    .slide-header h1 { font-size:2.35rem; font-weight:700; margin:0; letter-spacing:.02em; }
-    .slide-header p { margin:.5rem 0 0; color:#cbd5e1; font-size:1rem; line-height:1.55; min-height: 3.1em; }
-    .slide-meta small { color:#7f9cf5; display:block; margin-top:.75rem; }
-    .details { margin-top:1.5rem; border:1px solid rgba(148,163,184,.18); background:rgba(255,255,255,.04); border-radius:.85rem; padding:1.25rem; }
-    .details p { margin:0; color:#e2e8f0; font-size:1rem; line-height:1.75; }
-    .btn-pink { background:#ff8ab0; border-color:#ff7aa0; color:#111; font-weight:700; border-radius: 2rem; box-shadow:0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08); transition: all 0.2s ease; white-space: nowrap; touch-action: manipulation; }
-    .btn-pink:hover, .btn-pink:focus-visible { background:#ff6b8a; border-color:#ff5b7b; color:#111; transform: translateY(-1px); box-shadow: 0 7px 14px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.08); }
-    .btn-pink:focus-visible { outline: 2px solid #ff8ab0; outline-offset: 2px; }
-    .btn-pink:focus:not(:focus-visible) { outline: none; }
-    .btn-pink:active { transform: translateY(0); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    .slide-actions { display:flex; gap:0.5rem; align-items:stretch; flex-wrap: nowrap; justify-content: center; margin-top: auto; width: 100%; }
-    .slide-actions .btn { display: flex; align-items: center; justify-content: center; min-height: 48px; font-size: 1.25rem; flex: 1 1 0; }
-    .kiss-overlay { position:absolute; inset:0; pointer-events:none; z-index:999; }
-    .lip { position:absolute; font-size:3.25rem; transform:translate(-50%,-50%) scale(0.9); animation:pop 0.18s ease-out forwards; }
-    @keyframes pop { 0% { transform:translate(-50%,-50%) scale(0.5); opacity:0; }
-      60% { transform:translate(-50%,-50%) scale(1.12); opacity:1; }
-      100% { transform:translate(-50%,-50%) scale(1); opacity:1; }
-    }
-    .days-counter { font-weight: 700; color: #ff8ab0; margin-bottom: 0.5rem; display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .brat-mode-toggle { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; user-select: none; margin-top: 0.5rem; width: 100%; }
-    .brat-mode-toggle input { cursor: pointer; }
-    .sticker-item { position: absolute; cursor: move; font-size: 3rem; user-select: none; z-index: 10; touch-action: none; pointer-events: auto; }
-    .fish-animation { position: absolute; font-size: 2.5rem; z-index: 50; animation: fish-swim 1s ease-in-out forwards; }
-    @keyframes fish-swim {
-      0% { transform: translate(-50%, 100%) rotate(0deg); opacity: 0; }
-      50% { opacity: 1; transform: translate(-50%, 50%) rotate(-20deg); }
-      100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-    }
-
-    .sparkle {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: #ff8ab0;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 100;
-      animation: sparkle-fade 0.8s ease-out forwards;
-      box-shadow: 0 0 10px rgba(255,138,176,0.8);
-      will-change: transform, opacity;
-    }
-    @keyframes sparkle-fade {
-      0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-      100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
-    }
-    body.brat-mode .sparkle {
-      background: #b08aff;
-      box-shadow: 0 0 10px rgba(176,138,255,0.8);
-    }
-
-    .back-btn {
-      position: absolute;
-      top: 1.5rem;
-      left: 1.5rem;
-      z-index: 100;
-      text-decoration: none;
-    }
-
-    /* Brat Mode Styles */
-    body.brat-mode { background: #1a0b2e; }
-    body.brat-mode .slide-card { background: rgba(30, 10, 40, 0.96); }
-    body.brat-mode .btn-pink { background: #b08aff; border-color: #a07aff; }
-    body.brat-mode .btn-pink:focus-visible { outline-color: #b08aff; }
-    body.brat-mode .days-counter { color: #b08aff; }
-    body.brat-mode .heart { color: #b08aff; text-shadow: 0 0 12px rgba(176, 138, 255, 0.45); }
-
-    @media (max-width: 768px) {
-      .back-btn {
-        top: 1rem;
-        left: 1rem;
-        font-size: 0.9rem;
-        padding: 0.5rem 1rem;
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ruru's wall</title>
+    <meta
+      name="description"
+      content="Ruru spending time doing what he likes in a full-screen gallery."
+    />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <link rel="canonical" href="https://morfiadakis.au/cute_penguin/" />
+    <link
+      rel="icon"
+      href="images/IMG_20240517_214222_054.jpg"
+      type="image/jpeg"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://www.youtube.com" />
+    <!-- Performance: Preload LCP image and YouTube API for faster initial load -->
+    <link
+      rel="preload"
+      as="image"
+      href="images/PXL_20250609_000925302.jpg"
+      fetchpriority="high"
+    />
+    <link rel="preload" as="script" href="https://www.youtube.com/iframe_api" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+    />
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <style>
+      html,
+      body {
+        min-height: 100dvh;
       }
-      .slide-meta { text-align: center; }
-      .slide-header { margin-bottom: 1rem; }
-      .slide-header h1 { font-size: 1.9rem; }
-      .btn-pink { min-width: 40px; padding: 0.5rem; font-size: 0.85rem; }
-      .brat-mode-toggle { justify-content: center; }
-    }
-  </style>
-</head>
-<body>
-  <a class="btn btn-pink back-btn" href="../index.html" title="Back to Portfolio (Escape)" aria-label="Back to Portfolio">⬅️ Back to Portfolio</a>
-  <div id="a11y-announcer" aria-live="polite" style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;"></div>
-  <div id="youtube-player" style="position:absolute; width:0; height:0; border:0; pointer-events:none; visibility:hidden;"></div>
-  <div class="slideshow">
-    <div class="card slide-card">
-      <div class="slide-view" id="slideView">
-        <img id="slideImage" src="images/PXL_20250609_000925302.jpg" width="2256" height="4000" alt="RURU gallery image" style="position: absolute; opacity: 1;" decoding="async">
-        <img id="slideImageNext" src="" width="2256" height="4000" alt="" style="position: absolute; opacity: 0;" decoding="async">
-        <div class="heart-rain" aria-hidden="true"></div>
-        <div class="kiss-overlay" aria-hidden="true"></div>
-      </div>
-      <div class="card-body">
-        <span id="daysCounter" class="days-counter" aria-live="polite">Loading days...</span>
-        <div class="slide-meta">
-          <div class="slide-header">
-            <h1>Ruru's wall</h1>
-            <p id="slideName" aria-live="polite"></p>
-            <p id="slideDesc" aria-live="polite">Ruru spending time doing what he likes.</p>
-            <small id="slideIndex">1 / 10</small>
-            <label class="brat-mode-toggle">
-              <input type="checkbox" id="bratModeToggle"> Brat Mode 😈
-            </label>
-            <label class="brat-mode-toggle">
-              <input type="checkbox" id="songSharkToggle"> Baby Shark 🦈
-            </label>
-          </div>
-          <div class="slide-actions">
-            <button id="prevBtn" type="button" class="btn btn-pink btn-lg" title="Previous Slide (Arrow Left)" aria-label="Previous Slide">⬅️</button>
-            <button id="kissBtn" type="button" class="btn btn-pink btn-lg" title="Give Ruru a kiss (k)" aria-label="Give Ruru a kiss">Kiss 💋</button>
-            <button id="feedBtn" type="button" class="btn btn-pink btn-lg" title="Feed Ruru a fish (f)" aria-label="Feed Ruru a fish">Feed 🐟</button>
-            <button id="stickerBtn" type="button" class="btn btn-pink btn-lg" title="Place a random sticker (s)" aria-label="Place a random sticker">Sticker ✨</button>
-            <button id="nextBtn" type="button" class="btn btn-pink btn-lg" title="Next Slide (Arrow Right)" aria-label="Next Slide">➡️</button>
-            <button id="muteBtn" type="button" class="btn btn-pink btn-lg" title="Unmute music (m)" aria-label="Unmute background music">🔇</button>
+      body {
+        background: #020617;
+        color: #f8fafc;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        margin: 0;
+        padding: 2rem 1rem;
+        box-sizing: border-box;
+        font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+        position: relative;
+      }
+      .slideshow {
+        margin: auto 0;
+        width: 100%;
+        max-width: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+      }
+      .slide-card {
+        width: 100%;
+        border: none;
+        background: rgba(10, 15, 30, 0.96);
+        box-shadow: 0 30px 80px rgba(8, 18, 50, 0.45);
+        display: flex;
+        flex-direction: column;
+      }
+      .slide-view {
+        position: relative;
+        overflow: hidden;
+        flex: 1;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        aspect-ratio: 1 / 1;
+        width: 100%;
+      }
+      .slide-view img {
+        position: relative;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: opacity 0.45s ease;
+        display: block;
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+      .slide-view.loading::after {
+        content: "";
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255, 138, 176, 0.2);
+        border-top-color: #ff8ab0;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        z-index: 5;
+      }
+      body.brat-mode .slide-view.loading::after {
+        border-color: rgba(176, 138, 255, 0.2);
+        border-top-color: #b08aff;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .slide-view.loading img {
+        opacity: 0.45 !important;
+      }
+      .heart-rain {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 2;
+      }
+      .heart-rain .heart {
+        position: absolute;
+        top: -2rem;
+        color: #ff8ab0;
+        font-size: 1.25rem;
+        opacity: 0;
+        animation: rain 5s linear forwards;
+        text-shadow: 0 0 12px rgba(255, 138, 176, 0.45);
+        will-change: transform, opacity;
+      }
+      @keyframes rain {
+        0% {
+          transform: translate3d(0, -20px, 0) scale(0.7);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.9;
+        }
+        100% {
+          transform: translate3d(0, 110vh, 0) scale(0.85);
+          opacity: 0;
+        }
+      }
+      .card-body {
+        padding: 1.5rem 1rem 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        flex-shrink: 0;
+      }
+      .slide-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.25rem;
+        flex-grow: 1;
+      }
+      .slide-header {
+        width: 100%;
+        min-height: 180px;
+      }
+      .slide-header h1 {
+        font-size: 2.35rem;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: 0.02em;
+      }
+      .slide-header p {
+        margin: 0.5rem 0 0;
+        color: #cbd5e1;
+        font-size: 1rem;
+        line-height: 1.55;
+        min-height: 3.1em;
+      }
+      .slide-meta small {
+        color: #7f9cf5;
+        display: block;
+        margin-top: 0.75rem;
+      }
+      .details {
+        margin-top: 1.5rem;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 0.85rem;
+        padding: 1.25rem;
+      }
+      .details p {
+        margin: 0;
+        color: #e2e8f0;
+        font-size: 1rem;
+        line-height: 1.75;
+      }
+      .btn-pink {
+        background: #ff8ab0;
+        border-color: #ff7aa0;
+        color: #111;
+        font-weight: 700;
+        border-radius: 2rem;
+        box-shadow:
+          0 4px 6px rgba(0, 0, 0, 0.1),
+          0 1px 3px rgba(0, 0, 0, 0.08);
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        touch-action: manipulation;
+      }
+      .btn-pink:hover,
+      .btn-pink:focus-visible {
+        background: #ff6b8a;
+        border-color: #ff5b7b;
+        color: #111;
+        transform: translateY(-1px);
+        box-shadow:
+          0 7px 14px rgba(0, 0, 0, 0.1),
+          0 3px 6px rgba(0, 0, 0, 0.08);
+      }
+      .btn-pink:focus-visible {
+        outline: 2px solid #ff8ab0;
+        outline-offset: 2px;
+      }
+      .btn-pink:focus:not(:focus-visible) {
+        outline: none;
+      }
+      .btn-pink:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .slide-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: stretch;
+        flex-wrap: nowrap;
+        justify-content: center;
+        margin-top: auto;
+        width: 100%;
+      }
+      .slide-actions .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        font-size: 1.25rem;
+        flex: 1 1 0;
+      }
+
+      /* Keyboard guides & focus styles */
+      .keyboard-guide {
+        margin-top: 1.5rem;
+        padding: 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 0.5rem;
+        text-align: center;
+        font-size: 0.8rem;
+        color: #94a3b8;
+      }
+      .keyboard-guide kbd {
+        background: #1e293b;
+        border: 1px solid #475569;
+        border-radius: 3px;
+        box-shadow:
+          0 1px 0 rgba(0, 0, 0, 0.2),
+          inset 0 0 0 1px #334155;
+        color: #f8fafc;
+        display: inline-block;
+        font-family: inherit;
+        font-size: 0.75rem;
+        line-height: 1.4;
+        margin: 0 0.15em;
+        padding: 0.1em 0.4em;
+        white-space: nowrap;
+      }
+      .brat-mode-toggle:focus-within {
+        outline: 2px solid #ff8ab0;
+        outline-offset: 4px;
+        border-radius: 4px;
+      }
+      body.brat-mode .brat-mode-toggle:focus-within {
+        outline-color: #b08aff;
+      }
+      .brat-mode-toggle input:focus {
+        outline: none;
+      }
+
+      .kiss-overlay {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 999;
+      }
+      .lip {
+        position: absolute;
+        font-size: 3.25rem;
+        transform: translate(-50%, -50%) scale(0.9);
+        animation: pop 0.18s ease-out forwards;
+      }
+      @keyframes pop {
+        0% {
+          transform: translate(-50%, -50%) scale(0.5);
+          opacity: 0;
+        }
+        60% {
+          transform: translate(-50%, -50%) scale(1.12);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+      }
+      .days-counter {
+        font-weight: 700;
+        color: #ff8ab0;
+        margin-bottom: 0.5rem;
+        display: block;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .brat-mode-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        user-select: none;
+        margin-top: 0.5rem;
+        width: 100%;
+      }
+      .brat-mode-toggle input {
+        cursor: pointer;
+      }
+      .sticker-item {
+        position: absolute;
+        cursor: move;
+        font-size: 3rem;
+        user-select: none;
+        z-index: 10;
+        touch-action: none;
+        pointer-events: auto;
+      }
+      .fish-animation {
+        position: absolute;
+        font-size: 2.5rem;
+        z-index: 50;
+        animation: fish-swim 1s ease-in-out forwards;
+      }
+      @keyframes fish-swim {
+        0% {
+          transform: translate(-50%, 100%) rotate(0deg);
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+          transform: translate(-50%, 50%) rotate(-20deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 0;
+        }
+      }
+
+      .sparkle {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: #ff8ab0;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 100;
+        animation: sparkle-fade 0.8s ease-out forwards;
+        box-shadow: 0 0 10px rgba(255, 138, 176, 0.8);
+        will-change: transform, opacity;
+      }
+      @keyframes sparkle-fade {
+        0% {
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(2.5);
+          opacity: 0;
+        }
+      }
+      body.brat-mode .sparkle {
+        background: #b08aff;
+        box-shadow: 0 0 10px rgba(176, 138, 255, 0.8);
+      }
+
+      .back-btn {
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        z-index: 100;
+        text-decoration: none;
+      }
+
+      /* Brat Mode Styles */
+      body.brat-mode {
+        background: #1a0b2e;
+      }
+      body.brat-mode .slide-card {
+        background: rgba(30, 10, 40, 0.96);
+      }
+      body.brat-mode .btn-pink {
+        background: #b08aff;
+        border-color: #a07aff;
+      }
+      body.brat-mode .btn-pink:focus-visible {
+        outline-color: #b08aff;
+      }
+      body.brat-mode .days-counter {
+        color: #b08aff;
+      }
+      body.brat-mode .heart {
+        color: #b08aff;
+        text-shadow: 0 0 12px rgba(176, 138, 255, 0.45);
+      }
+
+      @media (max-width: 768px) {
+        .back-btn {
+          top: 1rem;
+          left: 1rem;
+          font-size: 0.9rem;
+          padding: 0.5rem 1rem;
+        }
+        .slide-meta {
+          text-align: center;
+        }
+        .slide-header {
+          margin-bottom: 1rem;
+        }
+        .slide-header h1 {
+          font-size: 1.9rem;
+        }
+        .btn-pink {
+          min-width: 40px;
+          padding: 0.5rem;
+          font-size: 0.85rem;
+        }
+        .brat-mode-toggle {
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a
+      class="btn btn-pink back-btn"
+      href="../index.html"
+      title="Back to Portfolio (Escape)"
+      aria-label="Back to Portfolio"
+      >⬅️ Back to Portfolio</a
+    >
+    <div
+      id="a11y-announcer"
+      aria-live="polite"
+      style="
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      "
+    ></div>
+    <div
+      id="youtube-player"
+      style="
+        position: absolute;
+        width: 0;
+        height: 0;
+        border: 0;
+        pointer-events: none;
+        visibility: hidden;
+      "
+    ></div>
+    <div class="slideshow">
+      <div class="card slide-card">
+        <div class="slide-view" id="slideView">
+          <img
+            id="slideImage"
+            src="images/PXL_20250609_000925302.jpg"
+            width="2256"
+            height="4000"
+            alt="RURU gallery image"
+            style="position: absolute; opacity: 1"
+            decoding="async"
+          />
+          <img
+            id="slideImageNext"
+            src=""
+            width="2256"
+            height="4000"
+            alt=""
+            style="position: absolute; opacity: 0"
+            decoding="async"
+          />
+          <div class="heart-rain" aria-hidden="true"></div>
+          <div class="kiss-overlay" aria-hidden="true"></div>
+        </div>
+        <div class="card-body">
+          <span id="daysCounter" class="days-counter" aria-live="polite"
+            >Loading days...</span
+          >
+          <div class="slide-meta">
+            <div class="slide-header">
+              <h1>Ruru's wall</h1>
+              <p id="slideName" aria-live="polite"></p>
+              <p id="slideDesc" aria-live="polite">
+                Ruru spending time doing what he likes.
+              </p>
+              <small id="slideIndex">1 / 10</small>
+              <label class="brat-mode-toggle">
+                <input type="checkbox" id="bratModeToggle" /> Brat Mode 😈
+              </label>
+              <label class="brat-mode-toggle">
+                <input type="checkbox" id="songSharkToggle" /> Baby Shark 🦈
+              </label>
+            </div>
+            <div class="slide-actions">
+              <button
+                id="prevBtn"
+                type="button"
+                class="btn btn-pink btn-lg"
+                title="Previous Slide (Arrow Left)"
+                aria-label="Previous Slide"
+              >
+                ⬅️
+              </button>
+              <button
+                id="kissBtn"
+                type="button"
+                class="btn btn-pink btn-lg"
+                title="Give Ruru a kiss (k)"
+                aria-label="Give Ruru a kiss"
+              >
+                Kiss 💋
+              </button>
+              <button
+                id="feedBtn"
+                type="button"
+                class="btn btn-pink btn-lg"
+                title="Feed Ruru a fish (f)"
+                aria-label="Feed Ruru a fish"
+              >
+                Feed 🐟
+              </button>
+              <button
+                id="stickerBtn"
+                type="button"
+                class="btn btn-pink btn-lg"
+                title="Place a random sticker (s)"
+                aria-label="Place a random sticker"
+              >
+                Sticker ✨
+              </button>
+              <button
+                id="nextBtn"
+                type="button"
+                class="btn btn-pink btn-lg"
+                title="Next Slide (Arrow Right)"
+                aria-label="Next Slide"
+              >
+                ➡️
+              </button>
+              <button
+                id="muteBtn"
+                type="button"
+                class="btn btn-pink btn-lg"
+                title="Unmute music (m)"
+                aria-label="Unmute background music"
+              >
+                🔇
+              </button>
+            </div>
+            <div class="keyboard-guide" aria-hidden="true">
+              <span
+                >Shortcuts: <kbd>←</kbd> Prev | <kbd>→</kbd> Next |
+                <kbd>k</kbd> Kiss | <kbd>f</kbd> Feed | <kbd>s</kbd> Sticker |
+                <kbd>m</kbd> Mute | <kbd>Esc</kbd> Back</span
+              >
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script>
-    const slides = [
-      'images/PXL_20250609_000925302.jpg',
-      'images/PXL_20250813_115834316.jpg',
-      'images/PXL_20250815_043254288.jpg',
-      'images/IMG_20240517_214222_054.jpg',
-      'images/PXL_20230106_093315319.jpg',
-      'images/PXL_20230117_222641776.jpg',
-      'images/PXL_20230831_115314741.jpg',
-      'images/PXL_20241213_112359676.BURST-01.COVER.jpg',
-      'images/PXL_20241231_093047041.jpg',
-      'images/PXL_20250609_000916756.jpg'
-    ];
-    const img = document.getElementById('slideImage');
-    const imgNext = document.getElementById('slideImageNext');
-    let activeImg = img;
-    let inactiveImg = imgNext;
+    <script>
+      const slides = [
+        "images/PXL_20250609_000925302.jpg",
+        "images/PXL_20250813_115834316.jpg",
+        "images/PXL_20250815_043254288.jpg",
+        "images/IMG_20240517_214222_054.jpg",
+        "images/PXL_20230106_093315319.jpg",
+        "images/PXL_20230117_222641776.jpg",
+        "images/PXL_20230831_115314741.jpg",
+        "images/PXL_20241213_112359676.BURST-01.COVER.jpg",
+        "images/PXL_20241231_093047041.jpg",
+        "images/PXL_20250609_000916756.jpg",
+      ];
+      const img = document.getElementById("slideImage");
+      const imgNext = document.getElementById("slideImageNext");
+      let activeImg = img;
+      let inactiveImg = imgNext;
 
-    const indexLabel = document.getElementById('slideIndex');
-    const slideName = document.getElementById('slideName');
-    const slideDesc = document.getElementById('slideDesc');
-    const heartRain = document.querySelector('.heart-rain');
-    const kissBtn = document.getElementById('kissBtn');
-    const feedBtn = document.getElementById('feedBtn');
-    const stickerBtn = document.getElementById('stickerBtn');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const muteBtn = document.getElementById('muteBtn');
-    const slideViewElement = document.getElementById('slideView');
-    const kissOverlay = document.querySelector('.kiss-overlay');
-    const bratModeToggle = document.getElementById('bratModeToggle');
-    const songSharkToggle = document.getElementById('songSharkToggle');
-    const daysCounter = document.getElementById('daysCounter');
-    const a11yAnnouncer = document.getElementById('a11y-announcer');
+      const indexLabel = document.getElementById("slideIndex");
+      const slideName = document.getElementById("slideName");
+      const slideDesc = document.getElementById("slideDesc");
+      const heartRain = document.querySelector(".heart-rain");
+      const kissBtn = document.getElementById("kissBtn");
+      const feedBtn = document.getElementById("feedBtn");
+      const stickerBtn = document.getElementById("stickerBtn");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const muteBtn = document.getElementById("muteBtn");
+      const slideViewElement = document.getElementById("slideView");
+      const kissOverlay = document.querySelector(".kiss-overlay");
+      const bratModeToggle = document.getElementById("bratModeToggle");
+      const songSharkToggle = document.getElementById("songSharkToggle");
+      const daysCounter = document.getElementById("daysCounter");
+      const a11yAnnouncer = document.getElementById("a11y-announcer");
 
-    let currentSlide = 0;
-    let timer = null;
-    let lipVisible = false;
-    const preloadedImages = [];
+      let currentSlide = 0;
+      let timer = null;
+      let lipVisible = false;
+      const preloadedImages = [];
 
-    const announce = (message) => {
-      // Toggle a non-breaking space to ensure consecutive identical messages are announced
-      a11yAnnouncer.textContent = a11yAnnouncer.textContent === message ? message + "\u00A0" : message;
-    };
+      const announce = (message) => {
+        // Toggle a non-breaking space to ensure consecutive identical messages are announced
+        a11yAnnouncer.textContent =
+          a11yAnnouncer.textContent === message ? message + "\u00A0" : message;
+      };
 
-    const preloadImages = () => {
-      // Performance: Preload images asychronously to avoid blocking the main thread.
-      // We skip the first image (slides[0]) because it is already preloaded via <link rel="preload">.
-      slides.slice(1).forEach((src) => {
-        const img = new Image();
-        img.decoding = 'async';
-        img.src = src;
-        preloadedImages.push(img);
-      });
-    };
+      const preloadImages = () => {
+        // Performance: Preload images asychronously to avoid blocking the main thread.
+        // We skip the first image (slides[0]) because it is already preloaded via <link rel="preload">.
+        slides.slice(1).forEach((src) => {
+          const img = new Image();
+          img.decoding = "async";
+          img.src = src;
+          preloadedImages.push(img);
+        });
+      };
 
-    const createHeart = () => {
-      // Performance: Skip heart creation when the page is not visible to save CPU/battery
-      if (document.visibilityState !== 'visible') return;
-      const heart = document.createElement('span');
-      heart.className = 'heart';
-      heart.textContent = bratModeToggle.checked ? '🦴' : '❤';
-      heart.style.left = `${Math.random() * 100}%`;
-      heart.style.fontSize = `${1 + Math.random() * 1.2}rem`;
-      heart.style.animationDuration = `${4 + Math.random() * 3}s`;
-      heartRain.appendChild(heart);
-    };
+      const createHeart = () => {
+        // Performance: Skip heart creation when the page is not visible to save CPU/battery
+        if (document.visibilityState !== "visible") return;
+        const heart = document.createElement("span");
+        heart.className = "heart";
+        heart.textContent = bratModeToggle.checked ? "🦴" : "❤";
+        heart.style.left = `${Math.random() * 100}%`;
+        heart.style.fontSize = `${1 + Math.random() * 1.2}rem`;
+        heart.style.animationDuration = `${4 + Math.random() * 3}s`;
+        heartRain.appendChild(heart);
+      };
 
-    // Performance: Use event delegation for animation cleanup to reduce memory overhead
-    heartRain.addEventListener('animationend', (e) => {
-      if (e.target.classList.contains('heart')) {
-        e.target.remove();
-      }
-    });
-
-    // Audio Context for chirping
-    let audioCtx = null;
-    const playChirp = () => {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
-      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.2);
-    };
-
-    const showKiss = () => {
-      if (lipVisible) return;
-      lipVisible = true;
-      const lip = document.createElement('span');
-      lip.className = 'lip';
-      lip.textContent = '💋';
-      const x = 10 + Math.random() * 80;
-      const y = 10 + Math.random() * 80;
-      lip.style.left = `${x}%`;
-      lip.style.top = `${y}%`;
-      kissOverlay.appendChild(lip);
-      playChirp();
-      announce("Gave Ruru a kiss!");
-      const duration = 3000 + Math.random() * 1000;
-      setTimeout(() => {
-        lip.remove();
-        lipVisible = false;
-      }, duration);
-    };
-
-    const feedRuru = () => {
-      const fish = document.createElement('span');
-      fish.className = 'fish-animation';
-      fish.textContent = '🐟';
-      fish.style.left = '50%';
-      fish.style.bottom = '20%';
-      kissOverlay.appendChild(fish);
-      playChirp();
-      announce("Fed Ruru a fish!");
-      setTimeout(() => {
-        fish.remove();
-        const msg = bratModeToggle.checked ? "More! Bring me MORE FISH! 😈" : "Yum! Ruru is a happy boy! 🐧";
-        slideName.textContent = msg;
-      }, 1000);
-    };
-
-    const stickers = ['🎩', '🎀', '👕', '👖'];
-    // const slideViewElement = document.querySelector('.slide-view'); // Removed redundant declaration to fix JS syntax error
-    const spawnSparkle = (x, y) => {
-      const sparkle = document.createElement('div');
-      sparkle.className = 'sparkle';
-      sparkle.style.left = `${x}px`;
-      sparkle.style.top = `${y}px`;
-      slideViewElement.appendChild(sparkle);
-    };
-
-    // Performance: Use event delegation for animation cleanup
-    slideViewElement.addEventListener('animationend', (e) => {
-      if (e.target.classList.contains('sparkle')) {
-        e.target.remove();
-      }
-    });
-
-    slideViewElement.addEventListener('click', (e) => {
-      const rect = slideViewElement.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      spawnSparkle(x, y);
-    });
-
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchStartTime = 0;
-
-    slideViewElement.addEventListener('touchstart', (e) => {
-      if (e.touches.length === 0) return;
-      const touch = e.touches[0];
-      touchStartX = touch.clientX;
-      touchStartY = touch.clientY;
-      touchStartTime = Date.now();
-
-      const rect = slideViewElement.getBoundingClientRect();
-      const x = touch.clientX - rect.left;
-      const y = touch.clientY - rect.top;
-      spawnSparkle(x, y);
-    }, { passive: true });
-
-    slideViewElement.addEventListener('touchend', (e) => {
-      if (e.changedTouches.length === 0) return;
-      const touch = e.changedTouches[0];
-      const dX = touch.clientX - touchStartX;
-      const dY = touch.clientY - touchStartY;
-      const duration = Date.now() - touchStartTime;
-
-      const minDistance = 50; // min distance for swipe
-      const maxVerticalDeviation = 50; // max vertical deviation to prevent conflict with scrolling
-      const maxTime = 300; // max time allowed for swipe
-
-      if (duration < maxTime && Math.abs(dX) >= minDistance && Math.abs(dY) < maxVerticalDeviation) {
-        if (dX > 0) {
-          // Swipe Right -> Previous slide
-          prevSlide();
-          setAutoplay(false);
-          setAutoplay(true);
-          announce("Swiped right to previous slide");
-        } else {
-          // Swipe Left -> Next slide
-          nextSlide();
-          setAutoplay(false);
-          setAutoplay(true);
-          announce("Swiped left to next slide");
+      // Performance: Use event delegation for animation cleanup to reduce memory overhead
+      heartRain.addEventListener("animationend", (e) => {
+        if (e.target.classList.contains("heart")) {
+          e.target.remove();
         }
-      }
-    }, { passive: true });
-
-    const spawnSticker = () => {
-      const emoji = stickers[Math.floor(Math.random() * stickers.length)];
-      const sticker = document.createElement('div');
-      sticker.className = 'sticker-item';
-      sticker.textContent = emoji;
-      sticker.style.left = '40%';
-      sticker.style.top = '40%';
-      sticker.title = "Double-click to remove";
-      sticker.addEventListener('dblclick', () => {
-        sticker.remove();
-        announce("Removed sticker");
       });
-      kissOverlay.appendChild(sticker);
-      announce("Placed a sticker!");
 
-      // Make Draggable
-      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-      sticker.onmousedown = dragMouseDown;
-      sticker.ontouchstart = dragTouchStart;
+      // Audio Context for chirping
+      let audioCtx = null;
+      const playChirp = () => {
+        if (!audioCtx)
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(
+          1200,
+          audioCtx.currentTime + 0.1,
+        );
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(
+          0.01,
+          audioCtx.currentTime + 0.2,
+        );
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.2);
+      };
 
-      function dragMouseDown(e) {
-        e.preventDefault();
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        document.onmouseup = closeDragElement;
-        document.onmousemove = elementDrag;
-      }
+      const showKiss = () => {
+        if (lipVisible) return;
+        lipVisible = true;
+        const lip = document.createElement("span");
+        lip.className = "lip";
+        lip.textContent = "💋";
+        const x = 10 + Math.random() * 80;
+        const y = 10 + Math.random() * 80;
+        lip.style.left = `${x}%`;
+        lip.style.top = `${y}%`;
+        kissOverlay.appendChild(lip);
+        playChirp();
+        announce("Gave Ruru a kiss!");
+        const duration = 3000 + Math.random() * 1000;
+        setTimeout(() => {
+          lip.remove();
+          lipVisible = false;
+        }, duration);
+      };
 
-      function dragTouchStart(e) {
-        pos3 = e.touches[0].clientX;
-        pos4 = e.touches[0].clientY;
-        document.ontouchend = closeDragElement;
-        document.ontouchmove = elementTouchDrag;
-      }
+      const feedRuru = () => {
+        const fish = document.createElement("span");
+        fish.className = "fish-animation";
+        fish.textContent = "🐟";
+        fish.style.left = "50%";
+        fish.style.bottom = "20%";
+        kissOverlay.appendChild(fish);
+        playChirp();
+        announce("Fed Ruru a fish!");
+        setTimeout(() => {
+          fish.remove();
+          const msg = bratModeToggle.checked
+            ? "More! Bring me MORE FISH! 😈"
+            : "Yum! Ruru is a happy boy! 🐧";
+          slideName.textContent = msg;
+        }, 1000);
+      };
 
-      function elementDrag(e) {
-        e.preventDefault();
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        sticker.style.top = (sticker.offsetTop - pos2) + "px";
-        sticker.style.left = (sticker.offsetLeft - pos1) + "px";
-      }
+      const stickers = ["🎩", "🎀", "👕", "👖"];
+      // const slideViewElement = document.querySelector('.slide-view'); // Removed redundant declaration to fix JS syntax error
+      const spawnSparkle = (x, y) => {
+        const sparkle = document.createElement("div");
+        sparkle.className = "sparkle";
+        sparkle.style.left = `${x}px`;
+        sparkle.style.top = `${y}px`;
+        slideViewElement.appendChild(sparkle);
+      };
 
-      function elementTouchDrag(e) {
-        if (e.cancelable) e.preventDefault();
-        pos1 = pos3 - e.touches[0].clientX;
-        pos2 = pos4 - e.touches[0].clientY;
-        pos3 = e.touches[0].clientX;
-        pos4 = e.touches[0].clientY;
-        sticker.style.top = (sticker.offsetTop - pos2) + "px";
-        sticker.style.left = (sticker.offsetLeft - pos1) + "px";
-      }
+      // Performance: Use event delegation for animation cleanup
+      slideViewElement.addEventListener("animationend", (e) => {
+        if (e.target.classList.contains("sparkle")) {
+          e.target.remove();
+        }
+      });
 
-      function closeDragElement() {
-        document.onmouseup = null;
-        document.onmousemove = null;
-        document.ontouchend = null;
-        document.ontouchmove = null;
-      }
-    };
+      slideViewElement.addEventListener("click", (e) => {
+        const rect = slideViewElement.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        spawnSparkle(x, y);
+      });
 
-    const updateMetadata = () => {
-      if (bratModeToggle.checked) {
-        slideName.textContent = 'I am the ruler of this domain. 😈';
-        slideDesc.textContent = 'Ruru being a little brat.';
-      } else {
-        slideName.textContent = 'A cozy little penguin slideshow.';
-        slideDesc.textContent = 'Ruru spending time doing what he likes.';
-      }
-      indexLabel.textContent = (currentSlide + 1) + ' / ' + slides.length;
-    };
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchStartTime = 0;
 
-    let isTransitioning = false;
-    const updateSlide = (position) => {
-      if (isTransitioning) return;
-      if (position < 0) position = slides.length - 1;
-      if (position >= slides.length) position = 0;
+      slideViewElement.addEventListener(
+        "touchstart",
+        (e) => {
+          if (e.touches.length === 0) return;
+          const touch = e.touches[0];
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
+          touchStartTime = Date.now();
 
-      const isInitial = imgNext.src === '' && currentSlide === 0 && position === 0;
-      if (!isInitial && position === currentSlide) return;
+          const rect = slideViewElement.getBoundingClientRect();
+          const x = touch.clientX - rect.left;
+          const y = touch.clientY - rect.top;
+          spawnSparkle(x, y);
+        },
+        { passive: true },
+      );
 
-      currentSlide = position;
-      updateMetadata();
+      slideViewElement.addEventListener(
+        "touchend",
+        (e) => {
+          if (e.changedTouches.length === 0) return;
+          const touch = e.changedTouches[0];
+          const dX = touch.clientX - touchStartX;
+          const dY = touch.clientY - touchStartY;
+          const duration = Date.now() - touchStartTime;
 
-      if (isInitial) {
-        activeImg.src = slides[0];
-        activeImg.alt = 'Cute penguin image 1';
-        activeImg.style.opacity = '1';
-        inactiveImg.style.opacity = '0';
-        return;
-      }
+          const minDistance = 50; // min distance for swipe
+          const maxVerticalDeviation = 50; // max vertical deviation to prevent conflict with scrolling
+          const maxTime = 300; // max time allowed for swipe
 
-      isTransitioning = true;
-      inactiveImg.src = slides[currentSlide];
-      inactiveImg.alt = 'Cute penguin image ' + (currentSlide + 1);
+          if (
+            duration < maxTime &&
+            Math.abs(dX) >= minDistance &&
+            Math.abs(dY) < maxVerticalDeviation
+          ) {
+            if (dX > 0) {
+              // Swipe Right -> Previous slide
+              prevSlide();
+              setAutoplay(false);
+              setAutoplay(true);
+              announce("Swiped right to previous slide");
+            } else {
+              // Swipe Left -> Next slide
+              nextSlide();
+              setAutoplay(false);
+              setAutoplay(true);
+              announce("Swiped left to next slide");
+            }
+          }
+        },
+        { passive: true },
+      );
 
-      // Start cross-fade
-      inactiveImg.style.opacity = '1';
-      activeImg.style.opacity = '0';
+      const spawnSticker = () => {
+        const emoji = stickers[Math.floor(Math.random() * stickers.length)];
+        const sticker = document.createElement("div");
+        sticker.className = "sticker-item";
+        sticker.textContent = emoji;
+        sticker.style.left = "40%";
+        sticker.style.top = "40%";
+        sticker.title = "Double-click to remove";
+        sticker.addEventListener("dblclick", () => {
+          sticker.remove();
+          announce("Removed sticker");
+        });
+        kissOverlay.appendChild(sticker);
+        announce("Placed a sticker!");
 
-      // Swap which image is active
-      const temp = activeImg;
-      activeImg = inactiveImg;
-      inactiveImg = temp;
+        // Make Draggable
+        let pos1 = 0,
+          pos2 = 0,
+          pos3 = 0,
+          pos4 = 0;
+        sticker.onmousedown = dragMouseDown;
+        sticker.ontouchstart = dragTouchStart;
 
-      setTimeout(() => {
-        isTransitioning = false;
-      }, 500); // Slightly longer than transition duration (0.45s) to be safe
-    };
+        function dragMouseDown(e) {
+          e.preventDefault();
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          document.onmouseup = closeDragElement;
+          document.onmousemove = elementDrag;
+        }
 
-    const nextSlide = () => updateSlide(currentSlide + 1);
-    const prevSlide = () => updateSlide(currentSlide - 1);
+        function dragTouchStart(e) {
+          pos3 = e.touches[0].clientX;
+          pos4 = e.touches[0].clientY;
+          document.ontouchend = closeDragElement;
+          document.ontouchmove = elementTouchDrag;
+        }
 
-    const setAutoplay = (enabled) => {
-      if (enabled) {
-        timer = setInterval(nextSlide, 4500);
-      } else {
-        clearInterval(timer);
-      }
-    };
+        function elementDrag(e) {
+          e.preventDefault();
+          pos1 = pos3 - e.clientX;
+          pos2 = pos4 - e.clientY;
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          sticker.style.top = sticker.offsetTop - pos2 + "px";
+          sticker.style.left = sticker.offsetLeft - pos1 + "px";
+        }
 
-    kissBtn.addEventListener('click', showKiss);
-    feedBtn.addEventListener('click', feedRuru);
-    stickerBtn.addEventListener('click', spawnSticker);
-    prevBtn.addEventListener('click', () => { prevSlide(); setAutoplay(false); setAutoplay(true); });
-    nextBtn.addEventListener('click', () => { nextSlide(); setAutoplay(false); setAutoplay(true); });
+        function elementTouchDrag(e) {
+          if (e.cancelable) e.preventDefault();
+          pos1 = pos3 - e.touches[0].clientX;
+          pos2 = pos4 - e.touches[0].clientY;
+          pos3 = e.touches[0].clientX;
+          pos4 = e.touches[0].clientY;
+          sticker.style.top = sticker.offsetTop - pos2 + "px";
+          sticker.style.left = sticker.offsetLeft - pos1 + "px";
+        }
 
-    const syncBratMode = () => {
+        function closeDragElement() {
+          document.onmouseup = null;
+          document.onmousemove = null;
+          document.ontouchend = null;
+          document.ontouchmove = null;
+        }
+      };
+
+      const updateMetadata = () => {
         if (bratModeToggle.checked) {
-            document.body.classList.add('brat-mode');
-            localStorage.setItem('bratMode', 'enabled');
+          slideName.textContent = "I am the ruler of this domain. 😈";
+          slideDesc.textContent = "Ruru being a little brat.";
         } else {
-            document.body.classList.remove('brat-mode');
-            localStorage.setItem('bratMode', 'disabled');
+          slideName.textContent = "A cozy little penguin slideshow.";
+          slideDesc.textContent = "Ruru spending time doing what he likes.";
+        }
+        indexLabel.textContent = currentSlide + 1 + " / " + slides.length;
+      };
+
+      let isTransitioning = false;
+      const updateSlide = (position) => {
+        if (isTransitioning) return;
+        if (position < 0) position = slides.length - 1;
+        if (position >= slides.length) position = 0;
+
+        const isInitial =
+          imgNext.src === "" && currentSlide === 0 && position === 0;
+        if (!isInitial && position === currentSlide) return;
+
+        currentSlide = position;
+        updateMetadata();
+
+        if (isInitial) {
+          activeImg.src = slides[0];
+          activeImg.alt = "Cute penguin image 1";
+          activeImg.style.opacity = "1";
+          inactiveImg.style.opacity = "0";
+          return;
+        }
+
+        isTransitioning = true;
+        slideViewElement.classList.add("loading");
+
+        const onImageLoad = () => {
+          cleanup();
+          slideViewElement.classList.remove("loading");
+
+          // Start cross-fade
+          inactiveImg.style.opacity = "1";
+          activeImg.style.opacity = "0";
+
+          // Swap which image is active
+          const temp = activeImg;
+          activeImg = inactiveImg;
+          inactiveImg = temp;
+
+          setTimeout(() => {
+            isTransitioning = false;
+          }, 500); // Slightly longer than transition duration (0.45s) to be safe
+        };
+
+        const onImageError = () => {
+          cleanup();
+          slideViewElement.classList.remove("loading");
+          isTransitioning = false;
+        };
+
+        function cleanup() {
+          inactiveImg.removeEventListener("load", onImageLoad);
+          inactiveImg.removeEventListener("error", onImageError);
+        }
+
+        inactiveImg.addEventListener("load", onImageLoad);
+        inactiveImg.addEventListener("error", onImageError);
+
+        inactiveImg.src = slides[currentSlide];
+        inactiveImg.alt = "Cute penguin image " + (currentSlide + 1);
+      };
+
+      const nextSlide = () => updateSlide(currentSlide + 1);
+      const prevSlide = () => updateSlide(currentSlide - 1);
+
+      const setAutoplay = (enabled) => {
+        if (enabled) {
+          timer = setInterval(nextSlide, 4500);
+        } else {
+          clearInterval(timer);
+        }
+      };
+
+      kissBtn.addEventListener("click", showKiss);
+      feedBtn.addEventListener("click", feedRuru);
+      stickerBtn.addEventListener("click", spawnSticker);
+      prevBtn.addEventListener("click", () => {
+        prevSlide();
+        setAutoplay(false);
+        setAutoplay(true);
+      });
+      nextBtn.addEventListener("click", () => {
+        nextSlide();
+        setAutoplay(false);
+        setAutoplay(true);
+      });
+
+      const syncBratMode = () => {
+        if (bratModeToggle.checked) {
+          document.body.classList.add("brat-mode");
+          localStorage.setItem("bratMode", "enabled");
+        } else {
+          document.body.classList.remove("brat-mode");
+          localStorage.setItem("bratMode", "disabled");
         }
         updateMetadata();
-    };
+      };
 
-    bratModeToggle.addEventListener('change', syncBratMode);
+      bratModeToggle.addEventListener("change", syncBratMode);
 
-    const SONGS = {
-      default: 'JkiglO98YYo',
-      shark: 'XqZsoesa55w'
-    };
+      const SONGS = {
+        default: "JkiglO98YYo",
+        shark: "XqZsoesa55w",
+      };
 
-    songSharkToggle.addEventListener('change', () => {
-      if (player) {
-        const videoId = songSharkToggle.checked ? SONGS.shark : SONGS.default;
-        player.loadVideoById({
-          videoId: videoId,
-          startSeconds: 0
-        });
-        // Ensure it keeps looping
-        // Note: loadVideoById with a single videoId might lose the 'playlist' loop context
-        // but YouTube IFrame API loop usually needs playlist to work reliably.
-      }
-    });
+      songSharkToggle.addEventListener("change", () => {
+        if (player) {
+          const videoId = songSharkToggle.checked ? SONGS.shark : SONGS.default;
+          player.loadVideoById({
+            videoId: videoId,
+            startSeconds: 0,
+          });
+          // Ensure it keeps looping
+          // Note: loadVideoById with a single videoId might lose the 'playlist' loop context
+          // but YouTube IFrame API loop usually needs playlist to work reliably.
+        }
+      });
 
-    const updateDaysCounter = () => {
-        const start = new Date('2022-08-13');
+      const updateDaysCounter = () => {
+        const start = new Date("2022-08-13");
         const now = new Date();
         const diff = now - start;
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         daysCounter.textContent = `Ruru has been with us for ${days} days`;
-    };
+      };
 
-    // YouTube Player API
-    let player;
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      // YouTube Player API
+      let player;
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName("script")[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    window.onYouTubeIframeAPIReady = () => {
-      player = new YT.Player('youtube-player', {
-        height: '0',
-        width: '0',
-        videoId: SONGS.default,
-        playerVars: {
-          'autoplay': 1,
-          'loop': 1,
-          'playlist': SONGS.default,
-          'controls': 0,
-          'showinfo': 0,
-          'rel': 0,
-          'mute': 1
-        },
-        events: {
-          'onReady': (event) => {
-            event.target.playVideo();
+      window.onYouTubeIframeAPIReady = () => {
+        player = new YT.Player("youtube-player", {
+          height: "0",
+          width: "0",
+          videoId: SONGS.default,
+          playerVars: {
+            autoplay: 1,
+            loop: 1,
+            playlist: SONGS.default,
+            controls: 0,
+            showinfo: 0,
+            rel: 0,
+            mute: 1,
           },
-          'onStateChange': (event) => {
-            if (event.data === YT.PlayerState.ENDED) {
+          events: {
+            onReady: (event) => {
+              event.target.playVideo();
+            },
+            onStateChange: (event) => {
+              if (event.data === YT.PlayerState.ENDED) {
                 player.playVideo();
-            }
-          }
+              }
+            },
+          },
+        });
+      };
+
+      const toggleMute = () => {
+        if (player && player.isMuted()) {
+          player.unMute();
+          muteBtn.textContent = "🔊";
+          muteBtn.title = "Mute music (m)";
+          muteBtn.setAttribute("aria-label", "Mute background music");
+          announce("Music unmuted");
+        } else if (player) {
+          player.mute();
+          muteBtn.textContent = "🔇";
+          muteBtn.title = "Unmute music (m)";
+          muteBtn.setAttribute("aria-label", "Unmute background music");
+          announce("Music muted");
+        }
+      };
+
+      muteBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        toggleMute();
+      });
+
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") {
+          prevSlide();
+          setAutoplay(false);
+          setAutoplay(true);
+        } else if (e.key === "ArrowRight") {
+          nextSlide();
+          setAutoplay(false);
+          setAutoplay(true);
+        } else if (e.key.toLowerCase() === "m") {
+          toggleMute();
+        } else if (e.key.toLowerCase() === "k") {
+          showKiss();
+        } else if (e.key.toLowerCase() === "f") {
+          feedRuru();
+        } else if (e.key.toLowerCase() === "s") {
+          spawnSticker();
+        } else if (e.key === "Escape") {
+          window.location.href = "../index.html";
         }
       });
-    };
 
-    const toggleMute = () => {
-      if (player && player.isMuted()) {
-        player.unMute();
-        muteBtn.textContent = '🔊';
-        muteBtn.title = 'Mute music (m)';
-        muteBtn.setAttribute('aria-label', 'Mute background music');
-        announce("Music unmuted");
-      } else if (player) {
-        player.mute();
-        muteBtn.textContent = '🔇';
-        muteBtn.title = 'Unmute music (m)';
-        muteBtn.setAttribute('aria-label', 'Unmute background music');
-        announce("Music muted");
+      setAutoplay(true);
+      setInterval(createHeart, 400);
+      for (let i = 0; i < 8; i += 1) {
+        setTimeout(createHeart, i * 260);
       }
-    };
 
-    muteBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      toggleMute();
-    });
-
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') {
-        prevSlide();
-        setAutoplay(false);
-        setAutoplay(true);
-      } else if (e.key === 'ArrowRight') {
-        nextSlide();
-        setAutoplay(false);
-        setAutoplay(true);
-      } else if (e.key.toLowerCase() === 'm') {
-        toggleMute();
-      } else if (e.key.toLowerCase() === 'k') {
-        showKiss();
-      } else if (e.key.toLowerCase() === 'f') {
-        feedRuru();
-      } else if (e.key.toLowerCase() === 's') {
-        spawnSticker();
-      } else if (e.key === 'Escape') {
-        window.location.href = '../index.html';
-      }
-    });
-
-    setAutoplay(true);
-    setInterval(createHeart, 400);
-    for (let i = 0; i < 8; i += 1) {
-      setTimeout(createHeart, i * 260);
-    }
-
-    // Restore Brat Mode state
-    if (localStorage.getItem('bratMode') === 'enabled') {
+      // Restore Brat Mode state
+      if (localStorage.getItem("bratMode") === "enabled") {
         bratModeToggle.checked = true;
-    } else if (localStorage.getItem('bratMode') === 'disabled') {
+      } else if (localStorage.getItem("bratMode") === "disabled") {
         bratModeToggle.checked = false;
-    }
-    syncBratMode();
+      }
+      syncBratMode();
 
-    updateSlide(0);
-    updateDaysCounter();
-    // Performance: Defer image preloading until the main thread is idle
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(() => preloadImages());
-    } else {
-      setTimeout(preloadImages, 1000);
-    }
-    setInterval(updateDaysCounter, 1000 * 60 * 60); // Update every hour
-  </script>
-</body>
+      updateSlide(0);
+      updateDaysCounter();
+      // Performance: Defer image preloading until the main thread is idle
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(() => preloadImages());
+      } else {
+        setTimeout(preloadImages, 1000);
+      }
+      setInterval(updateDaysCounter, 1000 * 60 * 60); // Update every hour
+    </script>
+  </body>
 </html>
