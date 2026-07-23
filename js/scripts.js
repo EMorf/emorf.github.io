@@ -34,11 +34,20 @@
         e.preventDefault();
         var headingId = $this.attr('href');
         var $heading = $(headingId);
-        var headerHeight = $header.outerHeight();
-        var isSticky = $header.hasClass('sticky');
 
-        // Performance: Use cached selector and calculate scroll distance accounting for sticky header
-        var scrollDistance = $heading.offset().top - (isSticky ? headerHeight : 0);
+        // Performance: Use cached layout dimensions (offsetTop, headerHeight, and isHeaderSticky)
+        // to avoid forced synchronous reflows (layout thrashing) on navigation click
+        var targetOffset = null;
+        for (var i = 0; i < navTargets.length; i++) {
+            if (navTargets[i].link.is($this)) {
+                targetOffset = navTargets[i].offsetTop;
+                break;
+            }
+        }
+        if (targetOffset === null) {
+            targetOffset = $heading.offset().top;
+        }
+        var scrollDistance = targetOffset - (isHeaderSticky ? headerHeight : 0);
 
         // Performance: stop() prevents animation queue buildup; duration capped at 800ms for better UX
         var duration = Math.min(800, Math.max(300, Math.abs($window.scrollTop() - scrollDistance) / 2));
@@ -150,7 +159,8 @@
     // Scroll to first element
     $('#lead-down button').click(function() {
         var $nextSection = $lead.next();
-        var scrollDistance = $nextSection.offset().top;
+        // Performance: Use cached offsetTop of the first navigation target (About) to avoid layout thrashing on click
+        var scrollDistance = navTargets.length ? navTargets[0].offsetTop : $nextSection.offset().top;
         $('html, body').stop().animate({
             scrollTop: scrollDistance + 'px'
         }, 500, function() {
