@@ -91,3 +91,12 @@
 **Action:**
 1. Default to native `addEventListener` with `{ passive: true }` for all non-blocking scroll, wheel, and touch event handlers.
 2. Ensure static collections queried inside loops or high-frequency event listeners are cached at initialization or layout boundaries.
+
+## 2026-07-23 - [Preventing Interaction Layout Thrashing]
+**Learning:**
+1. Layout-triggering operations (like `.offset().top` and `.outerHeight()`) queried during navigation click click-handlers block the main thread and cause a forced synchronous reflow (layout thrashing) right before starting the smooth scrolling animation.
+2. Reusing cached coordinates (like those calculated for scroll-spy) inside click click-handlers completely eliminates these layout reads on interaction, keeping the UI silky-smooth and highly responsive.
+
+**Action:**
+1. Extend coordinate caching strategies to also cover transition and scroll trigger handlers.
+2. Ensure all event-driven animations rely on pre-computed or debounced layout properties.
