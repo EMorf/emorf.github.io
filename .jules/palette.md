@@ -128,3 +128,7 @@
 1. Dynamic, client-driven image gallery slideshows can feel jarring or "broken" on slower/unstable networks when images cross-fade before being fully loaded. Attaching load/error events to images to show a visual indicator keeps the interface intuitive.
 2. Power-user features like keyboard shortcuts are invisible and underutilized unless presented in a non-obtrusive, highly accessible visual guide/legend (e.g., using styled `<kbd>` tags).
 **Action:** Always load dynamic media fully behind a loading spinner or skeleton state before triggering visual cross-fade transitions. Pair any keyboard accessibility shortcuts with explicit visual guides like `<kbd>` tags to ensure great discoverability.
+
+## 2025-07-24 - [Slideshow Autoplay Accessibility & User Control]
+**Learning:** Automatically rotating slideshows or dynamic content that moves continuously can overwhelm users or cause cognitive overload if there is no way to stop or pause them, violating WCAG 2.2.2. Adding a visible Play/Pause toggle alongside keyboard shortcuts and ARIA live announcements ensures full user control and a stress-free interaction.
+**Action:** Always provide accessible pause controls (such as a Play/Pause button and a global keyboard shortcut like 'p') for any auto-advancing slideshows, carousel components, or animated galleries to ensure compliance with accessibility standards and high-quality UX.
