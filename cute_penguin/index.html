@@ -563,6 +563,15 @@
                 ➡️
               </button>
               <button
+                id="playPauseBtn"
+                type="button"
+                class="btn btn-pink btn-lg"
+                title="Pause slideshow (p)"
+                aria-label="Pause slideshow"
+              >
+                ⏸️
+              </button>
+              <button
                 id="muteBtn"
                 type="button"
                 class="btn btn-pink btn-lg"
@@ -576,7 +585,7 @@
               <span
                 >Shortcuts: <kbd>←</kbd> Prev | <kbd>→</kbd> Next |
                 <kbd>k</kbd> Kiss | <kbd>f</kbd> Feed | <kbd>s</kbd> Sticker |
-                <kbd>m</kbd> Mute | <kbd>Esc</kbd> Back</span
+                <kbd>m</kbd> Mute | <kbd>p</kbd> Play/Pause | <kbd>Esc</kbd> Back</span
               >
             </div>
           </div>
@@ -611,6 +620,7 @@
       const stickerBtn = document.getElementById("stickerBtn");
       const prevBtn = document.getElementById("prevBtn");
       const nextBtn = document.getElementById("nextBtn");
+      const playPauseBtn = document.getElementById("playPauseBtn");
       const muteBtn = document.getElementById("muteBtn");
       const slideViewElement = document.getElementById("slideView");
       const kissOverlay = document.querySelector(".kiss-overlay");
@@ -622,6 +632,7 @@
       let currentSlide = 0;
       let timer = null;
       let lipVisible = false;
+      let isAutoplayPaused = false;
       const preloadedImages = [];
 
       const announce = (message) => {
@@ -944,12 +955,35 @@
       const prevSlide = () => updateSlide(currentSlide - 1);
 
       const setAutoplay = (enabled) => {
-        if (enabled) {
+        if (enabled && !isAutoplayPaused) {
+          clearInterval(timer);
           timer = setInterval(nextSlide, 4500);
         } else {
           clearInterval(timer);
         }
       };
+
+      const togglePlayPause = () => {
+        isAutoplayPaused = !isAutoplayPaused;
+        if (isAutoplayPaused) {
+          setAutoplay(false);
+          playPauseBtn.textContent = "▶️";
+          playPauseBtn.title = "Play slideshow (p)";
+          playPauseBtn.setAttribute("aria-label", "Play slideshow");
+          announce("Slideshow paused");
+        } else {
+          setAutoplay(true);
+          playPauseBtn.textContent = "⏸️";
+          playPauseBtn.title = "Pause slideshow (p)";
+          playPauseBtn.setAttribute("aria-label", "Pause slideshow");
+          announce("Slideshow playing");
+        }
+      };
+
+      playPauseBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        togglePlayPause();
+      });
 
       kissBtn.addEventListener("click", showKiss);
       feedBtn.addEventListener("click", feedRuru);
@@ -1070,6 +1104,8 @@
           setAutoplay(true);
         } else if (e.key.toLowerCase() === "m") {
           toggleMute();
+        } else if (e.key.toLowerCase() === "p") {
+          togglePlayPause();
         } else if (e.key.toLowerCase() === "k") {
           showKiss();
         } else if (e.key.toLowerCase() === "f") {
