@@ -21,6 +21,7 @@
             if ($el.length) {
                 return {
                     link: $(this),
+                    linkEl: this,
                     section: $el
                 };
             }
@@ -38,8 +39,9 @@
         // Performance: Use cached layout dimensions (offsetTop, headerHeight, and isHeaderSticky)
         // to avoid forced synchronous reflows (layout thrashing) on navigation click
         var targetOffset = null;
+        var clickTargetEl = this;
         for (var i = 0; i < navTargets.length; i++) {
-            if (navTargets[i].link.is($this)) {
+            if (navTargets[i].linkEl === clickTargetEl) {
                 targetOffset = navTargets[i].offsetTop;
                 break;
             }
@@ -50,7 +52,7 @@
         var scrollDistance = targetOffset - (isHeaderSticky ? headerHeight : 0);
 
         // Performance: stop() prevents animation queue buildup; duration capped at 800ms for better UX
-        var duration = Math.min(800, Math.max(300, Math.abs($window.scrollTop() - scrollDistance) / 2));
+        var duration = Math.min(800, Math.max(300, Math.abs(window.scrollY - scrollDistance) / 2));
         $('html, body').stop().animate({
             scrollTop: scrollDistance + 'px'
         }, duration, function() {
@@ -101,14 +103,16 @@
     // Performance: Cache the current active menu link, last link, and sticky status to prevent high-frequency DOM writes / queries
     var isHeaderSticky = false;
     var $activeLink = null;
+    var activeLinkEl = null;
     var $lastLink = $menuLinks.last();
+    var lastLinkEl = $lastLink[0];
     var scrollTicking = false;
 
     window.addEventListener('scroll', function() {
         if (!scrollTicking) {
             // Performance: Throttle navigation update logic using requestAnimationFrame to prevent layout thrashing
             window.requestAnimationFrame(function() {
-                var scrollPos = $window.scrollTop();
+                var scrollPos = window.scrollY;
 
                 var shouldBeSticky = scrollPos > leadHeight;
                 if (shouldBeSticky !== isHeaderSticky) {
@@ -118,10 +122,11 @@
 
                 // Performance: Handle highlighting of the final navigation link at the bottom of the page
                 if (scrollPos + windowHeight >= documentHeight - 10) {
-                    if ($activeLink === null || !$activeLink.is($lastLink)) {
+                    if (activeLinkEl !== lastLinkEl) {
                         $menuLinks.removeClass('active').removeAttr('aria-current');
                         $lastLink.addClass('active').attr('aria-current', 'location');
                         $activeLink = $lastLink;
+                        activeLinkEl = lastLinkEl;
                     }
                 } else {
                     // Performance: Use the cached navTargets dimensions for efficient scroll-spy calculations
@@ -132,10 +137,11 @@
                         var sectionBottom = sectionTop + target.outerHeight;
 
                         if (scrollPos + 5 >= sectionTop && scrollPos < sectionBottom) {
-                            if ($activeLink === null || !$activeLink.is(target.link)) {
+                            if (activeLinkEl !== target.linkEl) {
                                 $menuLinks.removeClass('active').removeAttr('aria-current');
                                 target.link.addClass('active').attr('aria-current', 'location');
                                 $activeLink = target.link;
+                                activeLinkEl = target.linkEl;
                             }
                             break;
                         }
