@@ -100,3 +100,13 @@
 **Action:**
 1. Extend coordinate caching strategies to also cover transition and scroll trigger handlers.
 2. Ensure all event-driven animations rely on pre-computed or debounced layout properties.
+
+## 2026-07-24 - [O(1) Raw DOM Comparison and native scrollY inside requestAnimationFrame]
+**Learning:**
+1. Using jQuery's `.is()` inside high-frequency scroll and click event handlers triggers tag/selector parsing and extra object allocations on every single frame, increasing CPU usage and garbage collection frequency.
+2. Caching raw HTML DOM elements (`this` or `.get(0)`) and using strict equality comparison (`===`) achieves an O(1) instantaneous check with zero allocations.
+3. Accessing the native `window.scrollY` Web API instead of jQuery's `$window.scrollTop()` bypasses the library wrapper overhead entirely inside hot paths.
+
+**Action:**
+1. Avoid jQuery utility functions like `.is()` inside scroll/resize tick frames; use raw DOM identity checks instead.
+2. Prefer native Web API properties like `window.scrollY` or `window.scrollX` for read-only geometry lookups inside animation frames.
